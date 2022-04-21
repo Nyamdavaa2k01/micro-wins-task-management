@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="1024.0" style="-fx-pre: #6c7474;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.HeaderMenuController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="1366.0" style="-fx-pre: #6c7474;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.HeaderMenuController">
    <children>
       <TextField fx:id="searchTextField" layoutX="134.0" layoutY="2.0" maxHeight="20.0" prefHeight="20.0" prefWidth="132.0" AnchorPane.leftAnchor="134.0" AnchorPane.topAnchor="2.0" />
       <ImageView fx:id="search" fitHeight="20.0" fitWidth="20.0" layoutX="246.0" layoutY="11.0" AnchorPane.leftAnchor="246.0">
@@ -16,7 +16,7 @@
             <Image url="@../../../images/search-icon.png" />
          </image>
       </ImageView>
-      <HBox fx:id="manageWindowSection" layoutX="894.0" prefHeight="37.0" prefWidth="125.0" spacing="20.0" style="-fx-background-color: #c4c4c4;">
+      <HBox fx:id="manageWindowSection" layoutX="894.0" prefHeight="37.0" prefWidth="125.0" spacing="20.0" style="-fx-background-color: #c4c4c4;" AnchorPane.rightAnchor="0.0">
          <children>
             <Button fx:id="collapseWindowBtn" mnemonicParsing="false">
                <graphic>
@@ -68,7 +68,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="addTaskBtn" layoutX="786.0" layoutY="2.0" mnemonicParsing="false">
+      <Button fx:id="addTaskBtn" layoutX="1076.0" layoutY="2.0" mnemonicParsing="false">
          <graphic>
             <ImageView fitHeight="25.0" fitWidth="25.0">
                <image>
@@ -77,7 +77,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="seeNotificationBtn" layoutX="842.0" layoutY="4.0" mnemonicParsing="false">
+      <Button fx:id="seeNotificationBtn" layoutX="1133.0" layoutY="5.0" mnemonicParsing="false">
          <graphic>
             <ImageView fitHeight="20.0" fitWidth="20.0">
                <image>
