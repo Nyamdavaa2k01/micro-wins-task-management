@@ -9,6 +9,11 @@
     -fx-height:20 ;
 }
 
+.button{
+    -fx-width:25;
+    -fx-height:25;
+    -fx-background-color:transparent;
+}
 
 #manageWindowSection {
     -fx-background-color : #c4c4c4 ;
