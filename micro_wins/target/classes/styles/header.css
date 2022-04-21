@@ -1,0 +1,15 @@
+.root {
+    -fx-background-color: #6C7474 ;
+    -fx-pref-width:1024 ;
+    -fx-pref-height: 37
+}
+
+.image-view {
+    -fx-width:20 ;
+    -fx-height:20 ;
+}
+
+
+#manageWindowSection {
+    -fx-background-color : #c4c4c4 ;
+}

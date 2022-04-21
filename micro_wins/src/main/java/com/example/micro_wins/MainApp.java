@@ -31,7 +31,8 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException {
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("home-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
+        Scene scene = new Scene(fxmlLoader.load(), 1024, 37);
+        scene.getStylesheets().add(getClass().getResource("/styles/header.css").toExternalForm()) ;
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
