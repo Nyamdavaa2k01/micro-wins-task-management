@@ -8,6 +8,7 @@ module com.example.micro_wins {
     requires lombok;
     requires spring.data.jpa;
     requires spring.beans;
+    requires java.datatransfer;
 
     opens com.example.micro_wins to javafx.fxml;
     exports com.example.micro_wins;

@@ -15,6 +15,14 @@
     -fx-background-color:transparent;
 }
 
+#header .button:hover {
+    -fx-cursor: hand;
+}
+
 #manageWindowSection {
     -fx-background-color : #c4c4c4 ;
+}
+
+#manageWindowSection #closeWindowBtn:hover {
+    -fx-background-color:#EE6A6A ;
 }
