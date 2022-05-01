@@ -1,0 +1,18 @@
+/*Created: May 01,
+Author: Nyamdavaa,
+Definition: fxml дээрх css-үүдийг тусд нь авч байгаа бөгөөд дуусаагүй байгаа.*/
+
+#addTaskView{
+
+}
+
+#addTaskView .text-field {
+	-fx-background-color:transparent;
+	
+}
+
+#addTaskView .button {
+	-fx-backround-color:transparent ; 
+	-fx-border-color:gray; 
+	-fx-border-radius:10 ; 
+}
