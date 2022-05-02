@@ -9,6 +9,7 @@ module com.example.micro_wins {
     requires spring.data.jpa;
     requires spring.beans;
     requires java.datatransfer;
+    requires java.sql;
 
     opens com.example.micro_wins to javafx.fxml;
     exports com.example.micro_wins;

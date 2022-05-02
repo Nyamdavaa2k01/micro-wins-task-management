@@ -1,16 +1,27 @@
+/**
+ * @author Nyamka
+ * @project micro-wins-task-management
+ */
+
 package com.example.micro_wins;
 
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
+import java.io.IOException;
 
 
 public class HeaderMenuController {
@@ -60,7 +71,14 @@ public class HeaderMenuController {
 
 
     @FXML
-    void addTask(ActionEvent event) {
+    void addTask(ActionEvent event) throws IOException {
+        Stage taskStage = new Stage() ;
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("add-task-view.fxml"));
+        taskStage.initStyle(StageStyle.UNDECORATED);
+        taskStage.initStyle(StageStyle.TRANSPARENT);
+        Scene scene = new Scene(fxmlLoader.load(), 624, 228, Color.TRANSPARENT) ;
+        taskStage.setScene(scene);
+        taskStage.show();
     }
 
     @FXML
