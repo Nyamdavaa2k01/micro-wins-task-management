@@ -6,6 +6,5 @@
    <children>
       <fx:include source="header-menu.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
       <fx:include source="navigation.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="37.0" />
-
    </children>
 </AnchorPane>
