@@ -9,8 +9,15 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+import org.springframework.stereotype.Component;
 
+@Component
 public class NavigationController {
+
+    private static final String TODAY_VIEW = "/fxml/welcome.fxml";
+    private static final String USER_VIEW = "/fxml/user.fxml";
+    private Stage stage;
 
     @FXML
     private VBox navBar;

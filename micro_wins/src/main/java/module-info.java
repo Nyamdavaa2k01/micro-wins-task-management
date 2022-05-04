@@ -10,6 +10,7 @@ module com.example.micro_wins {
     requires spring.beans;
     requires java.datatransfer;
     requires java.sql;
+    requires logback.classic;
 
     opens com.example.micro_wins to javafx.fxml;
     exports com.example.micro_wins;
