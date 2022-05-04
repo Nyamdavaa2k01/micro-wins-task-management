@@ -9,6 +9,7 @@ package com.example.micro_wins;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Bounds;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -22,6 +23,7 @@ import java.sql.*;
 public class AddTaskController {
 
     Stage addTaskStage ;
+    private int p ;
 
     @FXML
     public void initialize() {
@@ -88,10 +90,17 @@ public class AddTaskController {
         Stage priorityStage = new Stage() ;
         priorityStage.setScene(scene);
         priorityStage.initStyle(StageStyle.UNDECORATED);
-        // stage must be shown under the setPriorityBtn, so change it to be relative to the location of setPriorityBtn
-        priorityStage.setX(100);
-        priorityStage.setY(150);
+        Bounds setPriorityBtnBounds = setPriorityBtn.localToScreen(setPriorityBtn.getBoundsInLocal()) ;
+        int priorityButtonsInitPosX = (int) setPriorityBtnBounds.getMinX();
+        int priorityButtonsInitPosY = (int) setPriorityBtnBounds.getMaxY() ;
+        priorityStage.setX(priorityButtonsInitPosX);
+        priorityStage.setY(priorityButtonsInitPosY);
         priorityStage.show();
+        PriorityButtonsController p = new PriorityButtonsController() ;
+        while(p.getPriority() == 4) {
+            System.out.println(p.getPriority());
+        }
+        System.out.println(p.getPriority());
     }
 
     @FXML

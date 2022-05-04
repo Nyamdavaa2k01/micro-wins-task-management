@@ -11,7 +11,14 @@ import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 
 public class PriorityButtonsController {
-
+    /**
+     * priority is set to 4 by default
+     */
+//    private int priority = 4 ;
+//    private static PriorityButtonsController instance = new PriorityButtonsController() ;
+//    public  static PriorityButtonsController getInstance() {
+//        return instance ;
+//    }
     @FXML
     private Button priority1Btn;
 
@@ -30,16 +37,17 @@ public class PriorityButtonsController {
     @FXML
     void selectPriority(ActionEvent event) {
         if (event.getSource() == priority1Btn) {
-            System.out.println("p1");
+            //priority = 1 ;
         }
         else if (event.getSource() == priority2Btn) {
-            System.out.println("p2");
+            //priority = 2;
         }
         else if (event.getSource() == priority3Btn) {
-            System.out.println("p3");
+            //priority = 3 ;
         }
         else {
-            System.out.println("p4");
+            //priority = 4 ;
         }
     }
+
 }

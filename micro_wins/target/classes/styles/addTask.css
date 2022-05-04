@@ -1,4 +1,8 @@
 
+.button:hover {
+    -fx-cursor:hand;
+}
+
 #addTaskView{
     -fx-background-radius:25;
     -fx-border-radius:25;
