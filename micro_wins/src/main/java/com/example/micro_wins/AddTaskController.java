@@ -97,10 +97,6 @@ public class AddTaskController {
         priorityStage.setY(priorityButtonsInitPosY);
         priorityStage.show();
         PriorityButtonsController p = new PriorityButtonsController() ;
-        while(p.getPriority() == 4) {
-            System.out.println(p.getPriority());
-        }
-        System.out.println(p.getPriority());
     }
 
     @FXML
