@@ -30,11 +30,11 @@
             <Font name="System Bold" size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="24.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
-          <image>
-              <Image url="@../../../images/clarity_assign_user_line.png" />
-          </image>
-      </ImageView>
+         <ImageView fitHeight="24.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
+            <image>
+               <Image url="@../../../images/clarity_assign_user_line.png" />
+            </image>
+         </ImageView>
    </children>
    <padding>
       <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
