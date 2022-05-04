@@ -31,8 +31,3 @@
 #addTaskView #addTaskBtn:hover {
     -fx-background-color: #DC3939;
 }
-
-#priorityButtonBar .button{
-    -fx-border-color:gray;
-    -fx-background-color:transparent;
-}
