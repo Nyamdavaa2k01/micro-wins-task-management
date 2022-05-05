@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="1366.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.TodayViewController">
+
+    <fx:include source="header-menu.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+    <fx:include source="navigation.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="37.0" />
+   <Label layoutX="370.0" layoutY="92.0" text="Today">
+      <font>
+         <Font size="31.0" />
+      </font>
+   </Label>
+   <Label fx:id="todayDateLbl" layoutX="465.0" layoutY="115.0" text="May 6, Friday" textFill="#807474" />
+</AnchorPane>
