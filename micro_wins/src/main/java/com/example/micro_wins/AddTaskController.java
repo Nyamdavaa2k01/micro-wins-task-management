@@ -6,11 +6,13 @@
 
 package com.example.micro_wins;
 
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -25,7 +27,9 @@ import javafx.stage.StageStyle;
 import java.io.IOException;
 import java.sql.*;
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AddTaskController {
 
@@ -36,6 +40,7 @@ public class AddTaskController {
      * priority 4 is choosen by default
      */
     private int priority = 4;
+    private int maxTaskIdInDatabase = 1 ;
     private final String BUTTON_STYLE = "-fx-background-color:transparent; -fx-border-color:gray; -fx-cursor:hand" ;
 //    private final String HOVERED_BUTTON_STYLE = "-fx-background-color:-fx-shadow-highlight-color; -fx-border-color:gray; -fx-cursor:hand";
 
@@ -44,7 +49,20 @@ public class AddTaskController {
     public void initialize() throws SQLException {
         taskDatePicker.setValue(LocalDate.now());
         connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
+        /**
+         * Add Task Button is disabled while Task Name TextField is empty
+         */
+        BooleanBinding bindTaskNameTxt = new BooleanBinding() {
+            {
+                super.bind(taskNameTxt.textProperty());
+            }
 
+            @Override
+            protected boolean computeValue() {
+                return (taskNameTxt.getText().isEmpty());
+            }
+        };
+        addTaskBtn.disableProperty().bind(bindTaskNameTxt);
     }
 
     @FXML
@@ -73,20 +91,30 @@ public class AddTaskController {
 
     @FXML
     void addReminder(ActionEvent event) {
-
+        Alert alert = new Alert(Alert.AlertType.INFORMATION) ;
+        alert.setTitle("Мэдэгдэл");
+        alert.setHeaderText("Энэхүү хэсгийн хөгжүүлэлт дуусаагүй байна.");
+        alert.setContentText("Хугацаа сануулах үйлдэл нь байж болох шаардлага дунд багтсан байгааг анхаарна уу");
+        alert.showAndWait();
     }
 
     @FXML
     void addTask(ActionEvent event) throws SQLException {
         String taskTitle = taskNameTxt.getText() ;
         String taskDefinition = taskDescriptionTxt.getText();
-//        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
-//        Statement statement = connection.createStatement() ;
-//        ResultSet resultSet = statement.executeQuery("SELECT * FROM mw_task") ;
-//        while (resultSet.next()) {
-//            System.out.println(resultSet.getString("task_title"));
-//        }
-        //statement.executeUpdate("INSERT INTO mw_task(task_title, task_definition) VALUES ( ' " + taskTitle + " ',' " + taskDefinition + " ');") ;
+        Statement addTaskStatement = connection.createStatement() ;
+        String insertQuery = "INSERT INTO mw_task (task_title, task_definition, task_priority, task_status, task_start_date, task_user_id) VALUES (?, ?, ?, ?, ?, ?)" ;
+        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS) ;
+        preparedStatement.setString(1, taskTitle);
+        preparedStatement.setString(2, taskDefinition);
+        preparedStatement.setInt(3, priority);
+        preparedStatement.setInt(4, 1);
+        java.util.Date datePickerDate = java.util.Date.from(taskDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()) ;
+        java.sql.Date sqlDate = new java.sql.Date(datePickerDate.getTime()) ;
+        preparedStatement.setDate(5, sqlDate);
+        preparedStatement.setInt(6, 1);
+        preparedStatement.addBatch();
+        preparedStatement.executeBatch() ;
         addTaskStage = (Stage)  addTaskBtn.getScene().getWindow() ;
         addTaskStage.close();
      }
@@ -125,13 +153,14 @@ public class AddTaskController {
             priorityButtons[i].setOnMouseClicked(e -> {
                 String text = ((Button) e.getSource()).getText();
                 priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                setPriorityBtn.setGraphic(((Button) e.getSource()).getGraphic());
                 ((Stage)((Button)e.getSource()).getScene().getWindow()).close();
             });
             String buttonText = "Priority " + (i+1) ;
             String buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/priority-"+(i+1)+"-icon.png" ;
             ImageView buttonGraphicImage = new ImageView(new Image(buttonGraphicFilePath)) ;
-            buttonGraphicImage.setFitHeight(30);
-            buttonGraphicImage.setFitWidth(30);
+            buttonGraphicImage.setFitHeight(25);
+            buttonGraphicImage.setFitWidth(25);
             priorityButtons[i].setText(buttonText);
             priorityButtons[i].setGraphic(buttonGraphicImage);
             priorityButtons[i].setPrefWidth(200);
