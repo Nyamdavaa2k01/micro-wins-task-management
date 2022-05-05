@@ -31,3 +31,21 @@
 #addTaskView #addTaskBtn:hover {
     -fx-background-color: #DC3939;
 }
+
+.date-picker {
+    -fx-background-color:transparent ;
+    -fx-border-color:gray;
+}
+
+.date-picker > .arrow-button {
+    -fx-background-radius : 10 ;
+    -fx-border-radius : 10 ;
+}
+
+.non-editable-datepicker > .arrow-button > .arrow {
+    -fx-padding: 0px;
+}
+
+.non-editable-datepicker > .date-picker-display-node {
+    -fx-background-insets: 1 1 1 1;
+}

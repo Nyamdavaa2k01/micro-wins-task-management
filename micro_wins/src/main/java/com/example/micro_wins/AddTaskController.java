@@ -12,6 +12,7 @@ import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -23,10 +24,14 @@ import javafx.stage.StageStyle;
 
 import java.io.IOException;
 import java.sql.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class AddTaskController {
 
     Stage addTaskStage ;
+    private Stage priorityButtonsStage ;
+    Connection connection ;
     /**
      * priority 4 is choosen by default
      */
@@ -35,6 +40,12 @@ public class AddTaskController {
 //    private final String HOVERED_BUTTON_STYLE = "-fx-background-color:-fx-shadow-highlight-color; -fx-border-color:gray; -fx-cursor:hand";
 
 
+    @FXML
+    public void initialize() throws SQLException {
+        taskDatePicker.setValue(LocalDate.now());
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
+
+    }
 
     @FXML
     private Button addReminderBtn;
@@ -52,10 +63,7 @@ public class AddTaskController {
     private Button setPriorityBtn;
 
     @FXML
-    private Button setProjectBtn;
-
-    @FXML
-    private Button setTimeBtn;
+    private DatePicker taskDatePicker;
 
     @FXML
     private TextField taskDescriptionTxt;
@@ -93,8 +101,9 @@ public class AddTaskController {
     @FXML
     void setPriority(ActionEvent event) throws IOException {
         VBox priorityButtonsRoot = new VBox() ;
-        Scene priorityButtonsScene = new Scene(priorityButtonsRoot, 200, 172) ; 
-        Stage priorityButtonsStage = new Stage( );
+        Scene priorityButtonsScene = new Scene(priorityButtonsRoot, 200, 172) ;
+        if (priorityButtonsStage != null) priorityButtonsStage.close();
+        priorityButtonsStage = new Stage( );
         priorityButtonsStage.initStyle(StageStyle.UNDECORATED);
 
         /**
@@ -117,7 +126,6 @@ public class AddTaskController {
                 String text = ((Button) e.getSource()).getText();
                 priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
                 ((Stage)((Button)e.getSource()).getScene().getWindow()).close();
-
             });
             String buttonText = "Priority " + (i+1) ;
             String buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/priority-"+(i+1)+"-icon.png" ;
@@ -130,22 +138,59 @@ public class AddTaskController {
             priorityButtons[i].setPrefHeight(43);
             priorityButtonsRoot.getChildren().add(priorityButtons[i]) ;
         }
-
-
-       // priorityButtonsRoot.getChildren().addAll(priority1Btn, priority2Btn, priority3Btn, priority4Btn) ;
         priorityButtonsStage.setScene(priorityButtonsScene);
         priorityButtonsStage.show();
     }
+    /**
+     * The following method (setProject) had been used to set project of the task when
+     * user click set priority button.
+     *
+     * User cannot add tasks to project from private space so the following code will not be used.
+     * However, the code is only commented but not deleted for possible future use in project tasks!
+     */
+//
+//    @FXML
+//    private Button setProjectBtn;
+
+//    @FXML
+//    void setProject(ActionEvent event) throws SQLException {
+//        ArrayList<Button> projectButtons = new ArrayList<>();
+//        Statement statement = connection.createStatement() ;
+//        ResultSet projectsInDatabase = statement.executeQuery("SELECT * FROM mw_project") ;
+//        while (projectsInDatabase.next()) {
+//            String projectName = projectsInDatabase.getString("pro_title") ;
+//            Button projectBtn = new Button(projectName) ;
+//            projectBtn.setPrefHeight(43);
+//            projectBtn.setPrefWidth(200);
+//            projectBtn.setStyle(BUTTON_STYLE);
+//            projectBtn.setAlignment(Pos.TOP_LEFT);
+//            ImageView buttonGraphicImage = new ImageView(new Image("file:micro_wins/src/main/resources/images/inbox-icon.png")) ;
+//            buttonGraphicImage.setFitHeight(30);
+//            buttonGraphicImage.setFitWidth(30);
+//            projectBtn.setGraphic(buttonGraphicImage);
+//            projectButtons.add(projectBtn) ;
+//
+//
+//        }
+//
+//        VBox projectButtonsRoot = new VBox() ;
+//        Scene projectButtonsScene = new Scene(projectButtonsRoot, 200, projectButtons.size()*43) ;
+//
+//        int i ;
+//        for (i = 0 ; i < projectButtons.size() ; i ++) {
+//            projectButtonsRoot.getChildren().add(projectButtons.get(i)) ;
+//        }
+//
+//        /**
+//         * Stage is created down here because scene creation need number of active projects in database
+//         */
+//        Stage projectButtonsStage = new Stage() ;
+//        projectButtonsStage.setScene(projectButtonsScene);
+//        projectButtonsStage.initStyle(StageStyle.UNDECORATED);
+//     //   projectButtonsStage.initStyle(StageStyle.TRANSPARENT);
+//        projectButtonsStage.show();
+//    }
 
 
-    @FXML
-    void setProject(ActionEvent event) {
-
-    }
-
-    @FXML
-    void setTime(ActionEvent event) {
-
-    }
 
 }
