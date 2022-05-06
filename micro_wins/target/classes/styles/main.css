@@ -1,0 +1,15 @@
+/*
+    This css is not only used for main view but also other main uses of application.
+*/
+
+.root {
+    -fx-background-color:white;
+}
+
+.button {
+    -fx-background-color:transparent;
+}
+
+.button:hover {
+    -fx-cursor:hand;
+}
