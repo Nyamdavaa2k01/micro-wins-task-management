@@ -41,15 +41,9 @@ public class MainApp extends Application {
     public void start(Stage stage) throws IOException, SQLException {
 
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
-        Statement statement = connection.createStatement() ;
-        ResultSet resultSet = statement.executeQuery("SELECT * FROM mw_task") ;
-        while (resultSet.next()) {
-            System.out.println(resultSet.getString("task_title"));
-        }
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
         stage.initStyle(StageStyle.UNDECORATED);
-//        stage.setMaximized(true);
         stage.setResizable(true);
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds() ;
         stage.setX(primaryScreenBounds.getMinX());

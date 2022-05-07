@@ -8,11 +8,14 @@ package com.example.micro_wins;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +25,7 @@ import java.io.IOException;
 public class NavigationController {
 
     private static final String HOME_VIEW = "home-view.fxml";
-    private static final String TODAY_VIEW = "home-view.fxml";
+    private static final String TODAY_VIEW = "today-view.fxml";
     private static final String INBOX_VIEW = "";
     private static final String UPCOMING_VIEW = "";
     private static final String RESULT_VIEW = "";
@@ -34,6 +37,22 @@ public class NavigationController {
 
     @Autowired
     private ProjectController projectController;
+
+    @Autowired
+    private TodayViewController todayViewController ;
+
+    //@PostConstruct
+    public void initialize() {
+        if (stage == null)
+            stage = new Stage();
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.setResizable(true);
+        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds() ;
+        stage.setX(primaryScreenBounds.getMinX());
+        stage.setY(primaryScreenBounds.getMinY());
+        stage.setWidth(primaryScreenBounds.getWidth());
+        stage.setHeight(primaryScreenBounds.getHeight());
+    }
 
     @FXML
     private VBox navBar;
@@ -76,12 +95,16 @@ public class NavigationController {
 
     @FXML
     void navToToday(ActionEvent event) throws IOException {
-        show(TODAY_VIEW, 1366, 400);
-        System.out.println("Under development for now :)");
+       // show(TODAY_VIEW, 1366, 400);
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("today-view.fxml"));
+        Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
+        stage.setScene(scene);
+        stage.show();
+        ResizeHelper.addResizeListener(stage);
     }
 
     @FXML
-    void navToUpcomingBtn(ActionEvent event) {
+    void navToUpcoming(ActionEvent event) {
         System.out.println("Under development for now :)");
     }
 
