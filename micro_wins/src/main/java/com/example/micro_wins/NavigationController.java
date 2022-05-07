@@ -110,7 +110,6 @@ public class NavigationController {
         //root.getStylesheets().add(getClass().getResource(APP_CSS).toExternalForm());
         return root;
     }
-
     private Object getViewController(String view) {
         if (PROJECT_VIEW.equals(view)) {
             return projectController;

@@ -1,16 +1,226 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.example.micro_wins.ProjectController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.ProjectController">
     <children>
         <fx:include source="header-menu.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <VBox layoutY="36.0" prefHeight="720.0" prefWidth="1366.0">
+         <children>
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="700.0">
+               <children>
+                  <Label text="Project Name">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Label>
+                  <HBox fx:id="pro_add_member" alignment="CENTER" maxWidth="220.0" prefHeight="100.0" prefWidth="220.0" spacing="8.0" styleClass="add_owner_project_task" stylesheets="@../../../styles/projectView.css">
+                     <HBox.margin>
+                        <Insets bottom="20.0" right="20.0" top="20.0" />
+                     </HBox.margin>
+                      <children>
+                          <HBox alignment="CENTER" maxHeight="25.0" style="-fx-background-color: #fff;">
+                              <ImageView fitHeight="25.0" fitWidth="25.0">
+                                  <image>
+                                      <Image url="@../../../images/add-icon.png" />
+                                  </image>
+                              </ImageView>
+                          </HBox>
+                          <Label text="Add a member">
+                           <font>
+                              <Font size="15.0" />
+                           </font></Label>
+                          <HBox maxHeight="28.0">
+                              <ImageView fitHeight="28.0" fitWidth="28.0">
+                                  <image>
+                                      <Image url="@../../../images/clarity_assign_user_line.png" />
+                                  </image>
+                              </ImageView>
+                          </HBox>
+                      </children>
+                  </HBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="100.0" right="100.0" />
+               </VBox.margin>
+            </HBox>
+            <Separator prefWidth="200.0">
+               <VBox.margin>
+                  <Insets left="60.0" right="60.0" />
+               </VBox.margin>
+            </Separator>
+            <HBox alignment="CENTER" prefHeight="340.0" prefWidth="300.0" spacing="20.0">
+               <children>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
+                     <children>
+                        <HBox fx:id="pro_add_member1" alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #8980EF; -fx-background-radius: 35;">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="25.0">
+                                 <children>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0">
+                                       <image>
+                                          <Image url="@../../../images/open.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Label prefWidth="115.0" text="Open" textFill="WHITE">
+                                 <font>
+                                    <Font size="21.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" style="-fx-background-color: #ffffff59; -fx-background-radius: 10;" text="3" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox prefHeight="235.0" prefWidth="220.0" spacing="10.0">
+                           <children>
+                                <fx:include source="project-card-view.fxml" AnchorPane.topAnchor="0.0" />
+                              <fx:include source="project-card-view.fxml" />
+                              <fx:include source="project-card-view.fxml" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #F35532D4; -fx-background-radius: 35;">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="25.0">
+                                 <children>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0">
+                                       <image>
+                                          <Image url="@../../../images/working.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Label prefWidth="115.0" text="Working" textFill="WHITE">
+                                 <font>
+                                    <Font size="21.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" style="-fx-background-color: #ffffff59; -fx-background-radius: 10;" text="1" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox prefHeight="236.0" prefWidth="220.0" spacing="10.0">
+                           <children>
+                              <fx:include source="project-card-view.fxml" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 35;">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="25.0">
+                                 <children>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0">
+                                       <image>
+                                          <Image url="@../../../images/completed.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Label prefWidth="115.0" text="Completed" textFill="WHITE">
+                                 <font>
+                                    <Font size="21.0" />
+                                 </font>
+                              </Label>
+                              <Label alignment="CENTER" style="-fx-background-color: #ffffff59; -fx-background-radius: 10;" text="2" textAlignment="CENTER" textFill="WHITE">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                                 <padding>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </padding>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <VBox prefHeight="233.0" prefWidth="220.0" spacing="10.0">
+                           <children>
+                              <fx:include source="project-card-view.fxml" />
+                           </children>
+                           <padding>
+                              <Insets left="10.0" right="10.0" />
+                           </padding>
+                        </VBox>
+                     </children>
+                  </VBox>
+                  <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <children>
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #d3d3d3; -fx-background-radius: 35;">
+                           <children>
+                              <HBox alignment="CENTER" maxHeight="25.0" style="-fx-background-color: #fff;">
+                                 <children>
+                                    <ImageView fitHeight="25.0" fitWidth="25.0">
+                                       <image>
+                                          <Image url="@../../../images/add-icon.png" />
+                                       </image>
+                                    </ImageView>
+                                 </children>
+                              </HBox>
+                              <Label prefWidth="140.0" text="Add a section">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
+               </children>
+               <VBox.margin>
+                  <Insets left="60.0" right="60.0" />
+               </VBox.margin>
+               <padding>
+                  <Insets top="15.0" />
+               </padding>
+            </HBox>
+         </children>
+      </VBox>
     </children>
 </AnchorPane>
