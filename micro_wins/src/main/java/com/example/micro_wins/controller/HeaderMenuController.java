@@ -3,8 +3,9 @@
  * @project micro-wins-task-management
  */
 
-package com.example.micro_wins;
+package com.example.micro_wins.controller;
 
+import com.example.micro_wins.MainApp;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

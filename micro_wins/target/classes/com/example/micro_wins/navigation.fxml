@@ -6,7 +6,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="273.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@../../../styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.NavigationController">
+<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="273.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@../../../styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.controller.NavigationController">
    <children>
       <Button fx:id="navToTodayBtn" mnemonicParsing="false" onAction="#navToToday" text="Today">
          <graphic>

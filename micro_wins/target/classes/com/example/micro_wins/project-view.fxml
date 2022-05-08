@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Separator?>
 <?import javafx.scene.image.Image?>
@@ -8,12 +9,13 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="800.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.ProjectController">
+<AnchorPane prefHeight="1000.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.micro_wins.controller.ProjectController">
     <children>
         <fx:include source="header-menu.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <VBox layoutY="36.0" prefHeight="720.0" prefWidth="1366.0">
+      <VBox layoutY="36.0" prefHeight="964.0" prefWidth="1366.0">
          <children>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="700.0">
                <children>
@@ -25,7 +27,7 @@
                         <Insets left="20.0" />
                      </HBox.margin>
                   </Label>
-                  <HBox fx:id="pro_add_member" alignment="CENTER" maxWidth="220.0" onMouseClicked="#addMemberToPro" prefHeight="100.0" prefWidth="220.0" spacing="8.0" styleClass="add_owner_project_task" stylesheets="@../../../styles/projectView.css">
+                  <HBox fx:id="pro_add_member" alignment="CENTER" maxWidth="220.0" onMouseClicked="#addMember" prefHeight="100.0" prefWidth="220.0" spacing="8.0" styleClass="add_owner_project_task" stylesheets="@../../../styles/projectView.css">
                      <HBox.margin>
                         <Insets bottom="20.0" right="20.0" top="20.0" />
                      </HBox.margin>
@@ -64,13 +66,13 @@
                <children>
                   <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
                      <children>
-                        <HBox fx:id="pro_add_member1" alignment="CENTER" maxHeight="60.0" maxWidth="220.0" onMouseClicked="#addMemberToPro" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #8980EF; -fx-background-radius: 35;">
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #8980EF; -fx-background-radius: 35;">
                            <children>
-                              <HBox alignment="CENTER" maxHeight="25.0" style="-fx-background-color: #fff;">
+                              <HBox alignment="CENTER" maxHeight="25.0">
                                  <children>
                                     <ImageView fitHeight="25.0" fitWidth="25.0">
                                        <image>
-                                          <Image url="@../../../images/add-icon.png" />
+                                          <Image url="@../../../images/open.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -110,13 +112,13 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <HBox fx:id="pro_add_member11" alignment="CENTER" maxHeight="60.0" maxWidth="220.0" onMouseClicked="#addMemberToPro" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #F35532D4; -fx-background-radius: 35;">
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #F35532D4; -fx-background-radius: 35;">
                            <children>
-                              <HBox alignment="CENTER" maxHeight="25.0" style="-fx-background-color: #fff;">
+                              <HBox alignment="CENTER" maxHeight="25.0">
                                  <children>
                                     <ImageView fitHeight="25.0" fitWidth="25.0">
                                        <image>
-                                          <Image url="@../../../images/add-icon.png" />
+                                          <Image url="@../../../images/working.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -151,13 +153,13 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <HBox fx:id="pro_add_member111" alignment="CENTER" maxHeight="60.0" maxWidth="220.0" onMouseClicked="#addMemberToPro" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 35;">
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #4CAF50; -fx-background-radius: 35;">
                            <children>
-                              <HBox alignment="CENTER" maxHeight="25.0" style="-fx-background-color: #fff;">
+                              <HBox alignment="CENTER" maxHeight="25.0">
                                  <children>
                                     <ImageView fitHeight="25.0" fitWidth="25.0">
                                        <image>
-                                          <Image url="@../../../images/add-icon.png" />
+                                          <Image url="@../../../images/completed.png" />
                                        </image>
                                     </ImageView>
                                  </children>
@@ -192,7 +194,7 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                      <children>
-                        <HBox fx:id="pro_add_member1111" alignment="CENTER" maxHeight="60.0" maxWidth="220.0" onMouseClicked="#addMemberToPro" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #d3d3d3; -fx-background-radius: 35;">
+                        <HBox alignment="CENTER" maxHeight="60.0" maxWidth="220.0" prefHeight="60.0" prefWidth="220.0" spacing="8.0" style="-fx-background-color: #d3d3d3; -fx-background-radius: 35;">
                            <children>
                               <HBox alignment="CENTER" maxHeight="25.0" style="-fx-background-color: #fff;">
                                  <children>
@@ -220,6 +222,89 @@
                   <Insets top="15.0" />
                </padding>
             </HBox>
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0">
+               <children>
+                  <Label text="Project Process">
+                     <font>
+                        <Font name="System Bold" size="32.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="20.0" />
+                     </HBox.margin>
+                  </Label>
+               </children>
+               <VBox.margin>
+                  <Insets left="100.0" right="100.0" />
+               </VBox.margin>
+            </HBox>
+            <Separator prefWidth="200.0">
+               <padding>
+                  <Insets left="60.0" right="60.0" />
+               </padding>
+            </Separator>
+            <VBox prefHeight="417.0" prefWidth="1126.0">
+               <VBox.margin>
+                  <Insets left="120.0" right="120.0" />
+               </VBox.margin>
+               <children>
+                  <HBox alignment="CENTER" prefHeight="60.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Circle fill="#8980ef" radius="12.0" stroke="#8980ef" strokeType="INSIDE" />
+                              <Label text="Open">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets />
+                           </HBox.margin>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Circle fill="#f35532" radius="12.0" stroke="#f35532" strokeType="INSIDE" />
+                              <Label text="Working">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Circle fill="#ff13bf" radius="12.0" stroke="#ff13bf" strokeType="INSIDE" />
+                              <Label text="Postponed">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
+                           <children>
+                              <Circle fill="#4caf50" radius="12.0" stroke="#4caf50" strokeType="INSIDE" />
+                              <Label text="Completed">
+                                 <font>
+                                    <Font size="18.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </HBox>
+                     </children>
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                  </HBox>
+                  <Separator prefWidth="200.0">
+                     <padding>
+                        <Insets left="60.0" right="60.0" />
+                     </padding>
+                  </Separator>
+                  <PieChart prefHeight="354.0" prefWidth="1126.0" />
+               </children>
+            </VBox>
          </children>
       </VBox>
     </children>

@@ -14,4 +14,6 @@ module com.example.micro_wins {
 
     opens com.example.micro_wins to javafx.fxml;
     exports com.example.micro_wins;
+    exports com.example.micro_wins.controller;
+    opens com.example.micro_wins.controller to javafx.fxml;
 }

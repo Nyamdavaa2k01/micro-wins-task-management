@@ -4,7 +4,7 @@
  * @definition Header дээрх "+" товчийг дарахад гарж ирэх ба хэрхэн цонх болгон үзүүлж буйг HeaderMenuController-оос харна уу.
  */
 
-package com.example.micro_wins;
+package com.example.micro_wins.controller;
 
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
@@ -48,7 +48,7 @@ public class AddTaskController {
     @FXML
     public void initialize() throws SQLException {
         taskDatePicker.setValue(LocalDate.now());
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
         /**
          * Add Task Button is disabled while Task Name TextField is empty
          */

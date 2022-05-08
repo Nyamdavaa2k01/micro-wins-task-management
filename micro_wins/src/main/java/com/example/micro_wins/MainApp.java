@@ -5,6 +5,7 @@
 
 package com.example.micro_wins;
 
+import com.example.micro_wins.controller.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
@@ -40,7 +41,7 @@ public class MainApp extends Application {
     @Override
     public void start(Stage stage) throws IOException, SQLException {
 
-        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
+        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
         FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("home-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
         stage.initStyle(StageStyle.UNDECORATED);

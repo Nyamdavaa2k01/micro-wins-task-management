@@ -3,8 +3,10 @@
  * @project micro-wins-task-management
  */
 
-package com.example.micro_wins;
+package com.example.micro_wins.controller;
 
+import com.example.micro_wins.MainApp;
+import com.example.micro_wins.ResizeHelper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -24,12 +26,12 @@ import java.io.IOException;
 @Component
 public class NavigationController {
 
-    private static final String HOME_VIEW = "home-view.fxml";
-    private static final String TODAY_VIEW = "today-view.fxml";
+    private static final String HOME_VIEW = "/com/example/micro_wins/home-view.fxml";
+    private static final String TODAY_VIEW = "/com/example/micro_wins/today-view.fxml";
     private static final String INBOX_VIEW = "";
     private static final String UPCOMING_VIEW = "";
     private static final String RESULT_VIEW = "";
-    private static final String PROJECT_VIEW = "project-view.fxml";
+    private static final String PROJECT_VIEW = "/com/example/micro_wins/project-view.fxml";
     private Stage stage;
 
     @Autowired
@@ -110,7 +112,7 @@ public class NavigationController {
 
     @FXML
     void seeAllProjects(ActionEvent event) throws IOException {
-        show(PROJECT_VIEW, 1366, 400);
+        show(PROJECT_VIEW, 1366, 700);
         System.out.println("Under development for now :)");
     }
 

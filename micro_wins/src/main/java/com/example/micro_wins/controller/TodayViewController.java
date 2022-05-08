@@ -1,4 +1,4 @@
-package com.example.micro_wins;
+package com.example.micro_wins.controller;
 
 /**
  * @author Nyamka
@@ -6,6 +6,7 @@ package com.example.micro_wins;
  * @created 06/05/2022 - 1:46 AM
  */
 
+import com.example.micro_wins.Task;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -30,7 +31,7 @@ public class TodayViewController {
 
     @FXML
     public void initialize () throws SQLException {
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "pass") ;
+        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
         Statement getTaskStatement = connection.createStatement() ;
         ResultSet tasksInDatabase = getTaskStatement.executeQuery("SELECT * FROM mw_task") ;
         while (tasksInDatabase.next()) {

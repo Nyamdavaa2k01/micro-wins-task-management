@@ -1,4 +1,4 @@
-package com.example.micro_wins;
+package com.example.micro_wins.controller;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
