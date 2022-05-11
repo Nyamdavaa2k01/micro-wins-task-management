@@ -11,6 +11,7 @@ import com.example.micro_wins.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
@@ -21,10 +22,15 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 =======
+=======
+>>>>>>> Stashed changes
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
 >>>>>>> Stashed changes
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -38,8 +44,13 @@ import org.springframework.stereotype.Controller;
 import java.sql.*;
 
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
 import static javafx.scene.paint.Color.BLACK;
 
+=======
+@Controller
+@FxmlView
+>>>>>>> Stashed changes
 =======
 @Controller
 @FxmlView
