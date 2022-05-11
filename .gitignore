@@ -12,3 +12,5 @@ micro_wins/target/classes/module-info.class
 micro_wins/target/classes/module-info.class
 *.class
 *.class
+*.properties
+*.java

@@ -10,6 +10,7 @@ import com.example.micro_wins.ConstantValues;
 import com.example.micro_wins.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+<<<<<<< Updated upstream
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -17,6 +18,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+=======
+>>>>>>> Stashed changes
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
