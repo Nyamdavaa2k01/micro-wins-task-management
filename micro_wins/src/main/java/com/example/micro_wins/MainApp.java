@@ -44,6 +44,7 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
 <<<<<<< Updated upstream
+<<<<<<< Updated upstream
     @Override
     public void start(Stage stage) throws IOException, SQLException {
 
@@ -60,6 +61,11 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
         stage.setScene(scene);
         stage.show();
         ResizeHelper.addResizeListener(stage);
+=======
+    public static StageManager getStageManager()
+    {
+        return STAGE_MANAGER;
+>>>>>>> Stashed changes
 =======
     public static StageManager getStageManager()
     {
