@@ -8,3 +8,7 @@ micro_wins/src/main/java/com/example/micro_wins/controller/TodayViewController.j
 *.java
 *.java
 *.class
+micro_wins/target/classes/module-info.class
+micro_wins/target/classes/module-info.class
+*.class
+*.class
