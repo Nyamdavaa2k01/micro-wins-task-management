@@ -8,6 +8,7 @@ import java.util.Date;
  * @project micro-wins-task-management
  * @created 06/05/2022 - 1:59 AM
  */
+
 public class Task {
     private int taskId ;
     private String taskTitle;

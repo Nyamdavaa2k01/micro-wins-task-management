@@ -1,4 +1,4 @@
-package com.example.vplab13.conn;
+package com.example.micro_wins.conn;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,9 +9,9 @@ public class MySQLConnUtils {
     public static Connection getMySQLConnection()
             throws ClassNotFoundException, SQLException {
         String hostName = "localhost";
-        String dbName = "learningsql";
+        String dbName = "micro_wins";
         String userName = "root";
-        String password = "";
+        String password = "root";
         return getMySQLConnection(hostName, dbName, userName, password);
     }
 
