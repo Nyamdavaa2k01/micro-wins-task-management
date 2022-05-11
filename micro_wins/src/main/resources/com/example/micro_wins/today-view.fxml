@@ -45,7 +45,7 @@
    </AnchorPane>
    <VBox fx:id="tasksListRoot" layoutX="273.0" layoutY="167.0" prefHeight="1200.0" prefWidth="1093.0">
       <children>
-         <ListView fx:id="taskList" prefHeight="200.0" prefWidth="1093.0" />
+         <ListView fx:id="taskList" prefHeight="1000.0" prefWidth="1093.0" />
       </children>
    </VBox>
 </AnchorPane>

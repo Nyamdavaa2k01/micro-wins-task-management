@@ -13,3 +13,11 @@
 .button:hover {
     -fx-cursor:hand;
 }
+
+.list-view {
+    -fx-border-color:transparent;
+}
+
+.list-cell {
+    -fx-background-color:transparent;
+}

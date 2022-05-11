@@ -1,40 +1,38 @@
 
-.button:hover {
-    -fx-cursor:hand;
-}
-
-#addTaskView{
+.root{
     -fx-background-radius:25;
     -fx-border-radius:25;
     -fx-border-color: black;
 }
 
-#addTaskView .text-field {
+.text-field {
 	-fx-background-color:transparent;
 }
 
-#addTaskView .button {
-	-fx-background-color:transparent ;xampp
+.button {
+	-fx-background-color:transparent ;
 	-fx-border-color:gray; 
 	-fx-border-radius:10 ;
 	-fx-background-radius:10;
 }
 
-#addTaskView .button:hover {
+.button:hover {
     -fx-cursor: hand;
 }
 
-#addTaskView #addTaskBtn {
+#addTaskBtn, #saveTaskBtn {
     -fx-background-color: #CE5A5A;
 }
 
-#addTaskView #addTaskBtn:hover {
+#addTaskBtn:hover, #saveTaskBtn:hover {
     -fx-background-color: #DC3939;
 }
 
 .date-picker {
     -fx-background-color:transparent ;
     -fx-border-color:gray;
+    -fx-border-radius:10;
+    -fx-background-radius:10;
 }
 
 .date-picker > .arrow-button {
@@ -48,4 +46,10 @@
 
 .non-editable-datepicker > .date-picker-display-node {
     -fx-background-insets: 1 1 1 1;
+}
+
+#editTaskRoot {
+    -fx-background-radius:25;
+    -fx-border-radius:25;
+    -fx-border-color:gray;
 }

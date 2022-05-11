@@ -19,6 +19,8 @@ public class Task {
     private Date taskStartDate ;
     private Date taskDeadline ;
     private int taskUserId ;
+    private int taskProId ;
+    private String taskProTitle;
 
     public Task(int taskId, String taskTitle, String taskDefinition, int taskPriority, int taskStatus, int taskCategory, Date taskStartDate, Date taskDeadline) {
         this.taskId = taskId;
@@ -29,6 +31,20 @@ public class Task {
         this.taskCategory = taskCategory;
         this.taskStartDate = taskStartDate;
         this.taskDeadline = taskDeadline;
+    }
+
+    public Task(int taskId, String taskTitle, String taskDefinition, int taskPriority, int taskStatus, int taskCategory, Date taskStartDate, Date taskDeadline, int taskUserId, int taskProId, String taskProTitle) {
+        this.taskId = taskId;
+        this.taskTitle = taskTitle;
+        this.taskDefinition = taskDefinition;
+        this.taskPriority = taskPriority;
+        this.taskStatus = taskStatus;
+        this.taskCategory = taskCategory;
+        this.taskStartDate = taskStartDate;
+        this.taskDeadline = taskDeadline;
+        this.taskUserId = taskUserId;
+        this.taskProId = taskProId;
+        this.taskProTitle = taskProTitle;
     }
 
     public int getTaskId() {
@@ -101,5 +117,21 @@ public class Task {
 
     public void setTaskUserId(int taskUserId) {
         this.taskUserId = taskUserId;
+    }
+
+    public int getTaskProId() {
+        return taskProId;
+    }
+
+    public void setTaskProId(int taskProId) {
+        this.taskProId = taskProId;
+    }
+
+    public String getTaskProTitle() {
+        return taskProTitle;
+    }
+
+    public void setTaskProTitle(String taskProTitle) {
+        this.taskProTitle = taskProTitle;
     }
 }

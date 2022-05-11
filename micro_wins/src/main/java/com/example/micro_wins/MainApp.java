@@ -42,8 +42,7 @@ public class MainApp extends Application {
     public void start(Stage stage) throws IOException, SQLException {
 
         Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("home-view.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("today-view.fxml"));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.setResizable(true);
         Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds() ;
@@ -51,6 +50,7 @@ public class MainApp extends Application {
         stage.setY(primaryScreenBounds.getMinY());
         stage.setWidth(primaryScreenBounds.getWidth());
         stage.setHeight(primaryScreenBounds.getHeight());
+        Scene scene = new Scene(fxmlLoader.load(), primaryScreenBounds.getWidth(), primaryScreenBounds.getHeight());
         stage.setScene(scene);
         stage.show();
         ResizeHelper.addResizeListener(stage);
