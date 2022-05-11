@@ -83,7 +83,6 @@ public class TodayViewController {
                             AnchorPane taskOnTodayRoot = new AnchorPane() ;
                             taskOnTodayRoot.setPrefWidth(TASK_LIST_WIDTH-200);
                             taskOnTodayRoot.setPrefHeight(80);
-
                             Button finishTaskBtn = new Button() ;
                             AnchorPane.setLeftAnchor(finishTaskBtn, 50.0);
                             AnchorPane.setTopAnchor(finishTaskBtn, 14.0);
@@ -159,10 +158,13 @@ public class TodayViewController {
                              * when user clicks button with an icon of pen, textfield shows and user can change textfield
                              */
                             editTaskBtn.setOnMouseClicked(e -> {
+                                AnchorPane editTaskRootContainer = new AnchorPane() ;
                                 AnchorPane editTaskRoot = new AnchorPane() ;
+                                editTaskRootContainer.getChildren().add(editTaskRoot);
+                                AnchorPane.setLeftAnchor(editTaskRoot, 50.0);
+                                AnchorPane.setRightAnchor(editTaskRoot, 50.0);
                                 editTaskRoot.setPrefHeight(204);
-                                editTaskRoot.setPrefWidth(TASK_LIST_WIDTH-200);
-                                editTaskRoot.setMaxWidth(TASK_LIST_WIDTH);
+                                editTaskRoot.setMaxWidth(TASK_LIST_WIDTH-150);
                                 editTaskRoot.getStylesheets().add("file:micro_wins/src/main/resources/styles/addTask.css") ;
                                 editTaskRoot.setStyle("-fx-border-color:gray; " +
                                         "-fx-border-radius: 25;");
@@ -223,8 +225,13 @@ public class TodayViewController {
                                 AnchorPane.setTopAnchor(addReminderBtn, 110.0);
 
                                 editTaskRoot.getChildren().addAll(taskNameTxt, taskDescriptionTxt, taskDatePicker, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
-                                setGraphic(editTaskRoot);
+                                setGraphic(editTaskRootContainer);
 
+                                cancelBtn.setOnMouseClicked(cancelEvent -> {
+                                    taskOnTodayRoot.getChildren().add(bottomSep) ;
+                                    
+                                    setGraphic(taskOnTodayRoot);
+                                });
 
                             });
                         }
