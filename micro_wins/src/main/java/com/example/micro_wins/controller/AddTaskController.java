@@ -23,6 +23,8 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.sql.*;
@@ -31,6 +33,8 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 
+@Controller
+@FxmlView
 public class AddTaskController {
 
     Stage addTaskStage ;

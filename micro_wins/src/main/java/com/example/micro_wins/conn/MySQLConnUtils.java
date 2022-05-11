@@ -4,6 +4,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * @author Bagaa
+ * @project micro-wins-task-management
+ * @created 11/05/2022 - 10:09 AM
+ */
 public class MySQLConnUtils {
 
     public static Connection getMySQLConnection()
@@ -20,13 +25,9 @@ public class MySQLConnUtils {
             ClassNotFoundException {
 
         // Declare the class Driver for MySQL DB
-        // This is necessary with Java 5 (or older)
-        // Java6 (or newer) automatically find the appropriate driver.
-        // If you use Java> 5, then this line is not needed.
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
 
-        // Cấu trúc URL Connection dành cho Oracle
-        // Ví dụ: jdbc:mysql://localhost:3306/simplehr
+        //Connection url
         String connectionURL = "jdbc:mysql://" + hostName + ":3306/" + dbName;
 
         Connection conn = DriverManager.getConnection(connectionURL, userName,

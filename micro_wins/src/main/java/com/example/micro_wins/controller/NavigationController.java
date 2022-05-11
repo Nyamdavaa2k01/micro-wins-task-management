@@ -18,15 +18,17 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 
-@Component
+@Controller
+@FxmlView
 public class NavigationController {
 
-    private static final String HOME_VIEW = "/com/example/micro_wins/home-view.fxml";
+    private static final String HOME_VIEW = "/com/example/micro_wins/MainController.fxml";
     private static final String TODAY_VIEW = "/com/example/micro_wins/today-view.fxml";
     private static final String INBOX_VIEW = "";
     private static final String UPCOMING_VIEW = "";

@@ -22,10 +22,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 
-
+@Controller
+@FxmlView
 public class HeaderMenuController {
     boolean isScreenMaximized = true ;
     double screenPosX = 0;

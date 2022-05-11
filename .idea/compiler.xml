@@ -12,12 +12,12 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="13">
-      <module name="micro_wins" target="15" />
+      <module name="micro_wins" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="micro_wins" options="-parameters" />
+      <module name="micro_wins" options="" />
     </option>
   </component>
 </project>

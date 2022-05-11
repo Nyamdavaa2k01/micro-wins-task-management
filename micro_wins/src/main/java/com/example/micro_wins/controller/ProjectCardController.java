@@ -1,22 +1,18 @@
 package com.example.micro_wins.controller;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Circle;
-import org.springframework.stereotype.Component;
+import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.net.URL;
-import java.util.ResourceBundle;
 
-@Component
+@Controller
+@FxmlView
 public class ProjectCardController {
-
-    @FXML
-    private ResourceBundle resources;
 
     @FXML
     private URL location;
@@ -41,12 +37,4 @@ public class ProjectCardController {
         assert project_status != null : "fx:id=\"project_status\" was not injected: check your FXML file 'project-card-view.fxml'.";
     }
 
-    public ProjectCardController()
-            throws IOException {
-        // attach FXML to this control instance
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("project-card-view.fxml"));
-        loader.setRoot(this);
-        loader.setController(this);
-        loader.load();
-    }
 }
