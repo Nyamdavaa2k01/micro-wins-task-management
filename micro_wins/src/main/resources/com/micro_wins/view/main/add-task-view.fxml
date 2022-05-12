@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="addTaskView" maxHeight="248.0" maxWidth="624.0" prefHeight="228.0" prefWidth="624.0" stylesheets="@/styles/addTask.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.controller.AddTaskController">
+<AnchorPane fx:id="addTaskView" maxHeight="248.0" maxWidth="624.0" prefHeight="228.0" prefWidth="624.0" stylesheets="@/styles/addTask.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.AddTaskController">
    <children>
       <DatePicker fx:id="taskDatePicker" layoutX="37.0" layoutY="118.0" prefHeight="29.0" prefWidth="100.0" />
       <TextField fx:id="taskNameTxt" layoutX="14.0" layoutY="14.0" prefHeight="44.0" prefWidth="582.0" promptText="Task Name..." />
