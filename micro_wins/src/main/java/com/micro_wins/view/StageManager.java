@@ -58,13 +58,13 @@ public class StageManager {
         String title = ResourceBundleUtil.getKey(fxControllerClass.getSimpleName() + ".title");
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
-        ResizeHelper.addResizeListener(primaryStage);
         primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
 
         try
         {
             primaryStage.show();
+            ResizeHelper.addResizeListener(primaryStage);
         } catch (Exception exception)
         {
             logAndExit("Unable to show scene with title " + title, exception);

@@ -56,37 +56,4 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
         return LOCALE;
     }
 
-//    private ConfigurableApplicationContext applicationContext;
-//    @Override
-//    public void init() {
-//        applicationContext = SpringApplication.run(MainController.class);
-//    }
-//
-//    @Override
-//    public void stop() {
-//        applicationContext.close();
-//    }
-//
-//    @Override
-//    public void start(Stage stage) throws IOException, SQLException {
-//
-//        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
-//        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("MainPane.fxml"));
-//        Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
-//        stage.initStyle(StageStyle.UNDECORATED);
-//        stage.setResizable(true);
-//        Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds() ;
-//        stage.setX(primaryScreenBounds.getMinX());
-//        stage.setY(primaryScreenBounds.getMinY());
-//        stage.setWidth(primaryScreenBounds.getWidth());
-//        stage.setHeight(primaryScreenBounds.getHeight());
-//        stage.setScene(scene);
-//        stage.show();
-//        ResizeHelper.addResizeListener(stage);
-//    }
-//
-//    public static void main(String[] args) {
-//        launch();
-//    }
-
 }
