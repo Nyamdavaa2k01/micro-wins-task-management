@@ -6,9 +6,11 @@
 
 package com.micro_wins.view.main;
 
+import com.micro_wins.view.FxController;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -26,14 +28,16 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
-public class AddTaskPane {
+public class AddTaskPane implements Initializable, FxController {
 
     Stage addTaskStage ;
     private Stage priorityButtonsStage ;
@@ -119,6 +123,7 @@ public class AddTaskPane {
         preparedStatement.executeBatch() ;
         addTaskStage = (Stage)  addTaskBtn.getScene().getWindow() ;
         addTaskStage.close();
+
      }
 
     @FXML
@@ -171,6 +176,11 @@ public class AddTaskPane {
         }
         priorityButtonsStage.setScene(priorityButtonsScene);
         priorityButtonsStage.show();
+    }
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
     }
     /**
      * The following method (setProject) had been used to set project of the task when

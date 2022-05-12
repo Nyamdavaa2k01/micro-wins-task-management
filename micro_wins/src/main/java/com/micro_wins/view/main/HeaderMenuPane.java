@@ -6,6 +6,7 @@
 package com.micro_wins.view.main;
 
 import com.micro_wins.MainApp;
+import com.micro_wins.view.StageManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,13 +24,22 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
+import java.net.URL;
 
 @Controller
 @FxmlView
 public class HeaderMenuPane {
+
+    private StageManager stageManager;
+
+    @Autowired
+    ConfigurableApplicationContext springAppContext;
+
     boolean isScreenMaximized = true ;
     double screenPosX = 0;
     double screenPosY = 0;
@@ -79,9 +89,13 @@ public class HeaderMenuPane {
 
     @FXML
     void addTask(ActionEvent event) throws IOException {
+        stageManager = springAppContext.getBean(StageManager.class);
+        //stageManager.rebuildStage(AddTaskPane.class);
         if (taskStage != null) taskStage.close();
         taskStage = new Stage() ;
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("AddTaskPane.fxml"));
+        URL fxmlLocation = getClass().getResource("AddTaskPane.fxml");
+        System.out.println(fxmlLocation);
+        FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation) ;
         taskStage.initStyle(StageStyle.UNDECORATED);
         taskStage.initStyle(StageStyle.TRANSPARENT);
         Scene scene = new Scene(fxmlLoader.load(), 624, 228, Color.TRANSPARENT) ;
