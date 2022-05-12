@@ -6,6 +6,9 @@
 
 package com.micro_wins.view.main;
 
+import com.micro_wins.model.Task;
+import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.utils.ApplicationContextProvider;
 import com.micro_wins.view.FxController;
 import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
@@ -25,6 +28,10 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -39,9 +46,12 @@ import java.util.ResourceBundle;
 @FxmlView
 public class AddTaskPane implements Initializable, FxController {
 
+    @Autowired
+    ConfigurableApplicationContext springAppContext;
+
     Stage addTaskStage ;
     private Stage priorityButtonsStage ;
-    Connection connection ;
+   // Connection connection ;
     /**
      * priority 4 is choosen by default
      */
@@ -51,10 +61,13 @@ public class AddTaskPane implements Initializable, FxController {
 //    private final String HOVERED_BUTTON_STYLE = "-fx-background-color:-fx-shadow-highlight-color; -fx-border-color:gray; -fx-cursor:hand";
 
 
-    @FXML
-    public void initialize() throws SQLException {
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        System.out.println("ssadas");
+       // springAppContext = ApplicationContextProvider.getApplicationContext() ;
+        springAppContext = SpringApplication.run(AddTaskPane.class) ;
         taskDatePicker.setValue(LocalDate.now());
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
+        //   connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
         /**
          * Add Task Button is disabled while Task Name TextField is empty
          */
@@ -69,6 +82,11 @@ public class AddTaskPane implements Initializable, FxController {
             }
         };
         addTaskBtn.disableProperty().bind(bindTaskNameTxt);
+    }
+
+    @FXML
+    public void initialize() {
+
     }
 
     @FXML
@@ -108,19 +126,24 @@ public class AddTaskPane implements Initializable, FxController {
     void addTask(ActionEvent event) throws SQLException {
         String taskTitle = taskNameTxt.getText() ;
         String taskDefinition = taskDescriptionTxt.getText();
-        Statement addTaskStatement = connection.createStatement() ;
-        String insertQuery = "INSERT INTO mw_task (task_title, task_definition, task_priority, task_status, task_start_date, task_user_id) VALUES (?, ?, ?, ?, ?, ?)" ;
-        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS) ;
-        preparedStatement.setString(1, taskTitle);
-        preparedStatement.setString(2, taskDefinition);
-        preparedStatement.setInt(3, priority);
-        preparedStatement.setInt(4, 1);
+        //Statement addTaskStatement = connection.createStatement() ;
         Date datePickerDate = Date.from(taskDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()) ;
-        java.sql.Date sqlDate = new java.sql.Date(datePickerDate.getTime()) ;
-        preparedStatement.setDate(5, sqlDate);
-        preparedStatement.setInt(6, 1);
-        preparedStatement.addBatch();
-        preparedStatement.executeBatch() ;
+//        java.sql.Date sqlDate = new java.sql.Date(datePickerDate.getTime()) ;
+//        String insertQuery = "INSERT INTO mw_task (task_title, task_definition, task_priority, task_status, task_start_date, task_user_id) VALUES (?, ?, ?, ?, ?, ?)" ;
+//        PreparedStatement preparedStatement = connection.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS) ;
+//        preparedStatement.setString(1, taskTitle);
+//        preparedStatement.setString(2, taskDefinition);
+//        preparedStatement.setInt(3, priority);
+//        preparedStatement.setInt(4, 1);
+//        preparedStatement.setDate(5, sqlDate);
+//        preparedStatement.setInt(6, 1);
+//        preparedStatement.addBatch();
+//        preparedStatement.executeBatch();
+
+        Task currentTask = new Task(taskTitle, taskDefinition, priority, 1, datePickerDate, 12) ;
+        TaskRepo repo = springAppContext.getBean(TaskRepo.class) ;
+        System.out.println(currentTask.getTaskId());
+     //   repo.save(currentTask) ;
         addTaskStage = (Stage)  addTaskBtn.getScene().getWindow() ;
         addTaskStage.close();
 
@@ -178,10 +201,6 @@ public class AddTaskPane implements Initializable, FxController {
         priorityButtonsStage.show();
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
     /**
      * The following method (setProject) had been used to set project of the task when
      * user click set priority button.

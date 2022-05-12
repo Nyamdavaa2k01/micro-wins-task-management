@@ -7,7 +7,7 @@ package com.micro_wins.view.main;
  */
 
 import com.micro_wins.constants.ConstantValues;
-import com.micro_wins.Task;
+import com.micro_wins.model.Task;
 import com.micro_wins.view.FxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -60,11 +60,11 @@ public class TodayPane implements Initializable, FxController {
             String taskDefinition = tasksInDatabase.getString("task_definition") ;
             int taskPriority = tasksInDatabase.getInt("task_priority") ;
             int taskStatus = tasksInDatabase.getInt("task_status");
-            int taskCategory = tasksInDatabase.getInt("task_category") ;
+          //  int taskCategory = tasksInDatabase.getInt("task_category") ;
             java.util.Date taskStartDate = tasksInDatabase.getDate("task_start_date") ;
             java.util.Date taskDeadline = tasksInDatabase.getDate("task_deadline") ;
             taskList.getItems().add(
-                    new Task(taskId, taskTitle, taskDefinition, taskPriority, taskStatus, taskCategory, taskStartDate, taskDeadline)
+                    new Task(taskId, taskTitle, taskDefinition, taskPriority, taskStatus, "category", taskStartDate, taskDeadline)
             );
         }
         taskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
