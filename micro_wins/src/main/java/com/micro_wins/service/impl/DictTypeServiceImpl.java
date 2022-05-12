@@ -56,9 +56,9 @@ public class DictTypeServiceImpl implements CrudService<DictType>, DictTypeServi
     }
 
     @Override
-    public DictType findByDictTypeName(String dictTypeName)
+    public DictType findByDtTypeName(String dtTypeName)
     {
-        return dictTypeRepo.findByDictTypeName(dictTypeName);
+        return dictTypeRepo.findByDtTypeName(dtTypeName);
     }
 
     @Override

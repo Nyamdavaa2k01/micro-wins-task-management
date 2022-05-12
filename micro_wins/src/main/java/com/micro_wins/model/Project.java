@@ -18,7 +18,7 @@ public class Project {
     private int proId;
     private String proTitle;
     private int proOwner;
-    private double proCompletionPercent;
+    private float proCompletionPercent;
     private String proDescription;
     private int proStatus;
     private Date proStartDate;
@@ -52,7 +52,7 @@ public class Project {
         return proCompletionPercent;
     }
 
-    public void setProCompletionPercent(double proCompletionPercent) {
+    public void setProCompletionPercent(float proCompletionPercent) {
         this.proCompletionPercent = proCompletionPercent;
     }
 

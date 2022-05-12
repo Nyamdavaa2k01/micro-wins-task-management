@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface DictTypeRepo extends JpaRepository<DictType, Integer> {
-    DictType findByDictTypeName(String dictTypeName);
+    DictType findByDtTypeName(String dtTypeName);
 }

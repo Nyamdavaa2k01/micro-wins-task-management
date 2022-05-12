@@ -13,7 +13,7 @@ import javax.persistence.*;
 public class DictType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "dt_typeno", updatable = false, nullable = false)
+    @Column(name = "dt_type_no", updatable = false, nullable = false)
     private int dtTypeNo;
     private String dtTypeName;
     private String dtEngName;
