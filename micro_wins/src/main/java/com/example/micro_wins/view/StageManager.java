@@ -33,27 +33,20 @@ public class StageManager {
     public void rebuildStage(Class<? extends FxController> fxControllerClass)
     {
         Scene scene = createScene(fxControllerClass);
-        System.out.println("\n\n rebuildStage 1");
         showScene(fxControllerClass, scene);
-        System.out.println("\n\n rebuildStage 2");
 
     }
 
     private Scene createScene(Class<? extends FxController> fxControllerClass)
     {
         Parent node = fxWeaver.loadView(fxControllerClass);
-        System.out.println("\n\n createScene 1");
         Scene sc = primaryStage.getScene();
-        System.out.println("\n\n createScene 2");
 
         if (sc == null)
         {
             sc = new Scene(node);
-            System.out.println("\n\n createScene 3");
         }
-        System.out.println("\n\n createScene 4");
         sc.setRoot(node);
-        System.out.println("\n\n createScene 5");
         return sc;
     }
 
@@ -61,15 +54,10 @@ public class StageManager {
     {
         //primaryStage.initStyle(StageStyle.TRANSPARENT);
         String title = ResourceBundleUtil.getKey(fxControllerClass.getSimpleName() + ".title");
-        System.out.println("\n\n showScene 1");
         primaryStage.setTitle(title);
-        System.out.println("\n\n showScene 2");
         primaryStage.setScene(scene);
-        System.out.println("\n\n showScene 3");
         primaryStage.sizeToScene();
-        System.out.println("\n\n showScene 4");
         primaryStage.centerOnScreen();
-        System.out.println("\n\n showScene 5");
 
         try
         {
@@ -88,7 +76,6 @@ public class StageManager {
 
     public <C, V extends Node> V loadView(Class<C> controllerClass)
     {
-        System.out.println("\n\n loadView 1");
         return fxWeaver.loadView(controllerClass, ResourceBundleUtil.getResourceBundle());
     }
 }
