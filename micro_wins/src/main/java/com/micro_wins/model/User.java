@@ -3,6 +3,7 @@ package com.micro_wins.model;
 //import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 
 /**
@@ -25,6 +26,10 @@ public class User {
 
     public int getUserId(){
         return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
     public int getDeviceId() {
@@ -52,8 +57,12 @@ public class User {
     }
 
     @Override
-    public String toString()
-    {
-        return "User [userId=" + userId + ", deviceId=" + deviceId + ", userName=" + userName + ", userStatus=" + userStatus;
+    public String toString() {
+        return "User{" +
+                "userId=" + userId +
+                ", deviceId=" + deviceId +
+                ", userName='" + userName + '\'' +
+                ", userStatus=" + userStatus +
+                '}';
     }
 }

@@ -1,7 +1,7 @@
 package com.micro_wins.service.impl;
 
 import com.micro_wins.model.User;
-import com.micro_wins.repository.UserRepository;
+import com.micro_wins.repository.UserRepo;
 import com.micro_wins.service.CrudService;
 import com.micro_wins.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,42 +18,42 @@ import java.util.List;
 @Service
 public class UserServiceImpl implements CrudService<User>, UserService {
     @Autowired
-    private UserRepository userRepository;
+    private UserRepo userRepo;
 
     @Override
     public User save(User entity)
     {
-        return userRepository.save(entity);
+        return userRepo.save(entity);
     }
 
     @Override
     public User update(User entity)
     {
-        return userRepository.save(entity);
+        return userRepo.save(entity);
     }
 
     @Override
     public void delete(User entity)
     {
-        userRepository.delete(entity);
+        userRepo.delete(entity);
     }
 
     @Override
     public void deleteById(Integer id)
     {
-        userRepository.deleteById(id);
+        userRepo.deleteById(id);
     }
 
     @Override
     public User findById(Integer id)
     {
-        return userRepository.findById(id).orElse(null);
+        return userRepo.findById(id).orElse(null);
     }
 
     @Override
     public List<User> findAll()
     {
-        return userRepository.findAll();
+        return userRepo.findAll();
     }
 
     @Override
@@ -72,13 +72,13 @@ public class UserServiceImpl implements CrudService<User>, UserService {
     @Override
     public User findByUserName(String userName)
     {
-        return userRepository.findByUserName(userName);
+        return userRepo.findByUserName(userName);
     }
 
     @Override
     public void deleteInBatch(List<User> users)
     {
-        userRepository.deleteInBatch(users);
+        userRepo.deleteInBatch(users);
     }
 
 }
