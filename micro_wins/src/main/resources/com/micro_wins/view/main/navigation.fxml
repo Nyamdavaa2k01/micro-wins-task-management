@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1000.0" prefWidth="273.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@/styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.controller.NavigationController">
+   <children>
+      <Button fx:id="navToTodayBtn" mnemonicParsing="false" onAction="#navToToday" text="Today">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0">
+               <image>
+                  <Image url="@/images/calendar-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="navToInboxBtn" mnemonicParsing="false" onAction="#navToInbox" text="Inbox">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0">
+               <image>
+                  <Image url="@/images/inbox-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="navToUpcomingBtn" mnemonicParsing="false" onAction="#navToUpcoming" text="Upcoming">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0">
+               <image>
+                  <Image url="@/images/upcoming-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="navToResultsBtn" mnemonicParsing="false" onAction="#navToResults" text="Results">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0">
+               <image>
+                  <Image url="@/images/result-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="navToCustomizeBtn" mnemonicParsing="false" onAction="#navToCustomize" text="Customize">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0">
+               <image>
+                  <Image url="@/images/customize-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="seeAllProjectsBtn" mnemonicParsing="false" onAction="#seeAllProjects" text="Projects">
+         <graphic>
+            <ImageView fitHeight="35.0" fitWidth="35.0">
+               <image>
+                  <Image url="@/images/project-icon.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <VBox fx:id="projectButtons" maxWidth="193.0" prefHeight="200.0" prefWidth="193.0" spacing="20.0">
+         <VBox.margin>
+            <Insets left="20.0" />
+         </VBox.margin>
+         <children>
+            <Button mnemonicParsing="false" text="Project 1" />
+            <Button mnemonicParsing="false" text="Project 2 " />
+            <Button mnemonicParsing="false" text="Project 3 " />
+         </children>
+      </VBox>
+   </children>
+   <opaqueInsets>
+      <Insets />
+   </opaqueInsets>
+   <padding>
+      <Insets left="37.0" top="50.0" />
+   </padding>
+</VBox>

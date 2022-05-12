@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<GridPane fx:id="pro_task" alignment="CENTER" hgap="5.0" prefHeight="72.0" prefWidth="210.0" style="-fx-border-color: #000; -fx-border-radius: 30;" vgap="5.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.controller.ProjectCardController">
+   <columnConstraints>
+      <ColumnConstraints halignment="CENTER" minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+      <ColumnConstraints minWidth="10.0" prefWidth="100.0" />
+   </columnConstraints>
+   <rowConstraints>
+      <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="40.0" />
+      <RowConstraints maxHeight="36.0" minHeight="10.0" prefHeight="40.0" />
+   </rowConstraints>
+   <children>
+      <Circle fx:id="project_status" fill="#f55c5c" radius="12.0" stroke="RED" strokeType="INSIDE" strokeWidth="2.0" />
+      <Label fx:id="pro_task_name" alignment="CENTER" prefHeight="17.0" prefWidth="138.0" text="Task 1" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="3">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+      </Label>
+         <ImageView fx:id="is_owner" fitHeight="24.0" fitWidth="28.0" pickOnBounds="true" preserveRatio="true" GridPane.columnIndex="5">
+            <image>
+               <Image url="@/images/clarity_assign_user_line.png" />
+            </image>
+         </ImageView>
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</GridPane>
