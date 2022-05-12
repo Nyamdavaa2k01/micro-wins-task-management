@@ -20,6 +20,7 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
@@ -32,6 +33,9 @@ public class NavigationPane {
     private Stage stage;
 
     @Autowired
+    ConfigurableApplicationContext springAppContext;
+
+    @Autowired
     private MainPane mainController;
 
     @Autowired
@@ -42,6 +46,7 @@ public class NavigationPane {
 
     //@PostConstruct
     public void initialize() {
+        stageManager = springAppContext.getBean(StageManager.class);
         if (stage == null)
             stage = new Stage();
         stage.initStyle(StageStyle.UNDECORATED);
@@ -94,12 +99,7 @@ public class NavigationPane {
 
     @FXML
     void navToToday(ActionEvent event) throws IOException {
-       // show(TODAY_VIEW, 1366, 400);
-        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("TodayPane.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
-        stage.setScene(scene);
-        stage.show();
-        ResizeHelper.addResizeListener(stage);
+        stageManager.rebuildStage(TodayPane.class);
     }
 
     @FXML

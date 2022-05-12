@@ -8,8 +8,10 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constants.ConstantValues;
 import com.micro_wins.Task;
+import com.micro_wins.view.FxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -25,11 +27,13 @@ import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
+import java.net.URL;
 import java.sql.*;
+import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
-public class TodayPane {
+public class TodayPane implements Initializable, FxController {
 
     Connection connection ;
     ConstantValues constantValues ;
@@ -263,4 +267,8 @@ public class TodayPane {
 
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
 }
