@@ -4,15 +4,10 @@
  */
 
 package com.micro_wins.view.main;
-
-import com.micro_wins.MainApp;
-import com.micro_wins.utils.ResizeHelper;
 import com.micro_wins.view.StageManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
 import javafx.stage.Screen;
