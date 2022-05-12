@@ -1,8 +1,8 @@
 package com.micro_wins.view.login;
 
-import com.micro_wins.view.main.MainController;
 import com.micro_wins.service.UserService;
 import com.micro_wins.view.StageManager;
+import com.micro_wins.view.main.MainPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -28,7 +28,7 @@ public class LoginPaneManager
         Integer deviceId = Integer.valueOf(loginPane.getDeviceId());
 
         if (userService.authenticate(userName, deviceId)){
-            stageManager.rebuildStage(MainController.class);
+            stageManager.rebuildStage(MainPane.class);
         }
         else
             loginPane.getLblLogin().setText("Login Failed.");

@@ -1,5 +1,6 @@
 package com.micro_wins.view;
 
+import com.micro_wins.utils.ResizeHelper;
 import com.micro_wins.config.ResourceBundleUtil;
 import javafx.application.Platform;
 import javafx.scene.Node;
@@ -52,10 +53,12 @@ public class StageManager {
 
     private void showScene(Class<? extends FxController> fxControllerClass, Scene scene)
     {
-        //primaryStage.initStyle(StageStyle.TRANSPARENT);
+//        primaryStage.initStyle(StageStyle.TRANSPARENT);
+//        primaryStage.initStyle(StageStyle.UNDECORATED);
         String title = ResourceBundleUtil.getKey(fxControllerClass.getSimpleName() + ".title");
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
+        ResizeHelper.addResizeListener(primaryStage);
         primaryStage.sizeToScene();
         primaryStage.centerOnScreen();
 

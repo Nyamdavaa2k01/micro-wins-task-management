@@ -71,7 +71,7 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
 //    public void start(Stage stage) throws IOException, SQLException {
 //
 //        Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
-//        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("MainController.fxml"));
+//        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("MainPane.fxml"));
 //        Scene scene = new Scene(fxmlLoader.load(), 1366, 700);
 //        stage.initStyle(StageStyle.UNDECORATED);
 //        stage.setResizable(true);
