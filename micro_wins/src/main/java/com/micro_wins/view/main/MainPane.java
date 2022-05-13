@@ -37,5 +37,4 @@ public class MainPane implements Initializable, FxController {
         borderPane.setTop(stageManager.loadView(HeaderMenuPane.class));
         borderPane.setLeft(stageManager.loadView(NavigationPane.class));
     }
-
 }
