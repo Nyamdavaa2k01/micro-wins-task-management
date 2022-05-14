@@ -6,7 +6,8 @@
 
 package com.micro_wins.view.main;
 
-import com.micro_wins.constants.ConstantValues;
+import com.micro_wins.constants.ConstantColors;
+import com.micro_wins.constants.ConstantStyles;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.utils.ApplicationContextProvider;
@@ -67,11 +68,11 @@ public class AddTaskPane implements Initializable, FxController {
      * priority 4 is choosen by default
      */
     private int priority = 4;
-    ConstantValues constantValues ;
+    ConstantStyles constantStyles ;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        constantValues = new ConstantValues() ;
+        constantStyles = new ConstantStyles() ;
         taskDatePicker.setValue(LocalDate.now());
         /**
          * Add Task Button is disabled while Task Name TextField is empty, and as soon as user start
@@ -171,7 +172,7 @@ public class AddTaskPane implements Initializable, FxController {
         for (i = 0 ; i < 4 ; i ++) {
             priorityButtons[i] = new Button() ;
             priorityButtons[i].setAlignment(Pos.TOP_LEFT);
-            priorityButtons[i].setStyle(constantValues.getBUTTON_STYLE());
+            priorityButtons[i].setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
             priorityButtons[i].setOnMouseClicked(e -> {
                 String text = ((Button) e.getSource()).getText();
                 priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
