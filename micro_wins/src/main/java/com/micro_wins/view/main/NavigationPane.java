@@ -8,8 +8,11 @@ import com.micro_wins.view.StageManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -104,7 +107,14 @@ public class NavigationPane {
 
     @FXML
     void seeAllProjects(ActionEvent event) throws IOException {
-        stageManager.rebuildStage(ProjectPane.class);
+//        stageManager.rebuildStage(ProjectPane.class);
+        Stage addProjectStage = new Stage();
+        Parent node = stageManager.loadView(AddProjectPane.class);
+        addProjectStage.setScene(new Scene(node));
+        addProjectStage.initStyle(StageStyle.TRANSPARENT);
+        addProjectStage.initModality(Modality.APPLICATION_MODAL);
+        addProjectStage.show();
+//        StageManager addProjectStageManager = new StageManager(addProjectStage);
         System.out.println("Under development for now :)");
     }
 
