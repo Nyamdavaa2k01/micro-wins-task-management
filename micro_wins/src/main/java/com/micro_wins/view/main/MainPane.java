@@ -32,9 +32,6 @@ public class MainPane implements Initializable, FxController {
     @Autowired
     private StageManager stageManager;
 
-    @Autowired
-    TaskRepo taskRepo ;
-
     @FXML
     BorderPane borderPane;
 
@@ -44,10 +41,5 @@ public class MainPane implements Initializable, FxController {
         // set layout
         borderPane.setTop(stageManager.loadView(HeaderMenuPane.class));
         borderPane.setLeft(stageManager.loadView(NavigationPane.class));
-
-        Task task = new Task("resolve DB", "bolndoo", 3, 1, Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()), 12) ;
-        task.setTaskProId(1);
-        task.setTaskProTitle("inbox");
-        taskRepo.save(task) ;
     }
 }

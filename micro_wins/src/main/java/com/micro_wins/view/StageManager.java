@@ -3,10 +3,12 @@ package com.micro_wins.view;
 import com.micro_wins.utils.ResizeHelper;
 import com.micro_wins.config.ResourceBundleUtil;
 import javafx.application.Platform;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.slf4j.Logger;
@@ -70,7 +72,10 @@ public class StageManager {
         String title = ResourceBundleUtil.getKey(fxControllerClass.getSimpleName() + ".title");
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
-        primaryStage.sizeToScene();
+       // primaryStage.sizeToScene();
+        Rectangle2D screenBounds = Screen.getPrimary().getBounds() ;
+        primaryStage.setWidth(screenBounds.getWidth());
+        primaryStage.setHeight(screenBounds.getHeight());
         primaryStage.centerOnScreen();
 
         try
@@ -95,7 +100,6 @@ public class StageManager {
         try
         {
             secondaryStage.show();
-         //   ResizeHelper.addResizeListener(secondaryStage);
         } catch (Exception exception)
         {
             logAndExit("Unable to show scene with title " + title, exception);

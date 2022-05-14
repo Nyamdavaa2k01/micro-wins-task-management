@@ -5,6 +5,11 @@
 
 package com.micro_wins.view.main;
 
+/**
+ * @author Nyamka
+ * @project micro-wins-task-management
+ */
+
 import com.micro_wins.MainApp;
 import com.micro_wins.view.StageManager;
 import javafx.application.Platform;

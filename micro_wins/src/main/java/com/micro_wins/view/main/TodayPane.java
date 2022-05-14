@@ -6,8 +6,10 @@ package com.micro_wins.view.main;
  * @created 06/05/2022 - 1:46 AM
  */
 
-import com.micro_wins.constants.ConstantValues;
+import com.micro_wins.constants.ConstantColors;
+
 import com.micro_wins.model.Task;
+import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,48 +27,42 @@ import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.sql.*;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
 public class TodayPane implements Initializable, FxController {
 
-    Connection connection ;
-    ConstantValues constantValues ;
+    ConstantColors constantColors ;
+
+    @Autowired
+    TaskRepo taskRepo ;
 
     @FXML
     private ListView<Task> taskList;
 
-    @FXML
-    public void initialize () throws SQLException {
-        constantValues = new ConstantValues() ;
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle)  {
+        constantColors = new ConstantColors() ;
         final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
-        //final double TASK_CELL_HEIGHT = 1000 ;
         taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setStyle("-fx-border-color:white;");
         taskList.setFocusTraversable(false);
         taskList.setPadding(new Insets(20, 200, 0, 50));
-       // taskList.getStylesheets().add("file:micro_wins/src/main/resources/styles/listview.css") ;
-        connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/micro_wins", "root", "root") ;
-        Statement getTaskStatement = connection.createStatement() ;
-        ResultSet tasksInDatabase = getTaskStatement.executeQuery("SELECT * FROM mw_task") ;
-        while (tasksInDatabase.next()) {
-            int taskId = tasksInDatabase.getInt("task_id") ;
-            String taskTitle = tasksInDatabase.getString("task_title") ;
-            String taskDefinition = tasksInDatabase.getString("task_definition") ;
-            int taskPriority = tasksInDatabase.getInt("task_priority") ;
-            int taskStatus = tasksInDatabase.getInt("task_status");
-          //  int taskCategory = tasksInDatabase.getInt("task_category") ;
-            java.util.Date taskStartDate = tasksInDatabase.getDate("task_start_date") ;
-            java.util.Date taskDeadline = tasksInDatabase.getDate("task_deadline") ;
-            taskList.getItems().add(
-                    new Task(taskId, taskTitle, taskDefinition, taskPriority, taskStatus, "category", taskStartDate, taskDeadline)
-            );
+
+        List<Task> tasks = taskRepo.findAll() ;
+        int i ;
+        for (i = 0 ; i < tasks.size() ; i ++) {
+            taskList.getItems().add(tasks.get(i)) ;
         }
+
         taskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
             @Override
             public ListCell<Task> call (ListView<Task> taskList) {
@@ -91,10 +87,10 @@ public class TodayPane implements Initializable, FxController {
                             finishTaskBtn.setPrefHeight(35);
                             finishTaskBtn.setPrefWidth(35);
                             String finishTaskBtnBorderColor ;
-                            if (task.getTaskPriority() == 1) finishTaskBtnBorderColor = constantValues.getPRIORITY1_COLOR() ;
-                            else if (task.getTaskPriority() == 2) finishTaskBtnBorderColor = constantValues.getPRIORITY2_COLOR() ;
-                            else if (task.getTaskPriority() == 3) finishTaskBtnBorderColor = constantValues.getPRIORITY3_COLOR() ;
-                            else finishTaskBtnBorderColor = constantValues.getPRIORITY4_COLOR() ;
+                            if (task.getTaskPriority() == 1) finishTaskBtnBorderColor = constantColors.getPRIORITY1_COLOR() ;
+                            else if (task.getTaskPriority() == 2) finishTaskBtnBorderColor = constantColors.getPRIORITY2_COLOR() ;
+                            else if (task.getTaskPriority() == 3) finishTaskBtnBorderColor = constantColors.getPRIORITY3_COLOR() ;
+                            else finishTaskBtnBorderColor = constantColors.getPRIORITY4_COLOR() ;
                             String finishTaskBtnBgColor = finishTaskBtnBorderColor + "40";
                             finishTaskBtn.setStyle(
                                     "-fx-background-color: " + finishTaskBtnBgColor +  "; " +
@@ -202,6 +198,7 @@ public class TodayPane implements Initializable, FxController {
                                 saveTaskBtn.setPrefHeight(35);
                                 saveTaskBtn.setPrefWidth(0.1*TASK_LIST_WIDTH);
                                 saveTaskBtn.setFont(Font.font(13));
+                               // saveTaskBtn.setStyle();
 
                                 Button cancelBtn = new Button("Cancel") ;
                                 AnchorPane.setLeftAnchor(cancelBtn,159.0);
@@ -267,8 +264,4 @@ public class TodayPane implements Initializable, FxController {
 
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 }

@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 
-<AnchorPane fx:id="header" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="1366.0" style="-fx-pre: #6c7474;" stylesheets="@/styles/header.css" xmlns="http://javafx.com/javafx/15" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.HeaderMenuPane">
+<AnchorPane fx:id="header" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="37.0" prefWidth="1366.0" style="-fx-pre: #6c7474;" stylesheets="@../../../../styles/header.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.HeaderMenuPane">
    <children>
       <TextField fx:id="searchTextField" layoutX="134.0" layoutY="2.0" maxHeight="20.0" prefHeight="20.0" prefWidth="132.0" AnchorPane.leftAnchor="134.0" AnchorPane.topAnchor="2.0" />
       <HBox fx:id="manageWindowSection" layoutX="894.0" prefHeight="37.0" prefWidth="125.0" spacing="20.0" style="-fx-background-color: #c4c4c4;" AnchorPane.rightAnchor="0.0">
