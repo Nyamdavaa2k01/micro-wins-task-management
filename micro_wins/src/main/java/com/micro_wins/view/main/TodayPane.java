@@ -193,6 +193,7 @@ public class TodayPane implements Initializable, FxController {
                                 taskDatePicker.setPrefWidth(0.1*TASK_LIST_WIDTH);
 
                                 Button saveTaskBtn = new Button("Save") ;
+
                                 AnchorPane.setLeftAnchor(saveTaskBtn, 50.0);
                                 AnchorPane.setTopAnchor(saveTaskBtn, 150.0);
                                 saveTaskBtn.setPrefHeight(35);

@@ -10,7 +10,7 @@ package com.micro_wins.view.main;
  * @project micro-wins-task-management
  */
 
-import com.micro_wins.MainApp;
+
 import com.micro_wins.view.StageManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
