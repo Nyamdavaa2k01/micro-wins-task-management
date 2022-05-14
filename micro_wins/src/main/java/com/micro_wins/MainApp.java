@@ -10,6 +10,7 @@ import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.StageManager;
 import com.micro_wins.view.login.LoginPane;
 import com.micro_wins.view.main.MainPane;
+import com.micro_wins.view.main.TodayPane;
 import javafx.application.Application;
 
 import java.time.LocalDate;
@@ -44,7 +45,7 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
     public void onApplicationEvent(StageReadyEvent event)
     {
         STAGE_MANAGER = springAppContext.getBean(StageManager.class, event.stage);
-        STAGE_MANAGER.rebuildStage(MainPane.class);
+        STAGE_MANAGER.rebuildStage(TodayPane.class);
     }
 
     public static StageManager getStageManager()

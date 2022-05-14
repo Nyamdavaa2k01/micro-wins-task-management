@@ -10,5 +10,5 @@ import java.util.List;
  * @created 13/05/2022 - 4:56 AM
  */
 public interface TaskService {
-    List<Task> getTaskById (int id) ;
+
 }

@@ -8,14 +8,21 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constants.ConstantColors;
 
+import com.micro_wins.constants.ConstantStyles;
+import com.micro_wins.constants.Functions;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableArray;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -25,14 +32,16 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
-import java.sql.*;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Controller
@@ -40,28 +49,38 @@ import java.util.ResourceBundle;
 public class TodayPane implements Initializable, FxController {
 
     ConstantColors constantColors ;
+    ConstantStyles constantStyles ;
 
     @Autowired
     TaskRepo taskRepo ;
 
     @FXML
     private ListView<Task> taskList;
+    ObservableList<Task> taskObservableList ;
 
+    Stage priorityButtonsStage ;
+    int priority ;
+
+    private void refreshTaskList () {
+        List<Task> tasks = taskRepo.findAll() ;
+        taskList.getItems().clear();
+        int i ;
+        for (i = 0 ; i < tasks.size() ; i ++) {
+            taskList.getItems().add(tasks.get(i)) ;
+        }
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle)  {
         constantColors = new ConstantColors() ;
+        constantStyles = new ConstantStyles() ;
         final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
         taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setStyle("-fx-border-color:white;");
         taskList.setFocusTraversable(false);
         taskList.setPadding(new Insets(20, 200, 0, 50));
+        refreshTaskList();
 
-        List<Task> tasks = taskRepo.findAll() ;
-        int i ;
-        for (i = 0 ; i < tasks.size() ; i ++) {
-            taskList.getItems().add(tasks.get(i)) ;
-        }
 
         taskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
             @Override
@@ -77,7 +96,7 @@ public class TodayPane implements Initializable, FxController {
                             /**
                              * Individual Task View on Today List
                              */
-
+                            priority = task.getTaskPriority() ;
                             AnchorPane taskOnTodayRoot = new AnchorPane() ;
                             taskOnTodayRoot.setPrefWidth(TASK_LIST_WIDTH-200);
                             taskOnTodayRoot.setPrefHeight(80);
@@ -132,11 +151,11 @@ public class TodayPane implements Initializable, FxController {
                             editImage.setFitHeight(20);
                             editTaskBtn.setGraphic(editImage);
 
-                            Button seeMoreBtn = new Button() ;
-                            ImageView seeMoreImage = new ImageView(new Image("file:micro_wins/src/main/resources/images/3dots-icon.png")) ;
+                            Button deleteTaskBtn = new Button() ;
+                            ImageView seeMoreImage = new ImageView(new Image("file:micro_wins/src/main/resources/images/delete-icon.png")) ;
                             seeMoreImage.setFitWidth(20);
                             seeMoreImage.setFitHeight(20);
-                            seeMoreBtn.setGraphic(seeMoreImage);
+                            deleteTaskBtn.setGraphic(seeMoreImage);
 
                             Button changeProjectBtn = new Button() ;
                             if (task.getTaskProTitle() != null) changeProjectBtn.setText(task.getTaskProTitle());
@@ -148,7 +167,7 @@ public class TodayPane implements Initializable, FxController {
                             changeProjectBtn.setStyle("-fx-border-color:gray;" +
                                     "-fx-border-radius:10; ");
 
-                            editTaskButtons.getChildren().addAll(editTaskBtn, seeMoreBtn) ;
+                            editTaskButtons.getChildren().addAll(editTaskBtn, deleteTaskBtn) ;
                             taskOnTodayRoot.getChildren().addAll(finishTaskBtn, taskTitleLbl, taskDescriptionLbl, bottomSep, editTaskButtons, changeProjectBtn) ;
                             setGraphic(taskOnTodayRoot);
 
@@ -166,14 +185,14 @@ public class TodayPane implements Initializable, FxController {
                                 editTaskRoot.getStylesheets().add("file:micro_wins/src/main/resources/styles/addTask.css") ;
                                 editTaskRoot.setStyle("-fx-border-color:gray; " +
                                         "-fx-border-radius: 25;");
-                                TextField taskNameTxt = new TextField() ;
-                                taskNameTxt.setText(task.getTaskTitle());
-                                AnchorPane.setLeftAnchor(taskNameTxt, 50.0);
-                                AnchorPane.setTopAnchor(taskNameTxt, 10.0);
-                                AnchorPane.setRightAnchor(taskNameTxt, 50.0);
-                                taskNameTxt.setPrefHeight(35);
+                                TextField taskTitleTxt = new TextField() ;
+                                taskTitleTxt.setText(task.getTaskTitle());
+                                AnchorPane.setLeftAnchor(taskTitleTxt, 50.0);
+                                AnchorPane.setTopAnchor(taskTitleTxt, 10.0);
+                                AnchorPane.setRightAnchor(taskTitleTxt, 50.0);
+                                taskTitleTxt.setPrefHeight(35);
 
-                                taskNameTxt.setFont(Font.font("Times New Roman Bold", 18));
+                                taskTitleTxt.setFont(Font.font("Times New Roman Bold", 18));
 
                                 TextField taskDescriptionTxt = new TextField() ;
                                 taskDescriptionTxt.setText(task.getTaskDefinition());
@@ -187,6 +206,7 @@ public class TodayPane implements Initializable, FxController {
                                 AnchorPane.setBottomAnchor(bottomSep, 10.0);
 
                                 DatePicker taskDatePicker = new DatePicker() ;
+                                taskDatePicker.setValue(Functions.LOCALDATE_TO_DATE.DateToLocalDate(getItem().getTaskStartDate()));
                                 AnchorPane.setLeftAnchor(taskDatePicker, 50.0);
                                 AnchorPane.setTopAnchor(taskDatePicker, 110.0);
                                 taskDatePicker.setPrefHeight(29);
@@ -224,15 +244,96 @@ public class TodayPane implements Initializable, FxController {
                                 AnchorPane.setRightAnchor(addReminderBtn, 50.0);
                                 AnchorPane.setTopAnchor(addReminderBtn, 110.0);
 
-                                editTaskRoot.getChildren().addAll(taskNameTxt, taskDescriptionTxt, taskDatePicker, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
+                                editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
                                 setGraphic(editTaskRootContainer);
+
+                                /**
+                                 * Actions
+                                 */
 
                                 cancelBtn.setOnMouseClicked(cancelEvent -> {
                                     taskOnTodayRoot.getChildren().add(bottomSep) ;
-                                    
                                     setGraphic(taskOnTodayRoot);
                                 });
 
+                                saveTaskBtn.setOnMouseClicked(editEvent -> {
+
+                                    Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
+                                    System.out.println(getItem().getTaskId());
+                                    if (optionalTask.isPresent()) {
+                                        Task editTask = optionalTask.get() ;
+                                        editTask.setTaskTitle(taskTitleTxt.getText());
+                                        editTask.setTaskDefinition(taskDescriptionTxt.getText());
+                                        editTask.setTaskStartDate(Functions.LOCALDATE_TO_DATE.localDateToDate(taskDatePicker.getValue()));
+                                        System.out.println(priority);
+                                        editTask.setTaskPriority(priority);
+
+                                        taskRepo.save(editTask) ;
+                                        refreshTaskList();  
+                                       //  taskList.setItems(taskObservableList);
+                                    }
+
+                                });
+
+                                setPriorityBtn.setOnMouseClicked(setPriorityEvent -> {
+                                    VBox priorityButtonsRoot = new VBox() ;
+                                    Scene priorityButtonsScene = new Scene(priorityButtonsRoot, 200, 172) ;
+                                    if (priorityButtonsStage != null) priorityButtonsStage.close();
+                                    priorityButtonsStage = new Stage( );
+                                    priorityButtonsStage.initStyle(StageStyle.UNDECORATED);
+
+                                    /**
+                                     * Changing the initial position of priorityButtonsStage relative to setPriorityBtn
+                                     */
+                                    Bounds setPriorityBtnBounds = setPriorityBtn.localToScreen(setPriorityBtn.getBoundsInLocal()) ;
+                                    int priorityButtonsStageInitPosX = (int) setPriorityBtnBounds.getMinX();
+                                    int priorityButtonsStageInitPosY = (int) setPriorityBtnBounds.getMaxY() ;
+                                    priorityButtonsStage.setX(priorityButtonsStageInitPosX);
+                                    priorityButtonsStage.setY(priorityButtonsStageInitPosY);
+
+
+                                    Button [] priorityButtons = new Button[4] ;
+                                    int i ;
+                                    for (i = 0 ; i < 4 ; i ++) {
+                                        priorityButtons[i] = new Button() ;
+                                        priorityButtons[i].setAlignment(Pos.TOP_LEFT);
+                                        priorityButtons[i].setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+
+                                        String buttonText = "Priority " + (i+1) ;
+                                        String buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/priority-"+(i+1)+"-icon.png" ;
+                                        ImageView buttonGraphicImage = new ImageView(new Image(buttonGraphicFilePath)) ;
+                                        buttonGraphicImage.setFitHeight(25);
+                                        buttonGraphicImage.setFitWidth(25);
+                                        priorityButtons[i].setText(buttonText);
+                                        priorityButtons[i].setGraphic(buttonGraphicImage);
+                                        priorityButtons[i].setPrefWidth(200);
+                                        priorityButtons[i].setPrefHeight(43);
+                                        priorityButtonsRoot.getChildren().add(priorityButtons[i]) ;
+
+                                        priorityButtons[i].setOnMouseClicked(setEvent -> {
+                                            String text = ((Button) setEvent.getSource()).getText();
+                                            priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                                            setPriorityBtn.setGraphic(((Button) setEvent.getSource()).getGraphic());
+                                            ((Stage)((Button)setEvent.getSource()).getScene().getWindow()).close();
+                                        });
+
+                                    }
+                                    priorityButtonsStage.setScene(priorityButtonsScene);
+                                    priorityButtonsStage.show();
+                                });
+
+                            });
+
+                            deleteTaskBtn.setOnMouseClicked(deleteEvent -> {
+
+                                Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
+                                System.out.println(getItem().getTaskId());
+                                if (optionalTask.isPresent()) {
+                                    Task deleteTask = optionalTask.get() ;
+                                    taskRepo.deleteById(deleteTask.getTaskId());
+                                    refreshTaskList();
+                                    //  taskList.setItems(taskObservableList);
+                                }
                             });
                         }
                     }

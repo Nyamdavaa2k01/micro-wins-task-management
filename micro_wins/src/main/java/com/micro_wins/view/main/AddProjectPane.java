@@ -54,9 +54,9 @@ public class AddProjectPane implements Initializable, FxController {
         String title = proTitle.getText();
         String desc = proDesc.getText();
         LocalDate startLocalDate = proStartDate.getValue();
-        Date startDate = functions.localDataToDate(startLocalDate);
+        Date startDate = functions.localDateToDate(startLocalDate);
         LocalDate deadlineLocal = proDeadline.getValue();
-        Date deadline = functions.localDataToDate(deadlineLocal);
+        Date deadline = functions.localDateToDate(deadlineLocal);
         Project newProject = new Project();
         newProject.setProTitle(title);
         newProject.setProDescription(desc);

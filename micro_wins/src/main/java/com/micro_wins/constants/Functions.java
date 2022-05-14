@@ -13,7 +13,8 @@ import java.util.Date;
  */
 public enum Functions {
     IS_INT,
-    LOCALDATE_TO_DATE;
+    LOCALDATE_TO_DATE,
+    DATE_TO_LOCALDATE;
     public boolean isInt(TextField f, String msg)
     {
             try
@@ -27,9 +28,14 @@ public enum Functions {
                 return false;
             }
     }
-    public Date localDataToDate(LocalDate localDate)
+    public Date localDateToDate(LocalDate localDate)
     {
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
         return date;
     };
+
+    public LocalDate DateToLocalDate (Date date) {
+        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return localDate ;
+    }
 }

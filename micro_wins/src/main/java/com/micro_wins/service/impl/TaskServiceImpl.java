@@ -63,9 +63,4 @@ public class TaskServiceImpl implements CrudService<Task>, TaskService {
         return (List<Task>) taskRepo.findAll();
     }
 
-
-    @Override
-    public List<Task> getTaskById(int id) {
-        return null ;
-    }
 }
