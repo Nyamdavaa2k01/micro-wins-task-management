@@ -1,6 +1,9 @@
 package com.micro_wins;
 
+import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.context.ApplicationEvent;
 
 /**
@@ -15,5 +18,7 @@ public class StageReadyEvent extends ApplicationEvent {
     {
         super(stage);
         this.stage = stage;
+        stage.initStyle(StageStyle.UNDECORATED);
+        stage.initStyle(StageStyle.TRANSPARENT);
     }
 }

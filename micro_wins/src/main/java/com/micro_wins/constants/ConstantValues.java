@@ -10,6 +10,7 @@ public class ConstantValues {
     private final String PRIORITY2_COLOR = "#ffca38" ;
     private final String PRIORITY3_COLOR = "#38a8f3" ;
     private final String PRIORITY4_COLOR = "#000000" ;
+    private final String BUTTON_STYLE = "-fx-background-color:transparent; -fx-border-color:gray; -fx-cursor:hand" ;
 
     public String getPRIORITY1_COLOR() {
         return PRIORITY1_COLOR;
@@ -25,5 +26,9 @@ public class ConstantValues {
 
     public String getPRIORITY4_COLOR() {
         return PRIORITY4_COLOR;
+    }
+
+    public String getBUTTON_STYLE() {
+        return BUTTON_STYLE;
     }
 }

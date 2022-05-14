@@ -1,5 +1,8 @@
 package com.micro_wins.config;
 
+import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.service.TaskService;
+import com.micro_wins.service.impl.TaskServiceImpl;
 import com.micro_wins.view.StageManager;
 import javafx.stage.Stage;
 import org.springframework.context.annotation.Bean;

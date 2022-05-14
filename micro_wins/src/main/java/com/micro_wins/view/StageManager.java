@@ -6,6 +6,7 @@ import javafx.application.Platform;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,16 +26,22 @@ public class StageManager {
     private FxWeaver fxWeaver;
 
     private final Stage primaryStage;
+    private final Stage secondaryStage ;
 
     public StageManager(Stage stage)
     {
         this.primaryStage = stage;
+        secondaryStage = null;
     }
 
     public void rebuildStage(Class<? extends FxController> fxControllerClass)
     {
         Scene scene = createScene(fxControllerClass);
+        scene.setFill(Color.TRANSPARENT);
         showScene(fxControllerClass, scene);
+    }
+
+    public void addStage (Class<? extends FxController> fxControllerClass) {
 
     }
 
@@ -42,7 +49,6 @@ public class StageManager {
     {
         Parent node = fxWeaver.loadView(fxControllerClass);
         Scene sc = primaryStage.getScene();
-
         if (sc == null)
         {
             sc = new Scene(node);
@@ -53,8 +59,6 @@ public class StageManager {
 
     private void showScene(Class<? extends FxController> fxControllerClass, Scene scene)
     {
-//        primaryStage.initStyle(StageStyle.TRANSPARENT);
-//        primaryStage.initStyle(StageStyle.UNDECORATED);
         String title = ResourceBundleUtil.getKey(fxControllerClass.getSimpleName() + ".title");
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);

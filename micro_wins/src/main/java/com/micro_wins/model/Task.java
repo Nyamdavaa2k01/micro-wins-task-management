@@ -1,5 +1,7 @@
 package com.micro_wins.model;
 
+import jdk.jfr.DataAmount;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.Date;
@@ -9,6 +11,7 @@ import java.util.Date;
  * @project micro-wins-task-management
  * @created 06/05/2022 - 1:59 AM
  */
+
 @Entity
 @Table(name = "mw_task")
 public class Task {
@@ -59,13 +62,6 @@ public class Task {
         this.taskUserId = taskUserId ;
     }
 
-    public int getId() {
-        return taskId;
-    }
-
-    public void setId(int id) {
-        this.taskId = id;
-    }
 
     public Task(int taskId, String taskTitle, String taskDefinition, int taskPriority, int taskStatus, String taskCategory, Date taskStartDate, Date taskDeadline) {
         this.taskId = taskId;

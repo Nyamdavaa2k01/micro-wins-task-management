@@ -1,9 +1,12 @@
 package com.micro_wins.service.impl;
 
 import com.micro_wins.model.Task;
+import com.micro_wins.model.User;
 import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.repository.UserRepo;
 import com.micro_wins.service.CrudService;
 import com.micro_wins.service.TaskService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -17,31 +20,31 @@ import java.util.List;
  */
 @Service
 public class TaskServiceImpl implements CrudService<Task>, TaskService {
-    EntityManager entityManager ;
+    @Autowired
+    private TaskRepo taskRepo;
 
-    public TaskServiceImpl(EntityManager entityManager) {
-        this.entityManager = entityManager ;
-    }
-
-    @Transactional
-    public Task save(Task task) {
-        entityManager.persist(task);
-        return task ;
+    @Override
+    public Task save(Task entity)
+    {
+        return taskRepo.save(entity);
     }
 
     @Override
-    public Task update(Task entity) {
-        return null;
+    public Task update(Task entity)
+    {
+        return taskRepo.save(entity);
     }
 
     @Override
-    public void delete(Task entity) {
-
+    public void delete(Task entity)
+    {
+        taskRepo.delete(entity);
     }
 
     @Override
-    public void deleteById(Integer id) {
-
+    public void deleteById(Integer id)
+    {
+        taskRepo.deleteById(id);
     }
 
     @Override
@@ -50,17 +53,19 @@ public class TaskServiceImpl implements CrudService<Task>, TaskService {
     }
 
     @Override
-    public Task findById(Integer id) {
-        return null;
+    public Task findById(Integer id)
+    {
+        return taskRepo.findById(id).orElse(null);
     }
 
     @Override
     public List<Task> findAll() {
-        return null;
+        return (List<Task>) taskRepo.findAll();
     }
+
 
     @Override
     public List<Task> getTaskById(int id) {
-        return null;
+        return null ;
     }
 }

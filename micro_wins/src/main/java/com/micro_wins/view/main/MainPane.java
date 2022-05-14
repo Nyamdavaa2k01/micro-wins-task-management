@@ -5,6 +5,8 @@
 
 package com.micro_wins.view.main;
 
+import com.micro_wins.model.Task;
+import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
 import javafx.fxml.FXML;
@@ -16,6 +18,9 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.ResourceBundle;
 // somehow cant use javafx.awt.*
 
@@ -27,6 +32,9 @@ public class MainPane implements Initializable, FxController {
     @Autowired
     private StageManager stageManager;
 
+    @Autowired
+    TaskRepo taskRepo ;
+
     @FXML
     BorderPane borderPane;
 
@@ -36,5 +44,10 @@ public class MainPane implements Initializable, FxController {
         // set layout
         borderPane.setTop(stageManager.loadView(HeaderMenuPane.class));
         borderPane.setLeft(stageManager.loadView(NavigationPane.class));
+
+        Task task = new Task("resolve DB", "bolndoo", 3, 1, Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()), 12) ;
+        task.setTaskProId(1);
+        task.setTaskProTitle("inbox");
+        taskRepo.save(task) ;
     }
 }
