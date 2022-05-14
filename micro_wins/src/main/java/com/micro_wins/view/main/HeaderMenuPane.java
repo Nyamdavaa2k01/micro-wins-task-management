@@ -91,20 +91,7 @@ public class HeaderMenuPane {
     @FXML
     void addTask(ActionEvent event) throws IOException {
         stageManager = springAppContext.getBean(StageManager.class);
-        stageManager.rebuildStage(AddTaskPane.class);
-       // SpringApplication.run(AddTaskPane.class);
-//        if (taskStage != null) taskStage.close();
-//        taskStage = new Stage() ;
-//        URL fxmlLocation = getClass().getResource("AddTaskPane.fxml");
-//        System.out.println(fxmlLocation);
-//        FXMLLoader fxmlLoader = new FXMLLoader(fxmlLocation) ;
-//        taskStage.initStyle(StageStyle.UNDECORATED);
-//        taskStage.initStyle(StageStyle.TRANSPARENT);
-//        Scene scene = new Scene(fxmlLoader.load(), 624, 228, Color.TRANSPARENT) ;
-//        taskStage.setScene(scene);
-//        taskStage.getScene().getRoot().setEffect(new DropShadow());
-//        taskStage.getScene().setFill(Color.TRANSPARENT);
-//        taskStage.show();
+        stageManager.addStage(AddTaskPane.class);
     }
 
     @FXML

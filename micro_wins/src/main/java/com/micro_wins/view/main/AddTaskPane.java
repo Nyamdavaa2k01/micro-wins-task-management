@@ -139,12 +139,12 @@ public class AddTaskPane implements Initializable, FxController {
         task.setTaskProTitle("inbox");
         taskRepo.save(task) ;
 
-        stageManager.rebuildStage(MainPane.class);
+        stageManager.closeSecondaryStage();
      }
 
     @FXML
     void cancel(ActionEvent event) {
-        stageManager.rebuildStage(MainPane.class);
+        stageManager.closeSecondaryStage();
     }
 
 
