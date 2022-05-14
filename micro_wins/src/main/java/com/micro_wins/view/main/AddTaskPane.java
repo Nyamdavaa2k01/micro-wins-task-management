@@ -8,9 +8,10 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constants.ConstantColors;
 import com.micro_wins.constants.ConstantStyles;
+import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
+import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.TaskRepo;
-import com.micro_wins.utils.ApplicationContextProvider;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
 import javafx.beans.binding.BooleanBinding;
@@ -18,22 +19,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -43,8 +41,8 @@ import java.net.URL;
 import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.*;
 import java.util.Date;
-import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
@@ -61,19 +59,38 @@ public class AddTaskPane implements Initializable, FxController {
     @Autowired
     TaskRepo taskRepo ;
 
-    Stage addTaskStage ;
+    @Autowired
+    ProjectRepo projectRepo ;
+
     private Stage priorityButtonsStage ;
+    Stage projectButtonsStage ;
 
     /**
-     * priority 4 is choosen by default
+     * task values are being set from 4 main different places.
+     * taskUserId and taskStatus are set by default inside the initialize function,
+     * taskTitle, taskDefinition and taskStartDate are set by textfields when user clicks save button,
+     * taskPriority is set by priority stage if not set the value is 4 by default,
+     * taskProId and taskProTitle are set by project stage, if not set, project is inbox by default
      */
-    private int priority = 4;
+
+    Task task ;
     ConstantStyles constantStyles ;
+    ConstantColors constantColors ;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         constantStyles = new ConstantStyles() ;
+        constantColors = new ConstantColors() ;
         taskDatePicker.setValue(LocalDate.now());
+        task = new Task();
+        /**
+         * task default values
+         */
+        task.setTaskPriority(4);
+        task.setTaskStatus(1);
+        task.setTaskUserId(12);
+        task.setTaskProId(1);
+        task.setTaskProTitle("inbox");
         /**
          * Add Task Button is disabled while Task Name TextField is empty, and as soon as user start
          * typing task title, button is enabled
@@ -130,14 +147,15 @@ public class AddTaskPane implements Initializable, FxController {
     }
 
     @FXML
-    void addTask(ActionEvent event) throws SQLException {
+    void addTask(ActionEvent event) {
         String taskTitle = taskNameTxt.getText() ;
         String taskDefinition = taskDescriptionTxt.getText();
         Date datePickerDate = Date.from(taskDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()) ;
 
-        Task task = new Task(taskTitle, taskDefinition, priority, 1, datePickerDate, 12) ;
-        task.setTaskProId(1);
-        task.setTaskProTitle("inbox");
+      //  Task task = new Task(taskTitle, taskDefinition, priority, 1, datePickerDate, 12) ;
+        task.setTaskTitle(taskTitle);
+        task.setTaskDefinition(taskDefinition);
+        task.setTaskStartDate(datePickerDate);
         taskRepo.save(task) ;
 
         stageManager.closeSecondaryStage();
@@ -175,7 +193,8 @@ public class AddTaskPane implements Initializable, FxController {
             priorityButtons[i].setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
             priorityButtons[i].setOnMouseClicked(e -> {
                 String text = ((Button) e.getSource()).getText();
-                priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                int priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                task.setTaskPriority(priority);
                 setPriorityBtn.setGraphic(((Button) e.getSource()).getGraphic());
                 ((Stage)((Button)e.getSource()).getScene().getWindow()).close();
             });
@@ -201,49 +220,70 @@ public class AddTaskPane implements Initializable, FxController {
      * User cannot add tasks to project from private space so the following code will not be used.
      * However, the code is only commented but not deleted for possible future use in project tasks!
      */
-//
-//    @FXML
-//    private Button setProjectBtn;
 
-//    @FXML
-//    void setProject(ActionEvent event) throws SQLException {
-//        ArrayList<Button> projectButtons = new ArrayList<>();
-//        Statement statement = connection.createStatement() ;
-//        ResultSet projectsInDatabase = statement.executeQuery("SELECT * FROM mw_project") ;
-//        while (projectsInDatabase.next()) {
-//            String projectName = projectsInDatabase.getString("pro_title") ;
-//            Button projectBtn = new Button(projectName) ;
-//            projectBtn.setPrefHeight(43);
-//            projectBtn.setPrefWidth(200);
-//            projectBtn.setStyle(BUTTON_STYLE);
-//            projectBtn.setAlignment(Pos.TOP_LEFT);
-//            ImageView buttonGraphicImage = new ImageView(new Image("file:micro_wins/src/main/resources/images/inbox-icon.png")) ;
-//            buttonGraphicImage.setFitHeight(30);
-//            buttonGraphicImage.setFitWidth(30);
-//            projectBtn.setGraphic(buttonGraphicImage);
-//            projectButtons.add(projectBtn) ;
-//
-//
-//        }
-//
-//        VBox projectButtonsRoot = new VBox() ;
-//        Scene projectButtonsScene = new Scene(projectButtonsRoot, 200, projectButtons.size()*43) ;
-//
-//        int i ;
-//        for (i = 0 ; i < projectButtons.size() ; i ++) {
-//            projectButtonsRoot.getChildren().add(projectButtons.get(i)) ;
-//        }
-//
-//        /**
-//         * Stage is created down here because scene creation need number of active projects in database
-//         */
-//        Stage projectButtonsStage = new Stage() ;
-//        projectButtonsStage.setScene(projectButtonsScene);
-//        projectButtonsStage.initStyle(StageStyle.UNDECORATED);
-//     //   projectButtonsStage.initStyle(StageStyle.TRANSPARENT);
-//        projectButtonsStage.show();
-//    }
+    @FXML
+    private Button setProjectBtn;
+
+    @FXML
+    void setProject(ActionEvent event) {
+        ListView<Project> projectListView = new ListView<>() ;
+        List<Project> projectList = projectRepo.findAll() ;
+        VBox projectListRoot = new VBox( );
+        int i ;
+        for (i = 0 ; i < projectList.size() ; i ++) {
+            projectListView.getItems().add(projectList.get(i)) ;
+        }
+        projectListView.setPadding(new Insets(0));
+        projectListView.setCellFactory(new Callback<ListView<Project>, ListCell<Project>>() {
+            @Override
+            public ListCell<Project> call(ListView<Project> projectListView) {
+                ListCell<Project> customProjectCell = new ListCell<Project>() {
+                    @Override
+                    public void updateItem(Project project, boolean empty) {
+                        super.updateItem(project, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        }
+                        else {
+                            Button projectBtn = new Button(project.getProTitle()) ;
+                            projectBtn.setPrefHeight(43);
+                            projectBtn.setPrefWidth(200);
+                            projectBtn.setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+                            projectBtn.setAlignment(Pos.TOP_LEFT);
+                            setGraphic(projectBtn);
+                            projectBtn.setOnMouseClicked(e -> {
+                                Optional<Project> optionalProject = projectRepo.findById(getItem().getProId()) ;
+                                if (optionalProject.isPresent()) {
+                                    Project chosenProject = optionalProject.get() ;
+                                    task.setTaskProTitle(chosenProject.getProTitle());
+                                    task.setTaskProId(chosenProject.getProId());
+                                    setProjectBtn.setText(task.getTaskProTitle());
+                                    projectButtonsStage.close();
+                                }
+                            });
+                        }
+                    }
+                } ;
+                customProjectCell.setStyle("-fx-padding:0px;");
+                return customProjectCell ;
+            }
+        });
+        projectListRoot.getChildren().add(projectListView) ;
+        if (projectButtonsStage == null) {
+            projectButtonsStage = new Stage();
+            projectButtonsStage.initStyle(StageStyle.UNDECORATED);
+            Bounds setProjectBtnBounds = setProjectBtn.localToScreen(setProjectBtn.getBoundsInLocal()) ;
+            int projectButtonsStageInitPosX = (int) setProjectBtnBounds.getMinX();
+            int projectButtonsStageInitPosY = (int) setProjectBtnBounds.getMaxY() ;
+            projectButtonsStage.setX(projectButtonsStageInitPosX);
+            projectButtonsStage.setY(projectButtonsStageInitPosY);
+        }
+
+        Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
+        projectButtonsStage.setScene(projectButtonsScene);
+        projectButtonsStage.show();
 
 
+    }
 
 }

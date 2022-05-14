@@ -10,6 +10,8 @@ public class ConstantColors {
     private final String PRIORITY2_COLOR = "#ffca38" ;
     private final String PRIORITY3_COLOR = "#38a8f3" ;
     private final String PRIORITY4_COLOR = "#000000" ;
+    private final String INBOX_PROJECT_COLOR = "183597" ;
+
     public String getPRIORITY1_COLOR() {
         return PRIORITY1_COLOR;
     }
@@ -26,4 +28,7 @@ public class ConstantColors {
         return PRIORITY4_COLOR;
     }
 
+    public String getINBOX_PROJECT_COLOR() {
+        return INBOX_PROJECT_COLOR;
+    }
 }

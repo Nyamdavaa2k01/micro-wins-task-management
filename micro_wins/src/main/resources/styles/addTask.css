@@ -20,7 +20,7 @@
     -fx-cursor: hand;
 }
 
-#addTaskBtn #saveTaskBtn {
+#addTaskBtn, #saveTaskBtn {
     -fx-background-color: #CE5A5A;
 }
 

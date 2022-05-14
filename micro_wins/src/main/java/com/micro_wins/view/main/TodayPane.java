@@ -325,7 +325,6 @@ public class TodayPane implements Initializable, FxController {
                             });
 
                             deleteTaskBtn.setOnMouseClicked(deleteEvent -> {
-
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
                                 System.out.println(getItem().getTaskId());
                                 if (optionalTask.isPresent()) {
@@ -334,6 +333,10 @@ public class TodayPane implements Initializable, FxController {
                                     refreshTaskList();
                                     //  taskList.setItems(taskObservableList);
                                 }
+                            });
+
+                            finishTaskBtn.setOnMouseClicked(finishEvent -> {
+
                             });
                         }
                     }

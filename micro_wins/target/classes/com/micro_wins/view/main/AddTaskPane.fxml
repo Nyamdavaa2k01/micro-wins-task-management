@@ -39,5 +39,10 @@
             </ImageView>
          </graphic>
       </Button>
+      <Button fx:id="setProjectBtn" layoutX="152.0" layoutY="118.0" mnemonicParsing="false" onAction="#setProject" prefHeight="30.0" prefWidth="85.0" text="Inbox">
+         <font>
+            <Font size="13.0" />
+         </font>
+      </Button>
    </children>
 </AnchorPane>
