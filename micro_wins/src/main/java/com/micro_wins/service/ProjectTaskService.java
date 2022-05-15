@@ -11,8 +11,8 @@ import java.util.List;
  * @created 13/05/2022 - 2:10 AM
  */
 public interface ProjectTaskService {
-    List<ProjectTask> getProjectTaskByProjectId(int proId);
-    List<ProjectTask> getProjectTaskByHandlerId(int handlerId);
-    List<ProjectTask> getProjectTaskByProOwner(int proOwner);
+    List<ProjectTask> getProjectTaskByProjectId(int proId) ;
+    List<ProjectTask> getProjectTaskByHandlerId(int handlerId) ;
+    List<ProjectTask> getProjectTaskByProOwner(int proOwner) ;
     ProjectTask findByProTaskId(int taskId);
 }

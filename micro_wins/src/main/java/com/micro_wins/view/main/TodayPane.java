@@ -8,10 +8,14 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constants.ConstantColors;
 
+import com.micro_wins.constants.ConstantDictionaryValues;
 import com.micro_wins.constants.ConstantStyles;
 import com.micro_wins.constants.Functions;
+import com.micro_wins.model.Project;
+import com.micro_wins.model.Result;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.ProjectRepo;
+import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import javafx.collections.FXCollections;
@@ -41,6 +45,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -51,6 +56,7 @@ public class  TodayPane implements Initializable, FxController {
 
     ConstantColors constantColors ;
     ConstantStyles constantStyles ;
+    ConstantDictionaryValues constantDictionaryValues ;
 
     @Autowired
     TaskRepo taskRepo ;
@@ -58,15 +64,20 @@ public class  TodayPane implements Initializable, FxController {
     @Autowired
     ProjectRepo projectRepo ;
 
+    @Autowired
+    ResultRepo resultRepo ;
+
     @FXML
     private ListView<Task> taskList;
     ObservableList<Task> taskObservableList ;
 
     Stage priorityButtonsStage ;
+    Stage projectButtonsStage ;
     int priority ;
+    Project chosenProject ;
 
     private void refreshTaskList () {
-        List<Task> tasks = taskRepo.findAll() ;
+        List<Task> tasks = taskRepo.findByTaskStatus(1) ;
         taskList.getItems().clear();
         int i ;
         for (i = 0 ; i < tasks.size() ; i ++) {
@@ -78,6 +89,7 @@ public class  TodayPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle)  {
         constantColors = new ConstantColors() ;
         constantStyles = new ConstantStyles() ;
+        constantDictionaryValues = new ConstantDictionaryValues() ;
         final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
         taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setStyle("-fx-border-color:white;");
@@ -176,7 +188,7 @@ public class  TodayPane implements Initializable, FxController {
                             setGraphic(taskOnTodayRoot);
 
                             /**
-                             * when user clicks button with an icon of pen, textfield shows and user can change textfield
+                             * when user clicks button with an icon of pen, textfields show and user can change textfield
                              */
                             editTaskBtn.setOnMouseClicked(e -> {
                                 AnchorPane editTaskRootContainer = new AnchorPane() ;
@@ -216,6 +228,12 @@ public class  TodayPane implements Initializable, FxController {
                                 taskDatePicker.setPrefHeight(29);
                                 taskDatePicker.setPrefWidth(0.1*TASK_LIST_WIDTH);
 
+                                Button setProjectBtn = new Button(task.getTaskProTitle()) ;
+                                setProjectBtn.setPrefWidth(85);
+                                setProjectBtn.setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+                                AnchorPane.setLeftAnchor(setProjectBtn, 160.0);
+
+                                AnchorPane.setTopAnchor(setProjectBtn, 110.0);
                                 Button saveTaskBtn = new Button("Save") ;
 
                                 AnchorPane.setLeftAnchor(saveTaskBtn, 50.0);
@@ -223,7 +241,6 @@ public class  TodayPane implements Initializable, FxController {
                                 saveTaskBtn.setPrefHeight(35);
                                 saveTaskBtn.setPrefWidth(0.1*TASK_LIST_WIDTH);
                                 saveTaskBtn.setFont(Font.font(13));
-                               // saveTaskBtn.setStyle();
 
                                 Button cancelBtn = new Button("Cancel") ;
                                 AnchorPane.setLeftAnchor(cancelBtn,159.0);
@@ -248,7 +265,7 @@ public class  TodayPane implements Initializable, FxController {
                                 AnchorPane.setRightAnchor(addReminderBtn, 50.0);
                                 AnchorPane.setTopAnchor(addReminderBtn, 110.0);
 
-                                editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
+                                editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, setProjectBtn, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
                                 setGraphic(editTaskRootContainer);
 
                                 /**
@@ -269,12 +286,16 @@ public class  TodayPane implements Initializable, FxController {
                                         editTask.setTaskTitle(taskTitleTxt.getText());
                                         editTask.setTaskDefinition(taskDescriptionTxt.getText());
                                         editTask.setTaskStartDate(Functions.LOCALDATE_TO_DATE.localDateToDate(taskDatePicker.getValue()));
-                                        System.out.println(priority);
+//                                        editTask.setTaskPriority(priority) ;
+//                                        editTask.setTaskStatus();
                                         editTask.setTaskPriority(priority);
+                                        if (chosenProject != null) {
+                                            editTask.setTaskProId(chosenProject.getProId());
+                                            editTask.setTaskProTitle(chosenProject.getProTitle());
+                                        }
 
                                         taskRepo.save(editTask) ;
-                                        refreshTaskList();  
-                                       //  taskList.setItems(taskObservableList);
+                                        refreshTaskList();
                                     }
 
                                 });
@@ -326,6 +347,62 @@ public class  TodayPane implements Initializable, FxController {
                                     priorityButtonsStage.show();
                                 });
 
+                                setProjectBtn.setOnMouseClicked(setProjectEvent -> {
+                                    ListView<Project> projectListView = new ListView<>() ;
+                                    List<Project> projectList = projectRepo.findAll() ;
+                                    VBox projectListRoot = new VBox( );
+                                    int i ;
+                                    for (i = 0 ; i < projectList.size() ; i ++) {
+                                        projectListView.getItems().add(projectList.get(i)) ;
+                                    }
+                                    projectListView.setPadding(new Insets(0));
+                                    projectListView.setCellFactory(new Callback<ListView<Project>, ListCell<Project>>() {
+                                        @Override
+                                        public ListCell<Project> call(ListView<Project> projectListView) {
+                                            ListCell<Project> customProjectCell = new ListCell<Project>() {
+                                                @Override
+                                                public void updateItem(Project project, boolean empty) {
+                                                    super.updateItem(project, empty);
+                                                    if (empty) {
+                                                        setGraphic(null);
+                                                    }
+                                                    else {
+                                                        Button projectBtn = new Button(project.getProTitle()) ;
+                                                        projectBtn.setPrefHeight(43);
+                                                        projectBtn.setPrefWidth(200);
+                                                        projectBtn.setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+                                                        projectBtn.setAlignment(Pos.TOP_LEFT);
+                                                        setGraphic(projectBtn);
+                                                        projectBtn.setOnMouseClicked(e -> {
+                                                            Optional<Project> optionalProject = projectRepo.findById(getItem().getProId()) ;
+                                                            if (optionalProject.isPresent()) {
+                                                                chosenProject = optionalProject.get() ;
+                                                                setProjectBtn.setText(chosenProject.getProTitle());
+                                                                projectButtonsStage.close();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            } ;
+                                            customProjectCell.setStyle("-fx-padding:0px;");
+                                            return customProjectCell ;
+                                        }
+                                    });
+                                    projectListRoot.getChildren().add(projectListView) ;
+                                    if (projectButtonsStage == null) {
+                                        projectButtonsStage = new Stage();
+                                        projectButtonsStage.initStyle(StageStyle.UNDECORATED);
+                                        Bounds setProjectBtnBounds = setProjectBtn.localToScreen(setProjectBtn.getBoundsInLocal()) ;
+                                        int projectButtonsStageInitPosX = (int) setProjectBtnBounds.getMinX();
+                                        int projectButtonsStageInitPosY = (int) setProjectBtnBounds.getMaxY() ;
+                                        projectButtonsStage.setX(projectButtonsStageInitPosX);
+                                        projectButtonsStage.setY(projectButtonsStageInitPosY);
+                                    }
+
+                                    Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
+                                    projectButtonsStage.setScene(projectButtonsScene);
+                                    projectButtonsStage.show();
+                                });
                             });
 
                             deleteTaskBtn.setOnMouseClicked(deleteEvent -> {
@@ -341,7 +418,14 @@ public class  TodayPane implements Initializable, FxController {
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId()) ;
                                 if (optionalTask.isPresent()) {
                                     Task finishTask = optionalTask.get() ;
-                                    finishTask.setTaskStatus(4) ;
+                                    finishTask.setTaskStatus(constantDictionaryValues.getTASK_STATUS_COMPLETED()) ;
+                                    Result result = new Result() ;
+                                    result.setTaskId(finishTask.getTaskId());
+                                    result.setTaskCompletionPercent(1);
+                                    result.setTaskCompletedDate(Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()));
+                                    resultRepo.save(result) ;
+                                    taskRepo.save(finishTask);
+                                    refreshTaskList();
                                 }
                             });
                         }
