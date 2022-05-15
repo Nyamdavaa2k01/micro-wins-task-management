@@ -92,7 +92,7 @@ public class  TodayPane implements Initializable, FxController {
         constantColors = new ConstantColors() ;
         constantStyles = new ConstantStyles() ;
         //final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
-        constantDictionaryValues = new ConstantDictionaryValues() ; 
+        constantDictionaryValues = new ConstantDictionaryValues() ;
         final double TASK_LIST_WIDTH = 1000;
         taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setStyle("-fx-border-color:white;");
