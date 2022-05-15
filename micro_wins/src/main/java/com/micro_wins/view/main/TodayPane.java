@@ -35,6 +35,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -69,19 +70,20 @@ public class  TodayPane implements Initializable, FxController {
 
     @FXML
     private ListView<Task> taskList;
-    ObservableList<Task> taskObservableList ;
 
     Stage priorityButtonsStage ;
     Stage projectButtonsStage ;
     int priority ;
     Project chosenProject ;
 
-    private void refreshTaskList () {
-        List<Task> tasks = taskRepo.findByTaskStatus(1) ;
-        taskList.getItems().clear();
+    public void refreshTaskList () {
         int i ;
-        for (i = 0 ; i < tasks.size() ; i ++) {
-            taskList.getItems().add(tasks.get(i)) ;
+        taskList.getItems().clear();
+        for (i = 1 ; i <= 3 ; i ++) {
+            List<Task> tasks = taskRepo.findByTaskStatus(i) ;
+            tasks.forEach(eachTask -> {
+                taskList.getItems().add(eachTask) ;
+            });
         }
     }
 
@@ -96,7 +98,6 @@ public class  TodayPane implements Initializable, FxController {
         taskList.setFocusTraversable(false);
         taskList.setPadding(new Insets(20, 200, 0, 50));
         refreshTaskList();
-
 
         taskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
             @Override
@@ -118,21 +119,25 @@ public class  TodayPane implements Initializable, FxController {
                             taskOnTodayRoot.setPrefHeight(80);
                             Button finishTaskBtn = new Button() ;
                             AnchorPane.setLeftAnchor(finishTaskBtn, 50.0);
-                            AnchorPane.setTopAnchor(finishTaskBtn, 14.0);
-                            finishTaskBtn.setPrefHeight(35);
-                            finishTaskBtn.setPrefWidth(35);
+                            AnchorPane.setTopAnchor(finishTaskBtn, 18.0);
+                            finishTaskBtn.setPadding(new Insets(7, 14, 7, 14));
+                            finishTaskBtn.setShape(new Circle(5));
+
                             String finishTaskBtnBorderColor ;
-                            if (task.getTaskPriority() == 1) finishTaskBtnBorderColor = constantColors.getPRIORITY1_COLOR() ;
-                            else if (task.getTaskPriority() == 2) finishTaskBtnBorderColor = constantColors.getPRIORITY2_COLOR() ;
-                            else if (task.getTaskPriority() == 3) finishTaskBtnBorderColor = constantColors.getPRIORITY3_COLOR() ;
-                            else finishTaskBtnBorderColor = constantColors.getPRIORITY4_COLOR() ;
+                            if (task.getTaskPriority() == constantDictionaryValues.getTASK_PRIORITY_URGENT())
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY1_COLOR() ;
+                            else if (task.getTaskPriority() == constantDictionaryValues.getTASK_PRIORITY_HIGH())
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY2_COLOR() ;
+                            else if (task.getTaskPriority() == constantDictionaryValues.getTASK_PRIORITY_MEDIUM())
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY3_COLOR() ;
+                            else
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY4_COLOR() ;
+
                             String finishTaskBtnBgColor = finishTaskBtnBorderColor + "40";
                             finishTaskBtn.setStyle(
                                     "-fx-background-color: " + finishTaskBtnBgColor +  "; " +
                                             "-fx-border-color :" +  finishTaskBtnBorderColor + "; " +
-                                            "-fx-border-width : 5 ;" +
-                                            "-fx-border-radius : 50;" +
-                                            "-fx-background-radius:50;"
+                                            "-fx-border-width : 4 ;"
                             );
 
                             Label taskTitleLbl = new Label(task.getTaskTitle()) ;
@@ -286,14 +291,11 @@ public class  TodayPane implements Initializable, FxController {
                                         editTask.setTaskTitle(taskTitleTxt.getText());
                                         editTask.setTaskDefinition(taskDescriptionTxt.getText());
                                         editTask.setTaskStartDate(Functions.LOCALDATE_TO_DATE.localDateToDate(taskDatePicker.getValue()));
-//                                        editTask.setTaskPriority(priority) ;
-//                                        editTask.setTaskStatus();
                                         editTask.setTaskPriority(priority);
                                         if (chosenProject != null) {
                                             editTask.setTaskProId(chosenProject.getProId());
                                             editTask.setTaskProTitle(chosenProject.getProTitle());
                                         }
-
                                         taskRepo.save(editTask) ;
                                         refreshTaskList();
                                     }
@@ -349,12 +351,12 @@ public class  TodayPane implements Initializable, FxController {
 
                                 setProjectBtn.setOnMouseClicked(setProjectEvent -> {
                                     ListView<Project> projectListView = new ListView<>() ;
-                                    List<Project> projectList = projectRepo.findAll() ;
+                                    List<Project> projectList = projectRepo.findProjectsByProOwner(11) ;
                                     VBox projectListRoot = new VBox( );
-                                    int i ;
-                                    for (i = 0 ; i < projectList.size() ; i ++) {
-                                        projectListView.getItems().add(projectList.get(i)) ;
-                                    }
+                                    projectList.forEach(eachProject -> {
+                                        projectListView.getItems().add(eachProject) ;
+                                     });
+
                                     projectListView.setPadding(new Insets(0));
                                     projectListView.setCellFactory(new Callback<ListView<Project>, ListCell<Project>>() {
                                         @Override

@@ -20,6 +20,7 @@ import java.util.List;
  * @project micro-wins-task-management
  * @created 13/05/2022 - 4:58 AM
  */
+
 @Service
 public class TaskServiceImpl implements CrudService<Task>, TaskService {
     @Autowired
