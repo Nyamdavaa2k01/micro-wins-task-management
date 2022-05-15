@@ -7,6 +7,7 @@ import com.micro_wins.service.ProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -59,7 +60,7 @@ public class ProjectServiceImpl implements CrudService<Project>, ProjectService 
     @Override
     public boolean isCompleted(int proId, String proTitle)
     {
-        return true;
+        return false;
     }
 
     @Override
@@ -72,5 +73,17 @@ public class ProjectServiceImpl implements CrudService<Project>, ProjectService 
     public void deleteInBatch(List<Project> projects)
     {
         projectRepo.deleteInBatch(projects);
+    }
+
+    @Override
+    public List<Project> findProjectsByProOwner(int proOwner){
+        List<Project> projectList = projectRepo.findAll();
+        List<Project> proListWithOneOwner = new ArrayList<>();
+        projectList.forEach((project -> {
+            if(project.getProOwner() == proOwner){
+                proListWithOneOwner.add(project);
+            }
+        }));
+        return proListWithOneOwner;
     }
 }

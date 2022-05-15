@@ -5,9 +5,13 @@ import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
 
+import com.micro_wins.constants.ConstantColors;
 import com.micro_wins.constants.Functions;
 import com.micro_wins.model.Project;
+import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.FxController;
+import com.micro_wins.view.StageManager;
+import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -17,17 +21,27 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 @Controller
 @FxmlView
 public class AddProjectPane implements Initializable, FxController {
 
-    @FXML
-    private ResourceBundle resources;
+    @Lazy
+    @Autowired
+    private StageManager stageManager;
 
-    @FXML
-    private URL location;
+    @Autowired
+    ConfigurableApplicationContext springAppContext;
+
+    @Autowired
+    ProjectRepo projectRepo;
+
+    private Functions localDateToDate;
+    private Project newProject;
 
     @FXML
     private DatePicker proDeadline;
@@ -42,29 +56,45 @@ public class AddProjectPane implements Initializable, FxController {
     private TextField proTitle;
 
     @FXML
-    private Button btnAdd;
+    private Button btnAddProject;
 
     @FXML
     private Button btnCancel;
 
-    private Functions functions;
-
     @FXML
     void addProject(ActionEvent event) {
+
         String title = proTitle.getText();
         String desc = proDesc.getText();
+
+        /**
+         * set values to new instant of Project
+         */
         LocalDate startLocalDate = proStartDate.getValue();
-        Date startDate = functions.localDateToDate(startLocalDate);
+        Date startDate = localDateToDate.localDateToDate(startLocalDate);
         LocalDate deadlineLocal = proDeadline.getValue();
-        Date deadline = functions.localDateToDate(deadlineLocal);
-        Project newProject = new Project();
+        Date deadline = localDateToDate.localDateToDate(deadlineLocal);
         newProject.setProTitle(title);
         newProject.setProDescription(desc);
-        newProject.setProStatus(0);
-        newProject.setProCompletionPercent(0);
-        newProject.setProOwner(11);
         newProject.setProStartDate(startDate);
         newProject.setProDeadline(deadline);
+
+        /**
+         * insert new project into mw_project table
+         */
+        Project savedProject = projectRepo.save(newProject);
+
+        /**
+         * when save successfully, close stage to add new project and unbind button to and project
+         */
+        if(savedProject != null){
+            btnAddProject.disableProperty().unbind();
+
+            Stage stage = (Stage) btnAddProject.getScene().getWindow();
+            stage.close();
+
+            stageManager.rebuildStage(TodayPane.class);
+        }
     }
 
     @FXML
@@ -76,7 +106,46 @@ public class AddProjectPane implements Initializable, FxController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        stageManager = springAppContext.getBean(StageManager.class);
 
+        /**
+         * create localDateToDate to convert local date into date from enum of functions
+         */
+        localDateToDate = Functions.DATE_TO_LOCALDATE;
+
+        /**
+         * set instance of Project to newProject
+         */
+        newProject = new Project();
+
+        /**
+         * set default value to new project model fields and new project attribute
+         */
+        newProject.setProStatus(1);
+        newProject.setProCompletionPercent(0);
+        newProject.setProOwner(11);
+        LocalDate today = LocalDate.now();
+        proStartDate.setValue(today);
+        LocalDate tomorrow = today.plusDays(1);
+        proDeadline.setValue(tomorrow);
+
+        /**
+         * Add Task Button is disabled while Project Title TextField and Project Description TextField are empty, and as soon as user start
+         * typing task title, button is enabled
+         */
+        BooleanBinding bindProTitleAndDesc = new BooleanBinding() {
+            {
+                super.bind(proTitle.textProperty());
+                super.bind(proDesc.textProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                return (proTitle.getText().isEmpty() || proDesc.getText().isEmpty());
+            }
+        };
+
+        btnAddProject.disableProperty().bind(bindProTitleAndDesc);
     }
 
 }

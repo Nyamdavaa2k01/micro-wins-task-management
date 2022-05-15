@@ -2,6 +2,8 @@ package com.micro_wins.service;
 
 import com.micro_wins.model.Project;
 
+import java.util.List;
+
 /**
  * @author Bagaa
  * @project micro-wins-task-management
@@ -10,4 +12,5 @@ import com.micro_wins.model.Project;
 public interface ProjectService {
     boolean isCompleted(int proId, String proTitle);
     Project findByProTitle(String proTitle);
+    List<Project> findProjectsByProOwner(int proOwner);
 }

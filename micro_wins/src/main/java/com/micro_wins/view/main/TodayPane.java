@@ -46,7 +46,7 @@ import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
-public class TodayPane implements Initializable, FxController {
+public class  TodayPane implements Initializable, FxController {
 
     ConstantColors constantColors ;
     ConstantStyles constantStyles ;

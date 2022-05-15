@@ -28,6 +28,7 @@ public enum Functions {
                 return false;
             }
     }
+
     public Date localDateToDate(LocalDate localDate)
     {
         Date date = Date.from(localDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
