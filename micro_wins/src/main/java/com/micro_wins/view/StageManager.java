@@ -7,6 +7,8 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -30,6 +32,7 @@ public class StageManager {
 
     private final Stage primaryStage;
     private Stage secondaryStage ;
+    private Class<? extends FxController> latestFxControllerClass ;
 
     public StageManager(Stage stage)
     {
@@ -37,9 +40,14 @@ public class StageManager {
         secondaryStage = null;
     }
 
+    public Class<? extends FxController>  getLatestFxControllerClass () {
+        return latestFxControllerClass ;
+    }
+
     public void rebuildStage(Class<? extends FxController> fxControllerClass)
     {
         Scene scene = createScene(primaryStage, fxControllerClass);
+        latestFxControllerClass = fxControllerClass ;
         scene.setFill(Color.TRANSPARENT);
         showScene(fxControllerClass, scene);
     }

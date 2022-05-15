@@ -151,14 +151,16 @@ public class AddTaskPane implements Initializable, FxController {
         String taskTitle = taskNameTxt.getText() ;
         String taskDefinition = taskDescriptionTxt.getText();
         Date datePickerDate = Date.from(taskDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()) ;
-
-      //  Task task = new Task(taskTitle, taskDefinition, priority, 1, datePickerDate, 12) ;
         task.setTaskTitle(taskTitle);
         task.setTaskDefinition(taskDefinition);
         task.setTaskStartDate(datePickerDate);
         taskRepo.save(task) ;
-
         stageManager.closeSecondaryStage();
+        /**
+         * Go to the latest scene
+         */
+        Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+        if (fxControllerClass != null) stageManager.rebuildStage(fxControllerClass);
      }
 
     @FXML

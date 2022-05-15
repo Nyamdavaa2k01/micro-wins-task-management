@@ -454,7 +454,7 @@ public class  TodayPane implements Initializable, FxController {
 
     @FXML
     void setFilterOption(ActionEvent event) {
-
+        
     }
 
     @FXML
