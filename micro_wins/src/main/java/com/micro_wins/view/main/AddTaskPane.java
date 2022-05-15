@@ -156,6 +156,7 @@ public class AddTaskPane implements Initializable, FxController {
         task.setTaskStartDate(datePickerDate);
         taskRepo.save(task) ;
         stageManager.closeSecondaryStage();
+
         /**
          * Go to the latest scene
          */

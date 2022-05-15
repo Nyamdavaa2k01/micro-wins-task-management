@@ -63,7 +63,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <VBox alignment="CENTER" prefHeight="549.0" prefWidth="194.0" style="-fx-background-color: transparent;">
+      <VBox alignment="CENTER" minHeight="400.0" prefHeight="549.0" prefWidth="194.0" style="-fx-background-color: transparent;">
          <VBox.margin>
             <Insets left="20.0" />
          </VBox.margin>

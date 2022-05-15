@@ -103,11 +103,8 @@ public class AddProjectPane implements Initializable, FxController {
             Stage stage = (Stage) btnAddProject.getScene().getWindow();
             stage.close();
 
-            NavigationPane navigationPane = NavigationPane.getInstance();
-            stageManager.loadView(navigationPane.getClass());
-            navigationPane.lvProjects = new ListView<>();
-            navigationPane.projectRepo = projectRepo;
-            navigationPane.resetListView();
+            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+            if (fxControllerClass != null) stageManager.rebuildStage(fxControllerClass);
         }
     }
 
