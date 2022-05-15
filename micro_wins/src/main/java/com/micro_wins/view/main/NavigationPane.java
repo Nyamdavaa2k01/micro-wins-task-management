@@ -257,7 +257,7 @@ public class NavigationPane {
 
     @FXML
     void navToUpcoming(ActionEvent event) {
-        System.out.println("Under development for now :)");
+        stageManager.rebuildStage(UpcomingPane.class);
     }
 
     @FXML

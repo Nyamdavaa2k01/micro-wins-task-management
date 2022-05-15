@@ -46,10 +46,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.text.DateFormatSymbols;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Controller
 @FxmlView
@@ -71,9 +70,14 @@ public class  TodayPane implements Initializable, FxController {
     @FXML
     private ListView<Task> taskList;
 
+    Boolean sorted = false;
+
     Stage priorityButtonsStage ;
     Stage projectButtonsStage ;
-    int priority ;
+    Stage chooseFilterOptionStage ;
+
+    private int priority ;
+    private int filterOpt = 0 ;
     Project chosenProject ;
 
     public void refreshTaskList () {
@@ -91,6 +95,8 @@ public class  TodayPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle)  {
         constantColors = new ConstantColors() ;
         constantStyles = new ConstantStyles() ;
+
+        todayDateLbl.setText(Functions.TODAY_DATE_TO_STRING.todayDateToString());
         //final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
         constantDictionaryValues = new ConstantDictionaryValues() ;
         final double TASK_LIST_WIDTH = 1000;
@@ -412,8 +418,11 @@ public class  TodayPane implements Initializable, FxController {
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
                                 if (optionalTask.isPresent()) {
                                     Task deleteTask = optionalTask.get() ;
-                                    taskRepo.deleteById(deleteTask.getTaskId());
-                                    refreshTaskList();
+                                    if (Functions.DELETE_CONFIRM_ALERT.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete the task" +
+                                    deleteTask.getTaskTitle(), "yes", "no")) {
+                                        taskRepo.deleteById(deleteTask.getTaskId());
+                                        refreshTaskList();
+                                    }
                                 }
                             });
 
@@ -454,12 +463,84 @@ public class  TodayPane implements Initializable, FxController {
 
     @FXML
     void setFilterOption(ActionEvent event) {
-        
+        VBox setFilterOptionsRoot = new VBox() ;
+        Scene setFilterOptionsScene = new Scene(setFilterOptionsRoot, 200, 215) ;
+        if (chooseFilterOptionStage != null) chooseFilterOptionStage.close();
+        chooseFilterOptionStage = new Stage( );
+        chooseFilterOptionStage.initStyle(StageStyle.UNDECORATED);
+
+        /**
+         * Changing the initial position of priorityButtonsStage relative to setPriorityBtn
+         */
+        Bounds setFilterOptionBtnBounds = setFilterOptionBtn.localToScreen(setFilterOptionBtn.getBoundsInLocal()) ;
+        int priorityButtonsStageInitPosX = (int) setFilterOptionBtnBounds.getMinX();
+        int priorityButtonsStageInitPosY = (int) setFilterOptionBtnBounds.getMaxY() ;
+        chooseFilterOptionStage.setX(priorityButtonsStageInitPosX);
+        chooseFilterOptionStage.setY(priorityButtonsStageInitPosY);
+
+
+        Button [] filterOptions = new Button[5] ;
+        int i ;
+        for (i = 0 ; i < 5 ; i ++) {
+            filterOptions[i] = new Button() ;
+            filterOptions[i].setAlignment(Pos.TOP_LEFT);
+            filterOptions[i].setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+            filterOptions[i].setOnMouseClicked(e -> {
+                String text = ((Button) e.getSource()).getText();
+                if (text.equals("No Filter")) {
+                    filterOpt = 0 ;
+                }
+                else {
+                    filterOpt = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                }
+                System.out.println(filterOpt);
+                chooseFilterOptionStage.close();
+                if (filterOpt == 0) refreshTaskList();
+                else {
+                    List<Task> filteredTasks = taskRepo.findByTaskPriorityAndTaskStatus(filterOpt, constantDictionaryValues.getTASK_STATUS_OPEN()) ;
+                    taskList.getItems().clear();
+                    filteredTasks.forEach(each -> {
+                        taskList.getItems().add(each) ;
+                    });
+
+                }
+
+            });
+            String buttonText = "No Filter" ;
+            String buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/default-icon.png" ;
+            if (i < 4) {
+                buttonText = "Priority " + (i+1) ;
+                buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/priority-"+(i+1)+"-icon.png" ;
+            }
+            ImageView buttonGraphicImage = new ImageView(new Image(buttonGraphicFilePath)) ;
+            buttonGraphicImage.setFitHeight(25);
+            buttonGraphicImage.setFitWidth(25);
+            filterOptions[i].setText(buttonText);
+            filterOptions[i].setGraphic(buttonGraphicImage);
+            filterOptions[i].setPrefWidth(200);
+            filterOptions[i].setPrefHeight(43);
+            setFilterOptionsRoot.getChildren().add(filterOptions[i]) ;
+        }
+        chooseFilterOptionStage.setScene(setFilterOptionsScene);
+        chooseFilterOptionStage.show();
+
     }
 
     @FXML
     void setSortOption(ActionEvent event) {
-
+        if (!sorted) {
+            List<Task> sortTasks = taskRepo.findByOrderByTaskPriorityAsc() ;
+            taskList.getItems().clear();
+            sortTasks.forEach(task -> {
+                if (task.getTaskStatus() != 4)
+                    taskList.getItems().add(task) ;
+            });
+            sorted = true ;
+        }
+        else {
+            refreshTaskList();
+            sorted = false ;
+        }
     }
 
 }

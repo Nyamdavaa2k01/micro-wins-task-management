@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -17,4 +18,8 @@ import java.util.List;
 @Repository
 public interface TaskRepo extends JpaRepository<Task, Integer> {
     List<Task> findByTaskStatus (int taskStatus) ;
+    List<Task> findByOrderByTaskPriorityAsc() ;
+    List<Task> findByTaskPriority(int taskPriority) ;
+    List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) ;
+    List<Task> findByTaskStartDate (Date date) ;
 }

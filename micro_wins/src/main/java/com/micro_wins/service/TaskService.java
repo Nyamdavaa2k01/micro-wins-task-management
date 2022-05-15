@@ -2,6 +2,7 @@ package com.micro_wins.service;
 
 import com.micro_wins.model.Task;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -11,4 +12,8 @@ import java.util.List;
  */
 public interface TaskService {
     List<Task> findByTaskStatus (int taskStatus) ;
+    List<Task> findByOrderByTaskPriorityAsc() ;
+    List<Task> findByTaskPriority(int taskPriority) ;
+    List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) ;
+    List<Task> findByTaskStartDate (Date date) ;
 }

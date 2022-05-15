@@ -4,8 +4,10 @@ import javafx.scene.control.*;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
+import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 
@@ -18,7 +20,9 @@ public enum Functions {
     IS_INT,
     LOCALDATE_TO_DATE,
     DATE_TO_LOCALDATE,
-    DELETE_CONFIRM_ALERT;
+    DELETE_CONFIRM_ALERT,
+    TODAY_DATE_TO_STRING,
+    DATE_TO_STRING ;
 
     public boolean isInt(TextField f, String msg)
     {
@@ -54,10 +58,29 @@ public enum Functions {
         DialogPane dialogPane = alert.getDialogPane();
         dialogPane.getStylesheets().add(
                 getClass().getResource("/styles/deleteConfirmAlert.css").toExternalForm());
-//        dialogPane.getStyleClass().add("myDialog");
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == ButtonType.OK)
             return true;
         return false;
+    }
+
+    public String todayDateToString () {
+        Calendar calendar = Calendar.getInstance() ;
+        calendar.setTime(Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()));
+        int month = calendar.get(Calendar.MONTH) ;
+        int day = calendar.get(Calendar.DAY_OF_MONTH) ;
+        int year = calendar.get(Calendar.YEAR) ;
+        String monthLocalizedName = new DateFormatSymbols().getMonths()[month] ;
+        return monthLocalizedName + " " + day +", " + year ;
+    }
+
+    public String dateToString (Date date) {
+        Calendar calendar = Calendar.getInstance() ;
+        calendar.setTime(date);
+        int month = calendar.get(Calendar.MONTH) ;
+        int day = calendar.get(Calendar.DAY_OF_MONTH) ;
+        int year = calendar.get(Calendar.YEAR) ;
+        String monthLocalizedName = new DateFormatSymbols().getMonths()[month] ;
+        return monthLocalizedName + " " + day +", " + year ;
     }
 }

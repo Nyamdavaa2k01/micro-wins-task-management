@@ -8,11 +8,13 @@ import com.micro_wins.repository.UserRepo;
 import com.micro_wins.service.CrudService;
 import com.micro_wins.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -81,5 +83,35 @@ public class TaskServiceImpl implements CrudService<Task>, TaskService {
         });
 
         return activeTasks ;
+    }
+
+    @Override
+    public List<Task> findByOrderByTaskPriorityAsc() {
+        List<Task> sortedTasks = taskRepo.findAll(Sort.by(Sort.Direction.ASC, "taskPriority")) ;
+        return sortedTasks ;
+    }
+
+    @Override
+    public List<Task> findByTaskPriority(int taskPriority)  {
+        List<Task> allTasks = taskRepo.findAll() ;
+        List<Task> filteredTasks = new ArrayList<>( );
+
+        allTasks.forEach(task -> {
+            if (task.getTaskPriority() == taskPriority) {
+                filteredTasks.add(task) ;
+            }
+        });
+
+        return filteredTasks ;
+    }
+
+    @Override
+    public List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) {
+        return taskRepo.findByTaskPriorityAndTaskStatus(taskPriority, taskStatus);
+    }
+
+    @Override
+    public List<Task> findByTaskStartDate (Date date)  {
+        return taskRepo.findByTaskStartDate(date) ;
     }
 }
