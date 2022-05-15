@@ -1,7 +1,6 @@
 #header {
     -fx-background-color: #6C7474 ;
-    -fx-pref-width:1366 ;
-    -fx-pref-height: 37
+    -fx-pref-height: 40
 }
 
 #header .image-view {

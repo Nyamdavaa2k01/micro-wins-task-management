@@ -33,7 +33,20 @@ public class MainPane implements Initializable, FxController {
     private StageManager stageManager;
 
     @FXML
-    BorderPane borderPane;
+    public BorderPane borderPane;
+
+    private final static MainPane INSTANCE = new MainPane() ;
+
+    private MainPane(){}
+
+    /**
+     * get global static instance of NavigationPane class
+     * @return
+     */
+    public static MainPane getInstance() {
+        return INSTANCE;
+    }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -41,5 +54,6 @@ public class MainPane implements Initializable, FxController {
         // set layout
         borderPane.setTop(stageManager.loadView(HeaderMenuPane.class));
         borderPane.setLeft(stageManager.loadView(NavigationPane.class));
+        borderPane.setCenter(stageManager.loadView(TodayPane.class));
     }
 }

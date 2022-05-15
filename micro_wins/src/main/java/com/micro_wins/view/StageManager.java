@@ -55,6 +55,11 @@ public class StageManager {
         secondaryStage.close();
     }
 
+    public void refreshStage () {
+        if (primaryStage == null) return ;
+        primaryStage.show();
+    }
+
     private Scene createScene(Stage stage , Class<? extends FxController> fxControllerClass)
     {
         Parent node = fxWeaver.loadView(fxControllerClass);
@@ -87,6 +92,7 @@ public class StageManager {
             logAndExit("Unable to show scene with title " + title, exception);
         }
     }
+
 
     private void showSecondaryScene(Class<? extends FxController> fxControllerClass, Scene scene)
     {

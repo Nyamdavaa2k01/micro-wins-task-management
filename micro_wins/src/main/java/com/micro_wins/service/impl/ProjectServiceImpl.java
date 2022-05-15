@@ -64,9 +64,9 @@ public class ProjectServiceImpl implements CrudService<Project>, ProjectService 
     }
 
     @Override
-    public Project findByProTitle(String proTitle)
+    public List<Project> findByProTitleAndProOwner(String proTitle, int proOwner)
     {
-        return projectRepo.findByProTitle(proTitle);
+        return projectRepo.findByProTitleAndProOwner(proTitle, proOwner);
     }
 
     @Override
@@ -86,4 +86,5 @@ public class ProjectServiceImpl implements CrudService<Project>, ProjectService 
         }));
         return proListWithOneOwner;
     }
+
 }

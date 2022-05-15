@@ -78,7 +78,8 @@ public class  TodayPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle)  {
         constantColors = new ConstantColors() ;
         constantStyles = new ConstantStyles() ;
-        final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
+        //final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
+        final double TASK_LIST_WIDTH = 1000;
         taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setStyle("-fx-border-color:white;");
         taskList.setFocusTraversable(false);
@@ -210,7 +211,7 @@ public class  TodayPane implements Initializable, FxController {
                                 AnchorPane.setBottomAnchor(bottomSep, 10.0);
 
                                 DatePicker taskDatePicker = new DatePicker() ;
-                                taskDatePicker.setValue(Functions.LOCALDATE_TO_DATE.DateToLocalDate(getItem().getTaskStartDate()));
+                                taskDatePicker.setValue(Functions.LOCALDATE_TO_DATE.dateToLocalDate(getItem().getTaskStartDate()));
                                 AnchorPane.setLeftAnchor(taskDatePicker, 50.0);
                                 AnchorPane.setTopAnchor(taskDatePicker, 110.0);
                                 taskDatePicker.setPrefHeight(29);

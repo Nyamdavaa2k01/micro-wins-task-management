@@ -3,6 +3,7 @@ package com.micro_wins.view.main;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import com.micro_wins.constants.ConstantColors;
@@ -15,10 +16,7 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +40,8 @@ public class AddProjectPane implements Initializable, FxController {
 
     private Functions localDateToDate;
     private Project newProject;
+
+    private ConstantColors constantColors;
 
     @FXML
     private DatePicker proDeadline;
@@ -68,6 +68,16 @@ public class AddProjectPane implements Initializable, FxController {
         String desc = proDesc.getText();
 
         /**
+         * whether check be same title project of saved projects
+         */
+        if(projectRepo.findByProTitleAndProOwner(title, 11).size() > 0)
+        {
+            proTitle.setStyle("-fx-background-color: " + constantColors.getWARNING_COLOR() + ";");
+            return;
+        }else{
+            proTitle.setStyle("-fx-background-color: " + constantColors.getWHITE() + ";");
+        }
+        /**
          * set values to new instant of Project
          */
         LocalDate startLocalDate = proStartDate.getValue();
@@ -93,7 +103,11 @@ public class AddProjectPane implements Initializable, FxController {
             Stage stage = (Stage) btnAddProject.getScene().getWindow();
             stage.close();
 
-            stageManager.rebuildStage(TodayPane.class);
+            NavigationPane navigationPane = NavigationPane.getInstance();
+            stageManager.loadView(navigationPane.getClass());
+            navigationPane.lvProjects = new ListView<>();
+            navigationPane.projectRepo = projectRepo;
+            navigationPane.resetListView();
         }
     }
 
@@ -107,6 +121,11 @@ public class AddProjectPane implements Initializable, FxController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stageManager = springAppContext.getBean(StageManager.class);
+
+        /**
+         * set instance of ConstantColors
+         */
+        constantColors = new ConstantColors();
 
         /**
          * create localDateToDate to convert local date into date from enum of functions

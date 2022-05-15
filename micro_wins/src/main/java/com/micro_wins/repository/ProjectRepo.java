@@ -14,6 +14,6 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepo extends JpaRepository<Project, Integer> {
-    Project findByProTitle(String proTitle);
+    List<Project> findByProTitleAndProOwner(String proTitle, int proOwner);
     List<Project> findProjectsByProOwner(int proOwner);
 }

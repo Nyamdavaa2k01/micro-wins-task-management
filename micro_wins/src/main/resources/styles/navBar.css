@@ -22,23 +22,9 @@
 
 #navBar .projectButtons .button{
     -fx-pref-height: 30;
-
 }
 
 #navBar .image-view {
     -fx-fit-width:35;
     -fx-pref-height:35;
-}
-
-#navBar #lvProjects .button{
-    -fx-pref-width:180;
-    -fx-pref-height:45;
-    -fx-background-radius : 25 ;
-    -fx-text-fill : white ;
-    -fx-font-size: 18 ;
-    -fx-graphic-text-gap: 30 ;
-    -fx-alignment: center-left ;
-    -fx-padding: 0 0 0 30 ;
-
-    -fx-background-color: #4CAF50 ;
 }

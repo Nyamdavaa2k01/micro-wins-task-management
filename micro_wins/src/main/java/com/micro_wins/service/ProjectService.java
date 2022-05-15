@@ -11,6 +11,6 @@ import java.util.List;
  */
 public interface ProjectService {
     boolean isCompleted(int proId, String proTitle);
-    Project findByProTitle(String proTitle);
+    List<Project> findByProTitleAndProOwner(String proTitle, int proOwner);
     List<Project> findProjectsByProOwner(int proOwner);
 }

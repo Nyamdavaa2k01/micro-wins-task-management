@@ -4,6 +4,7 @@
  */
 
 package com.micro_wins.view.main;
+import com.micro_wins.constants.Functions;
 import com.micro_wins.model.Project;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.StageManager;
@@ -11,14 +12,21 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.geometry.Point2D;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.MenuItem;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
@@ -30,21 +38,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 @FxmlView
 public class NavigationPane {
     private StageManager stageManager;
 
+    private final static NavigationPane INSTANCE = new NavigationPane();
+
     private Stage stage;
 
-    private List<Project> projectList;
-    private ObservableList<Project> projects;
+    public List<Project> projectList;
+    public ObservableList<Project> projects;
+
+    private Functions deleteConfirmAlert;
 
     @Autowired
-    ProjectRepo projectRepo;
+    public ProjectRepo projectRepo;
 
     @Autowired
     ConfigurableApplicationContext springAppContext;
@@ -83,60 +97,132 @@ public class NavigationPane {
     private Button addNewProjectBtn;
 
     @FXML
-    private ListView<Project> lvProjects;
+    public ListView<Project> lvProjects;
 
+    /**
+     * get global static instance of NavigationPane class
+     * @return
+     */
+    public static NavigationPane getInstance() {
+        return INSTANCE;
+    }
+
+    /**
+     * refresh list view items
+     */
     void resetListView(){
         lvProjects.getItems().clear();
         projectList = projectRepo.findProjectsByProOwner(11);
         projects = FXCollections.observableArrayList(projectList);
-        lvProjects.getItems().addAll(projects);
+        projects.forEach(project -> {
+            lvProjects.getItems().add(project);
+        });
     }
 
     //@PostConstruct
     public void initialize() {
         stageManager = springAppContext.getBean(StageManager.class);
+        deleteConfirmAlert = Functions.DELETE_CONFIRM_ALERT;
 
-        /**
-         *
-         */
         resetListView();
         lvProjects.setCellFactory(param -> new ListCell<Project>() {
             @Override
             protected void updateItem(Project item, boolean empty) {
                 super.updateItem(item, empty);
                 setText(null);
+                setGraphic(null);
 
                 if (!empty && item != null){
-                    Button btn = new Button(item.getProTitle());
-                    btn.setOnAction(new EventHandler<ActionEvent>() {
+                    HBox hBox = new HBox(5);
+                    hBox.setAlignment(Pos.CENTER);
+
+                    Button btnTitle = new Button(item.getProTitle());
+                    btnTitle.setStyle("-fx-pref-width:180;\n" +
+                            "-fx-pref-height:45;\n" +
+                            "-fx-background-radius : 25;\n" +
+                            "-fx-text-fill : white;\n" +
+                            "-fx-font-size: 18;\n" +
+                            "-fx-graphic-text-gap: 30;\n" +
+                            "-fx-alignment: center-left;\n" +
+                            "-fx-padding: 0 5 0 15;\n" +
+                            "\n" +
+                            "    -fx-background-color: #4CAF50;");
+                    btnTitle.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
 //                            stageManager.rebuildStage(ProjectPane.class);
                         }
                     });
 
-                    final ContextMenu contextMenu = new ContextMenu();
-                    MenuItem delete = new MenuItem("Delete");
-                    delete.setOnAction(new EventHandler<ActionEvent>() {
+                    Image deleteIcon = new Image("file:micro_wins/src/main/resources/images/white-x.png");
+                    ImageView deleteIconImgView = new ImageView(deleteIcon);
+                    deleteIconImgView.setFitHeight(10);
+                    deleteIconImgView.setFitWidth(10);
+
+                    Button btnDelete = new Button("", deleteIconImgView);
+                    btnDelete.setContentDisplay(ContentDisplay.CENTER);
+                    btnDelete.setStyle("-fx-pref-width:10;\n" +
+                            "-fx-pref-height: 10;\n" +
+                            "-fx-background-radius : 25;\n" +
+                            "-fx-text-fill : white;\n" +
+                            "-fx-font-size: 10;\n" +
+                            "-fx-graphic-text-gap: 0;\n" +
+                            "-fx-alignment: center;\n" +
+                            "-fx-padding: 3;\n" +
+                            "\n" +
+                            "-fx-background-color: transparent;");
+
+                    btnDelete.addEventHandler(MouseEvent.MOUSE_ENTERED, new EventHandler<MouseEvent>() {
                         @Override
-                        public void handle(ActionEvent event) {
-                            System.out.println("deleted");
-                            projectRepo.delete(item);
-                            stageManager.rebuildStage(TodayPane.class);
+                        public void handle(MouseEvent event) {
+                            btnDelete.setStyle("-fx-pref-width:10;\n" +
+                                    "-fx-pref-height: 10;\n" +
+                                    "-fx-background-radius : 25;\n" +
+                                    "-fx-text-fill : white;\n" +
+                                    "-fx-font-size: 10;\n" +
+                                    "-fx-graphic-text-gap: 0;\n" +
+                                    "-fx-alignment: center;\n" +
+                                    "-fx-padding: 3;\n" +
+                                    "\n" +
+                                    "-fx-background-color: rgba(255, 0, 0, 1);");
+                            event.consume();
                         }
                     });
-                    contextMenu.getItems().add(delete);
 
-                    btn.addEventFilter(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+                    btnDelete.addEventHandler(MouseEvent.MOUSE_EXITED, new EventHandler<MouseEvent>() {
                         @Override
-                        public void handle(MouseEvent mouseEvent) {
-                            if(mouseEvent.getButton() == MouseButton.SECONDARY){
-                                System.out.println("mouse right clicked");
-                                btn.setContextMenu(contextMenu);
+                        public void handle(MouseEvent event) {
+                            btnDelete.setStyle("-fx-pref-width:10;\n" +
+                                    "-fx-pref-height: 10;\n" +
+                                    "-fx-background-radius : 25;\n" +
+                                    "-fx-text-fill : white;\n" +
+                                    "-fx-font-size: 10;\n" +
+                                    "-fx-graphic-text-gap: 0;\n" +
+                                    "-fx-alignment: center;\n" +
+                                    "-fx-padding: 3;\n" +
+                                    "\n" +
+                                    "-fx-background-color: transparent;");
+                            event.consume();
+                        }
+                    });
+
+                    btnDelete.setOnAction(new EventHandler<ActionEvent>() {
+                        @Override
+                        public void handle(ActionEvent event) {
+                            if(deleteConfirmAlert.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete this project?", "Yes", "No")){
+                                projectRepo.delete(item);
+                                resetListView();
                             }
                         }
                     });
-                    setGraphic(btn);
+
+                    if(item.getProTitle().toLowerCase().equals("inbox")){
+                        btnDelete.setDisable(true);
+                    }
+
+                    hBox.getChildren().addAll(btnTitle, btnDelete);
+
+                    setGraphic(hBox);
                 }
             }
         });

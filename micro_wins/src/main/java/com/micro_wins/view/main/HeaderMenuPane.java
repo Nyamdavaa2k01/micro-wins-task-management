@@ -11,11 +11,13 @@ package com.micro_wins.view.main;
  */
 
 
+import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,12 +25,14 @@ import javafx.scene.control.TextField;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.jboss.jandex.Main;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -36,10 +40,11 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
-public class HeaderMenuPane {
+public class HeaderMenuPane implements Initializable, FxController {
 
     private StageManager stageManager;
 
@@ -146,7 +151,11 @@ public class HeaderMenuPane {
 
     @FXML
     void seeNavBar(ActionEvent event) {
-
+        MainPane mainPane = MainPane.getInstance();
+        mainPane.borderPane = new BorderPane();
+        mainPane.borderPane.setTop(stageManager.loadView(HeaderMenuPane.class));
+        mainPane.borderPane.setCenter(stageManager.loadView(TodayPane.class));
+        mainPane.borderPane.setLeft(null);
     }
 
     @FXML
@@ -154,4 +163,8 @@ public class HeaderMenuPane {
 
     }
 
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        stageManager = springAppContext.getBean(StageManager.class);
+    }
 }

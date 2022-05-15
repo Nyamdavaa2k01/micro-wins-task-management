@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="270.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@/styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.NavigationPane">
+<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="270.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@/styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.NavigationPane">
    <children>
       <Button fx:id="navToTodayBtn" mnemonicParsing="false" onAction="#navToToday" text="Today">
          <graphic>
@@ -63,12 +63,12 @@
             </ImageView>
          </graphic>
       </Button>
-      <VBox fx:id="projectButtons" alignment="CENTER" prefHeight="549.0" prefWidth="194.0">
+      <VBox alignment="CENTER" prefHeight="549.0" prefWidth="194.0" style="-fx-background-color: transparent;">
          <VBox.margin>
             <Insets left="20.0" />
          </VBox.margin>
          <children>
-            <ListView fx:id="lvProjects" prefHeight="549.0" prefWidth="125.0" style="-fx-background-color: transparent;" />
+            <ListView fx:id="lvProjects" prefHeight="549.0" prefWidth="125.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" />
          </children>
       </VBox>
    </children>
