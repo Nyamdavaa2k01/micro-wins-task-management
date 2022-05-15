@@ -11,6 +11,7 @@ import com.micro_wins.constants.ConstantColors;
 import com.micro_wins.constants.ConstantStyles;
 import com.micro_wins.constants.Functions;
 import com.micro_wins.model.Task;
+import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import javafx.collections.FXCollections;
@@ -53,6 +54,9 @@ public class  TodayPane implements Initializable, FxController {
 
     @Autowired
     TaskRepo taskRepo ;
+
+    @Autowired
+    ProjectRepo projectRepo ;
 
     @FXML
     private ListView<Task> taskList;
@@ -326,17 +330,19 @@ public class  TodayPane implements Initializable, FxController {
 
                             deleteTaskBtn.setOnMouseClicked(deleteEvent -> {
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
-                                System.out.println(getItem().getTaskId());
                                 if (optionalTask.isPresent()) {
                                     Task deleteTask = optionalTask.get() ;
                                     taskRepo.deleteById(deleteTask.getTaskId());
                                     refreshTaskList();
-                                    //  taskList.setItems(taskObservableList);
                                 }
                             });
 
                             finishTaskBtn.setOnMouseClicked(finishEvent -> {
-
+                                Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId()) ;
+                                if (optionalTask.isPresent()) {
+                                    Task finishTask = optionalTask.get() ;
+                                    finishTask.setTaskStatus(4) ;
+                                }
                             });
                         }
                     }
