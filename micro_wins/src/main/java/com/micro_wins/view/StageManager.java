@@ -63,11 +63,6 @@ public class StageManager {
         secondaryStage.close();
     }
 
-    public void refreshStage () {
-        if (primaryStage == null) return ;
-        primaryStage.show();
-    }
-
     private Scene createScene(Stage stage , Class<? extends FxController> fxControllerClass)
     {
         Parent node = fxWeaver.loadView(fxControllerClass);

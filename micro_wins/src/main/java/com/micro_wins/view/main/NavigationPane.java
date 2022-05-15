@@ -8,23 +8,20 @@ import com.micro_wins.constants.Functions;
 import com.micro_wins.model.Project;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.StageManager;
+import com.micro_wins.view.holder.ProjectHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -38,17 +35,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import java.awt.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 @Controller
 @FxmlView
 public class NavigationPane {
     private StageManager stageManager;
-
-    private final static NavigationPane INSTANCE = new NavigationPane();
 
     private Stage stage;
 
@@ -100,26 +95,20 @@ public class NavigationPane {
     public ListView<Project> lvProjects;
 
     /**
-     * get global static instance of NavigationPane class
-     * @return
-     */
-    public static NavigationPane getInstance() {
-        return INSTANCE;
-    }
-
-    /**
      * refresh list view items
      */
     void resetListView(){
         lvProjects.getItems().clear();
         projectList = projectRepo.findProjectsByProOwner(11);
-        projects = FXCollections.observableArrayList(projectList);
+        projects = FXCollections.observableArrayList(projectList.stream().filter(project -> !project.getProTitle().toLowerCase().equals("inbox")).collect(Collectors.toList()));
         projects.forEach(project -> {
             lvProjects.getItems().add(project);
         });
     }
 
-    //@PostConstruct
+    /**
+     *
+     */
     public void initialize() {
         stageManager = springAppContext.getBean(StageManager.class);
         deleteConfirmAlert = Functions.DELETE_CONFIRM_ALERT;
@@ -150,7 +139,9 @@ public class NavigationPane {
                     btnTitle.setOnAction(new EventHandler<ActionEvent>() {
                         @Override
                         public void handle(ActionEvent event) {
-//                            stageManager.rebuildStage(ProjectPane.class);
+                            ProjectHolder projectHolder = ProjectHolder.getInstance();
+                            projectHolder.setProject(item);
+                            stageManager.rebuildStage(ProjectPane.class);
                         }
                     });
 
@@ -212,16 +203,20 @@ public class NavigationPane {
                             if(deleteConfirmAlert.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete this project?", "Yes", "No")){
                                 projectRepo.delete(item);
                                 resetListView();
+
+                                Scene scene = btnDelete.getScene();
+                                if(scene == null){
+                                    return;
+                                }
+                                Stage stage = (Stage) scene.getWindow();
+                                if(stage.isShowing()){
+                                    stageManager.rebuildStage(TodayPane.class);
+                                }
                             }
                         }
                     });
 
-                    if(item.getProTitle().toLowerCase().equals("inbox")){
-                        btnDelete.setDisable(true);
-                    }
-
                     hBox.getChildren().addAll(btnTitle, btnDelete);
-
                     setGraphic(hBox);
                 }
             }
