@@ -3,11 +3,10 @@ package com.micro_wins.repository;
 import com.micro_wins.model.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 
 /**
  * @author Nyamka
@@ -17,5 +16,5 @@ import javax.persistence.EntityManager;
 
 @Repository
 public interface TaskRepo extends JpaRepository<Task, Integer> {
-
+    List<Task> findByTaskStatus (int taskStatus) ;
 }

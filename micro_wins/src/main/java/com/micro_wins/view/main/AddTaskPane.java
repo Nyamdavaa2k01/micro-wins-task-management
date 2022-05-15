@@ -227,12 +227,11 @@ public class AddTaskPane implements Initializable, FxController {
     @FXML
     void setProject(ActionEvent event) {
         ListView<Project> projectListView = new ListView<>() ;
-        List<Project> projectList = projectRepo.findAll() ;
-        VBox projectListRoot = new VBox( );
-        int i ;
-        for (i = 0 ; i < projectList.size() ; i ++) {
-            projectListView.getItems().add(projectList.get(i)) ;
-        }
+        List<Project> projectList = projectRepo.findProjectsByProOwner(11) ;
+        VBox projectListRoot = new VBox();
+        projectList.forEach(project -> {
+            projectListView.getItems().add(project) ;
+        });
         projectListView.setPadding(new Insets(0));
         projectListView.setCellFactory(new Callback<ListView<Project>, ListCell<Project>>() {
             @Override

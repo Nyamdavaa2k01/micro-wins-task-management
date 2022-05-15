@@ -8,10 +8,14 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constants.ConstantColors;
 
+import com.micro_wins.constants.ConstantDictionaryValues;
 import com.micro_wins.constants.ConstantStyles;
 import com.micro_wins.constants.Functions;
+import com.micro_wins.model.Project;
+import com.micro_wins.model.Result;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.ProjectRepo;
+import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import javafx.collections.FXCollections;
@@ -31,6 +35,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -41,6 +46,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -51,6 +57,7 @@ public class  TodayPane implements Initializable, FxController {
 
     ConstantColors constantColors ;
     ConstantStyles constantStyles ;
+    ConstantDictionaryValues constantDictionaryValues ;
 
     @Autowired
     TaskRepo taskRepo ;
@@ -58,19 +65,25 @@ public class  TodayPane implements Initializable, FxController {
     @Autowired
     ProjectRepo projectRepo ;
 
+    @Autowired
+    ResultRepo resultRepo ;
+
     @FXML
     private ListView<Task> taskList;
-    ObservableList<Task> taskObservableList ;
 
     Stage priorityButtonsStage ;
+    Stage projectButtonsStage ;
     int priority ;
+    Project chosenProject ;
 
-    private void refreshTaskList () {
-        List<Task> tasks = taskRepo.findAll() ;
-        taskList.getItems().clear();
+    public void refreshTaskList () {
         int i ;
-        for (i = 0 ; i < tasks.size() ; i ++) {
-            taskList.getItems().add(tasks.get(i)) ;
+        taskList.getItems().clear();
+        for (i = 1 ; i <= 3 ; i ++) {
+            List<Task> tasks = taskRepo.findByTaskStatus(i) ;
+            tasks.forEach(eachTask -> {
+                taskList.getItems().add(eachTask) ;
+            });
         }
     }
 
@@ -79,13 +92,13 @@ public class  TodayPane implements Initializable, FxController {
         constantColors = new ConstantColors() ;
         constantStyles = new ConstantStyles() ;
         //final double TASK_LIST_WIDTH = Screen.getPrimary().getVisualBounds().getWidth()*0.8 - 200 ;
+        constantDictionaryValues = new ConstantDictionaryValues() ; 
         final double TASK_LIST_WIDTH = 1000;
         taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setStyle("-fx-border-color:white;");
         taskList.setFocusTraversable(false);
         taskList.setPadding(new Insets(20, 200, 0, 50));
         refreshTaskList();
-
 
         taskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
             @Override
@@ -107,21 +120,25 @@ public class  TodayPane implements Initializable, FxController {
                             taskOnTodayRoot.setPrefHeight(80);
                             Button finishTaskBtn = new Button() ;
                             AnchorPane.setLeftAnchor(finishTaskBtn, 50.0);
-                            AnchorPane.setTopAnchor(finishTaskBtn, 14.0);
-                            finishTaskBtn.setPrefHeight(35);
-                            finishTaskBtn.setPrefWidth(35);
+                            AnchorPane.setTopAnchor(finishTaskBtn, 18.0);
+                            finishTaskBtn.setPadding(new Insets(7, 14, 7, 14));
+                            finishTaskBtn.setShape(new Circle(5));
+
                             String finishTaskBtnBorderColor ;
-                            if (task.getTaskPriority() == 1) finishTaskBtnBorderColor = constantColors.getPRIORITY1_COLOR() ;
-                            else if (task.getTaskPriority() == 2) finishTaskBtnBorderColor = constantColors.getPRIORITY2_COLOR() ;
-                            else if (task.getTaskPriority() == 3) finishTaskBtnBorderColor = constantColors.getPRIORITY3_COLOR() ;
-                            else finishTaskBtnBorderColor = constantColors.getPRIORITY4_COLOR() ;
+                            if (task.getTaskPriority() == constantDictionaryValues.getTASK_PRIORITY_URGENT())
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY1_COLOR() ;
+                            else if (task.getTaskPriority() == constantDictionaryValues.getTASK_PRIORITY_HIGH())
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY2_COLOR() ;
+                            else if (task.getTaskPriority() == constantDictionaryValues.getTASK_PRIORITY_MEDIUM())
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY3_COLOR() ;
+                            else
+                                finishTaskBtnBorderColor = constantColors.getPRIORITY4_COLOR() ;
+
                             String finishTaskBtnBgColor = finishTaskBtnBorderColor + "40";
                             finishTaskBtn.setStyle(
                                     "-fx-background-color: " + finishTaskBtnBgColor +  "; " +
                                             "-fx-border-color :" +  finishTaskBtnBorderColor + "; " +
-                                            "-fx-border-width : 5 ;" +
-                                            "-fx-border-radius : 50;" +
-                                            "-fx-background-radius:50;"
+                                            "-fx-border-width : 4 ;"
                             );
 
                             Label taskTitleLbl = new Label(task.getTaskTitle()) ;
@@ -177,7 +194,7 @@ public class  TodayPane implements Initializable, FxController {
                             setGraphic(taskOnTodayRoot);
 
                             /**
-                             * when user clicks button with an icon of pen, textfield shows and user can change textfield
+                             * when user clicks button with an icon of pen, textfields show and user can change textfield
                              */
                             editTaskBtn.setOnMouseClicked(e -> {
                                 AnchorPane editTaskRootContainer = new AnchorPane() ;
@@ -217,6 +234,12 @@ public class  TodayPane implements Initializable, FxController {
                                 taskDatePicker.setPrefHeight(29);
                                 taskDatePicker.setPrefWidth(0.1*TASK_LIST_WIDTH);
 
+                                Button setProjectBtn = new Button(task.getTaskProTitle()) ;
+                                setProjectBtn.setPrefWidth(85);
+                                setProjectBtn.setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+                                AnchorPane.setLeftAnchor(setProjectBtn, 160.0);
+
+                                AnchorPane.setTopAnchor(setProjectBtn, 110.0);
                                 Button saveTaskBtn = new Button("Save") ;
 
                                 AnchorPane.setLeftAnchor(saveTaskBtn, 50.0);
@@ -224,7 +247,6 @@ public class  TodayPane implements Initializable, FxController {
                                 saveTaskBtn.setPrefHeight(35);
                                 saveTaskBtn.setPrefWidth(0.1*TASK_LIST_WIDTH);
                                 saveTaskBtn.setFont(Font.font(13));
-                               // saveTaskBtn.setStyle();
 
                                 Button cancelBtn = new Button("Cancel") ;
                                 AnchorPane.setLeftAnchor(cancelBtn,159.0);
@@ -249,7 +271,7 @@ public class  TodayPane implements Initializable, FxController {
                                 AnchorPane.setRightAnchor(addReminderBtn, 50.0);
                                 AnchorPane.setTopAnchor(addReminderBtn, 110.0);
 
-                                editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
+                                editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, setProjectBtn, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
                                 setGraphic(editTaskRootContainer);
 
                                 /**
@@ -270,12 +292,13 @@ public class  TodayPane implements Initializable, FxController {
                                         editTask.setTaskTitle(taskTitleTxt.getText());
                                         editTask.setTaskDefinition(taskDescriptionTxt.getText());
                                         editTask.setTaskStartDate(Functions.LOCALDATE_TO_DATE.localDateToDate(taskDatePicker.getValue()));
-                                        System.out.println(priority);
                                         editTask.setTaskPriority(priority);
-
+                                        if (chosenProject != null) {
+                                            editTask.setTaskProId(chosenProject.getProId());
+                                            editTask.setTaskProTitle(chosenProject.getProTitle());
+                                        }
                                         taskRepo.save(editTask) ;
-                                        refreshTaskList();  
-                                       //  taskList.setItems(taskObservableList);
+                                        refreshTaskList();
                                     }
 
                                 });
@@ -327,6 +350,62 @@ public class  TodayPane implements Initializable, FxController {
                                     priorityButtonsStage.show();
                                 });
 
+                                setProjectBtn.setOnMouseClicked(setProjectEvent -> {
+                                    ListView<Project> projectListView = new ListView<>() ;
+                                    List<Project> projectList = projectRepo.findProjectsByProOwner(11) ;
+                                    VBox projectListRoot = new VBox( );
+                                    projectList.forEach(eachProject -> {
+                                        projectListView.getItems().add(eachProject) ;
+                                     });
+
+                                    projectListView.setPadding(new Insets(0));
+                                    projectListView.setCellFactory(new Callback<ListView<Project>, ListCell<Project>>() {
+                                        @Override
+                                        public ListCell<Project> call(ListView<Project> projectListView) {
+                                            ListCell<Project> customProjectCell = new ListCell<Project>() {
+                                                @Override
+                                                public void updateItem(Project project, boolean empty) {
+                                                    super.updateItem(project, empty);
+                                                    if (empty) {
+                                                        setGraphic(null);
+                                                    }
+                                                    else {
+                                                        Button projectBtn = new Button(project.getProTitle()) ;
+                                                        projectBtn.setPrefHeight(43);
+                                                        projectBtn.setPrefWidth(200);
+                                                        projectBtn.setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+                                                        projectBtn.setAlignment(Pos.TOP_LEFT);
+                                                        setGraphic(projectBtn);
+                                                        projectBtn.setOnMouseClicked(e -> {
+                                                            Optional<Project> optionalProject = projectRepo.findById(getItem().getProId()) ;
+                                                            if (optionalProject.isPresent()) {
+                                                                chosenProject = optionalProject.get() ;
+                                                                setProjectBtn.setText(chosenProject.getProTitle());
+                                                                projectButtonsStage.close();
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                            } ;
+                                            customProjectCell.setStyle("-fx-padding:0px;");
+                                            return customProjectCell ;
+                                        }
+                                    });
+                                    projectListRoot.getChildren().add(projectListView) ;
+                                    if (projectButtonsStage == null) {
+                                        projectButtonsStage = new Stage();
+                                        projectButtonsStage.initStyle(StageStyle.UNDECORATED);
+                                        Bounds setProjectBtnBounds = setProjectBtn.localToScreen(setProjectBtn.getBoundsInLocal()) ;
+                                        int projectButtonsStageInitPosX = (int) setProjectBtnBounds.getMinX();
+                                        int projectButtonsStageInitPosY = (int) setProjectBtnBounds.getMaxY() ;
+                                        projectButtonsStage.setX(projectButtonsStageInitPosX);
+                                        projectButtonsStage.setY(projectButtonsStageInitPosY);
+                                    }
+
+                                    Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
+                                    projectButtonsStage.setScene(projectButtonsScene);
+                                    projectButtonsStage.show();
+                                });
                             });
 
                             deleteTaskBtn.setOnMouseClicked(deleteEvent -> {
@@ -342,7 +421,14 @@ public class  TodayPane implements Initializable, FxController {
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId()) ;
                                 if (optionalTask.isPresent()) {
                                     Task finishTask = optionalTask.get() ;
-                                    finishTask.setTaskStatus(4) ;
+                                    finishTask.setTaskStatus(constantDictionaryValues.getTASK_STATUS_COMPLETED()) ;
+                                    Result result = new Result() ;
+                                    result.setTaskId(finishTask.getTaskId());
+                                    result.setTaskCompletionPercent(1);
+                                    result.setTaskCompletedDate(Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()));
+                                    resultRepo.save(result) ;
+                                    taskRepo.save(finishTask);
+                                    refreshTaskList();
                                 }
                             });
                         }
