@@ -72,11 +72,11 @@ public class StageManager {
         String title = ResourceBundleUtil.getKey(fxControllerClass.getSimpleName() + ".title");
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
-       // primaryStage.sizeToScene();
         Rectangle2D screenBounds = Screen.getPrimary().getBounds() ;
         primaryStage.setWidth(screenBounds.getWidth());
         primaryStage.setHeight(screenBounds.getHeight());
-        primaryStage.centerOnScreen();
+        primaryStage.setX(screenBounds.getMinX()) ;
+        primaryStage.setY(screenBounds.getMinY());
 
         try
         {
