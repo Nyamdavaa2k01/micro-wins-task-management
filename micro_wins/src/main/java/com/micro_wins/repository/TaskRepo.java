@@ -22,6 +22,7 @@ public interface TaskRepo extends JpaRepository<Task, Integer> {
     List<Task> findByTaskPriority(int taskPriority) ;
     List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) ;
     List<Task> findByTaskStartDate (Date date) ;
+    List<Task> findByTaskStartDateAndTaskStatus(Date date, int taskStatus) ;
 
     /**
      * @author Bagaa

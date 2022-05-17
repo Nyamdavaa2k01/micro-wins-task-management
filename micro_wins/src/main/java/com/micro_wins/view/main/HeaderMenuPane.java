@@ -16,29 +16,21 @@ import com.micro_wins.view.StageManager;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
-import org.jboss.jandex.Main;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -95,11 +87,8 @@ public class HeaderMenuPane implements Initializable, FxController {
     @FXML
     private Button seeNotificationBtn;
 
-    //Stage stage = (Stage) restoreDownWindowBtn.getScene().getWindow() ;
-
-
     @FXML
-    void addTask(ActionEvent event) throws IOException {
+    void addTask(ActionEvent event) {
         stageManager = springAppContext.getBean(StageManager.class);
         stageManager.addStage(AddTaskPane.class);
     }

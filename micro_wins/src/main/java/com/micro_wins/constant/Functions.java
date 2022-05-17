@@ -62,7 +62,7 @@ public enum Functions {
         dialogPane.getStylesheets().add(
                 getClass().getResource("/styles/deleteConfirmAlert.css").toExternalForm());
         Optional<ButtonType> result = alert.showAndWait();
-        if (result.get() == ButtonType.OK)
+        if (result.get() == yesBtn)
             return true;
         return false;
     }

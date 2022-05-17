@@ -5,8 +5,6 @@
 
 package com.micro_wins.view.main;
 
-import com.micro_wins.model.Task;
-import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
 import javafx.fxml.FXML;
@@ -18,9 +16,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.ResourceBundle;
 // somehow cant use javafx.awt.*
 

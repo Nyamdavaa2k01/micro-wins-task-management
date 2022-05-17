@@ -21,3 +21,9 @@
 .list-cell {
     -fx-background-color:transparent;
 }
+
+.list-view, .split-pane { -fx-background-insets: 0; -fx-padding: 0; }
+
+#addTaskBtn:hover {
+    -fx-background-color:red;
+}

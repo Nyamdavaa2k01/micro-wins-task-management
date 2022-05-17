@@ -9,6 +9,7 @@ package com.micro_wins.view.main;
 import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.ProjectRepo;
@@ -56,8 +57,8 @@ public class AddTaskPane implements Initializable, FxController {
 
     private Functions informationAlert;
 
-    @Autowired
-    ConfigurableApplicationContext springAppContext;
+    //@Autowired
+    //ConfigurableApplicationContext springAppContext;
 
     @Autowired
     TaskRepo taskRepo ;
@@ -67,6 +68,12 @@ public class AddTaskPane implements Initializable, FxController {
 
     private Stage priorityButtonsStage ;
     Stage projectButtonsStage ;
+
+    private Date date ;
+
+    public void setDate (Date date) {
+        this.date = date ;
+    }
 
     /**
      * task values are being set from 4 main different places.
@@ -85,7 +92,10 @@ public class AddTaskPane implements Initializable, FxController {
         constantStyles = new ConstantStyles() ;
         constantColors = new ConstantColors() ;
         informationAlert = Functions.INFORMATION_ALERT;
-        taskDatePicker.setValue(LocalDate.now());
+
+        if (date == null) taskDatePicker.setValue(LocalDate.now());
+        else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
+
         task = new Task();
         /**
          * task default values

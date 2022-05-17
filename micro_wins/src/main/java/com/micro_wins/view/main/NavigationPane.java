@@ -68,7 +68,7 @@ public class NavigationPane {
     private ProjectPane projectController;
 
     @Autowired
-    private TodayPane todayViewController ;
+    private UpcomingPane upcomingController ;
 
     @FXML
     private VBox navBar;
@@ -248,7 +248,7 @@ public class NavigationPane {
 
     @FXML
     void navToInbox(ActionEvent event) {
-        System.out.println("Under development for now :)");
+        stageManager.rebuildStage(TodayPane.class);
     }
 
     @FXML
@@ -258,7 +258,6 @@ public class NavigationPane {
 
     @FXML
     void navToToday(ActionEvent event) throws IOException {
-        stageManager.rebuildStage(TodayPane.class);
     }
 
     @FXML

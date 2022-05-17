@@ -4,9 +4,11 @@ import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.UpcomingHolder;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.view.FxController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -26,7 +28,9 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Controller;
 
@@ -51,13 +55,10 @@ public class DailyTasks implements  Initializable{
     ConstantStyles constantStyles ;
     ConstantDictionaryValues constantDictionaryValues ;
 
-    @Autowired
     TaskRepo taskRepo ;
 
-    @Autowired
     ProjectRepo projectRepo ;
 
-    @Autowired
     ResultRepo resultRepo ;
 
     Date dayDate ;
@@ -79,19 +80,27 @@ public class DailyTasks implements  Initializable{
         this.projectRepo = projectRepo ;
     }
 
+    @Autowired
+    public void setResultRepo (ResultRepo resultRepo) {
+        this.resultRepo = resultRepo ;
+    }
+
+    private void refreshParentController () {
+        UpcomingHolder.getInstance().getUpcomingPane().refreshComingDaysListView();
+    }
+
     private final int TASK_LIST_WIDTH = 1000;
 
     public void refreshTaskList () {
-        int i ;
+        List<Task> tasks = taskRepo.findByTaskStartDate(dayDate) ;
         taskList.getItems().clear();
-        for (i = 1 ; i <= 3 ; i ++) {
-            taskList.getItems().clear();
-            List<Task> tasks = taskRepo.findByTaskStartDate(dayDate) ;
-            tasks.forEach(eachTask -> {
+        tasks.forEach(eachTask -> {
+            System.out.println(eachTask.toString());
+            if (eachTask.getTaskStatus() != constantDictionaryValues.getTASK_STATUS_COMPLETED()) {
                 taskList.getItems().add(eachTask) ;
-            });
-        }
-        taskList.setPrefHeight(taskList.getItems().size() * 50);
+            }
+        });
+        taskList.setPrefHeight(taskList.getItems().size() * 100);
     }
 
     public void cellFactoryImpl() {
@@ -119,6 +128,7 @@ public class DailyTasks implements  Initializable{
                             AnchorPane taskOnTodayRoot = new AnchorPane() ;
                             taskOnTodayRoot.setPrefWidth(TASK_LIST_WIDTH-200);
                             taskOnTodayRoot.setPrefHeight(80);
+
                             Button finishTaskBtn = new Button() ;
                             AnchorPane.setLeftAnchor(finishTaskBtn, 50.0);
                             AnchorPane.setTopAnchor(finishTaskBtn, 18.0);
@@ -142,6 +152,15 @@ public class DailyTasks implements  Initializable{
                                             "-fx-border-width : 4 ;"
                             );
 
+                            Button acceptTaskBtn = new Button() ;
+                            AnchorPane.setLeftAnchor(acceptTaskBtn, 43.0);
+                            AnchorPane.setTopAnchor(acceptTaskBtn, 15.0) ;
+                            ImageView acceptImage = new ImageView(new Image("file:micro_wins/src/main/resources/images/accepted-icon.png")) ;
+                            acceptImage.setFitWidth(28);
+                            acceptImage.setFitHeight(28);
+                            acceptTaskBtn.setGraphic(acceptImage);
+                            acceptTaskBtn.setVisible(false);
+
                             Label taskTitleLbl = new Label(task.getTaskTitle()) ;
                             AnchorPane.setLeftAnchor(taskTitleLbl, 113.0);
                             AnchorPane.setTopAnchor(taskTitleLbl, 14.0);
@@ -159,7 +178,6 @@ public class DailyTasks implements  Initializable{
                             AnchorPane.setLeftAnchor(bottomSep, 50.0);
                             AnchorPane.setBottomAnchor(bottomSep, 5.0);
                             AnchorPane.setRightAnchor(bottomSep, 50.0);
-                            bottomSep.setStyle("-fx-border-width: 0.1;");
 
                             HBox editTaskButtons = new HBox() ;
                             AnchorPane.setRightAnchor(editTaskButtons, 51.0);
@@ -191,7 +209,7 @@ public class DailyTasks implements  Initializable{
                                     "-fx-border-radius:10; ");
 
                             editTaskButtons.getChildren().addAll(editTaskBtn, deleteTaskBtn) ;
-                            taskOnTodayRoot.getChildren().addAll(finishTaskBtn, taskTitleLbl, taskDescriptionLbl, bottomSep, editTaskButtons, changeProjectBtn) ;
+                            taskOnTodayRoot.getChildren().addAll(finishTaskBtn, acceptTaskBtn, taskTitleLbl, taskDescriptionLbl, bottomSep, editTaskButtons, changeProjectBtn) ;
                             setGraphic(taskOnTodayRoot);
 
                             /**
@@ -274,6 +292,9 @@ public class DailyTasks implements  Initializable{
 
                                 editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, setProjectBtn, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
                                 setGraphic(editTaskRootContainer);
+
+                                System.out.println(taskList.getParent().toString());
+
                                 double collapsedHeight = taskList.getHeight() ;
                                 taskList.setPrefHeight(collapsedHeight + 104);
                                 /**
@@ -295,18 +316,25 @@ public class DailyTasks implements  Initializable{
                                         Task editTask = optionalTask.get() ;
                                         editTask.setTaskTitle(taskTitleTxt.getText());
                                         editTask.setTaskDefinition(taskDescriptionTxt.getText());
+
+                                        Date previousDate = editTask.getTaskStartDate() ;
                                         editTask.setTaskStartDate(Functions.LOCALDATE_TO_DATE.localDateToDate(taskDatePicker.getValue()));
+
+                                        if (editTask.getTaskStartDate() != previousDate) {
+                                               refreshParentController();
+                                        }
+
                                         editTask.setTaskPriority(priority);
                                         if (chosenProject != null) {
                                             editTask.setTaskProId(chosenProject.getProId());
                                             editTask.setTaskProTitle(chosenProject.getProTitle());
                                         }
                                         taskRepo.save(editTask) ;
-                                        refreshTaskList();
                                         taskOnTodayRoot.getChildren().add(bottomSep) ;
                                         setGraphic(taskOnTodayRoot);
                                         double expandedHeight = taskList.getHeight();
                                         taskList.setPrefHeight(expandedHeight - 104);
+                                        refreshTaskList();
                                     }
                                 });
 
@@ -422,23 +450,34 @@ public class DailyTasks implements  Initializable{
                                     if (Functions.DELETE_CONFIRM_ALERT.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete the task " +
                                             deleteTask.getTaskTitle(), "yes", "no")) {
                                         taskRepo.deleteById(deleteTask.getTaskId());
-                                   //     refreshTaskList();
+                                        refreshTaskList();
                                     }
                                 }
                             });
 
-                            finishTaskBtn.setOnMouseClicked(finishEvent -> {
+                            finishTaskBtn.setOnMouseEntered(enterEvent -> {
+                              //  System.out.println(finishTaskBtn.getHeight());
+                                finishTaskBtn.setVisible(false);
+                                acceptTaskBtn.setVisible(true);
+                            });
+
+                            acceptTaskBtn.setOnMouseExited(exitEvent -> {
+                                finishTaskBtn.setVisible(true);
+                                acceptTaskBtn.setVisible(false);
+                            });
+
+                            acceptTaskBtn.setOnMouseClicked(finishEvent -> {
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId()) ;
                                 if (optionalTask.isPresent()) {
                                     Task finishTask = optionalTask.get() ;
                                     finishTask.setTaskStatus(constantDictionaryValues.getTASK_STATUS_COMPLETED()) ;
+                                    taskRepo.save(finishTask);
                                     Result result = new Result() ;
                                     result.setTaskId(finishTask.getTaskId());
                                     result.setTaskCompletionPercent(1);
                                     result.setTaskCompletedDate(Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()));
                                     resultRepo.save(result) ;
-                                    taskRepo.save(finishTask);
-                                   // refreshTaskList();
+                                    refreshTaskList();
                                 }
                             });
                         }
