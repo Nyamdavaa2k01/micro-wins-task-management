@@ -59,7 +59,7 @@ public class UserServiceImpl implements CrudService<User>, UserService {
     @Override
     public boolean authenticate(String userName, Integer deviceId)
     {
-        User user = this.findByUserName(userName);
+        User user = this.findByUserNameAndDeviceId(userName, deviceId);
         if (user == null)
         {
             return false;
@@ -70,9 +70,9 @@ public class UserServiceImpl implements CrudService<User>, UserService {
     }
 
     @Override
-    public User findByUserName(String userName)
+    public User findByUserNameAndDeviceId(String userName, Integer deviceId)
     {
-        return userRepo.findByUserName(userName);
+        return userRepo.findByUserNameAndDeviceId(userName, deviceId);
     }
 
     @Override

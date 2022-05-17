@@ -2,7 +2,9 @@ package com.micro_wins.view.login;
 
 import com.micro_wins.service.UserService;
 import com.micro_wins.view.StageManager;
-import com.micro_wins.view.main.MainPane;
+import com.micro_wins.view.holder.UserHolder;
+import com.micro_wins.model.User;
+import com.micro_wins.view.main.TodayPane;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,18 @@ public class LoginPaneManager
         Integer deviceId = Integer.valueOf(loginPane.getDeviceId());
 
         if (userService.authenticate(userName, deviceId)){
-            stageManager.rebuildStage(MainPane.class);
+
+            /**
+             * hold user which logins
+             */
+            UserHolder userHolder = UserHolder.getInstance();
+            User user = userService.findByUserNameAndDeviceId(userName, deviceId);
+            userHolder.setUser(user);
+
+            /**
+             * jump to Today Page
+             */
+            stageManager.rebuildStage(TodayPane.class);
         }
         else
             loginPane.getLblLogin().setText("Login Failed.");

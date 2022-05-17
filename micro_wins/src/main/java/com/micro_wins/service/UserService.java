@@ -11,6 +11,6 @@ import com.micro_wins.model.User;
 public interface UserService {
     boolean authenticate(String userName, Integer deviceId);
 
-    User findByUserName(String userName);
+    User findByUserNameAndDeviceId(String userName, Integer deviceId);
 }
 

@@ -1,21 +1,14 @@
+
 /**
  * @author Nyamka
  * @project micro-wins-task-management
  */
 
 package com.micro_wins;
-
-import com.micro_wins.model.Task;
-import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.StageManager;
-import com.micro_wins.view.login.LoginPane;
-import com.micro_wins.view.main.MainPane;
 import com.micro_wins.view.main.TodayPane;
 import javafx.application.Application;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
