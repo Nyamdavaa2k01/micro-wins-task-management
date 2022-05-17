@@ -10,10 +10,10 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="1366.0" stylesheets="@/styles/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.TodayPane">
+<AnchorPane prefHeight="600.0" prefWidth="1366.0" stylesheets="@/styles/main.css" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.TodayPane">
 
     <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-    <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="37.0" />
+    <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
    <AnchorPane layoutX="273.0" layoutY="38.0" prefHeight="129.0" prefWidth="1093.0">
       <children>
          <Label layoutX="65.0" layoutY="63.0" prefHeight="35.0" prefWidth="84.0" text="Today" AnchorPane.bottomAnchor="15.0">

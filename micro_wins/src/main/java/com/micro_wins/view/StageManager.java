@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -106,6 +107,7 @@ public class StageManager {
         secondaryStage.setScene(scene);
         secondaryStage.sizeToScene();
         secondaryStage.centerOnScreen();
+        secondaryStage.initModality(Modality.APPLICATION_MODAL);
         try
         {
             secondaryStage.show();

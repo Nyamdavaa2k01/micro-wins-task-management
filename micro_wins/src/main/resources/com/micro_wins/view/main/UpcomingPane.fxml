@@ -11,7 +11,7 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="837.0" prefWidth="1366.0" stylesheets="@../../../../styles/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.UpcomingPane">
    <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-   <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="37.0" />
+   <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
    <AnchorPane layoutX="283.0" layoutY="48.0" prefHeight="129.0" prefWidth="1093.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
       <children>
          <Label layoutX="65.0" layoutY="63.0" prefHeight="46.0" prefWidth="268.0" text="Upcoming Tasks" AnchorPane.bottomAnchor="15.0" AnchorPane.rightAnchor="760.0">

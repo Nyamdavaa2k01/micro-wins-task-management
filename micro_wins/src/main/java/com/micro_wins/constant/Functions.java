@@ -21,6 +21,8 @@ public enum Functions {
     LOCALDATE_TO_DATE,
     DATE_TO_LOCALDATE,
     DELETE_CONFIRM_ALERT,
+
+    INFORMATION_ALERT,
     TODAY_DATE_TO_STRING,
     DATE_TO_STRING ;
 
@@ -50,9 +52,10 @@ public enum Functions {
     }
 
     public boolean deleteConfirmAlert(String title, String msg, String yesMsg, String noMsg) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        ButtonType yesBtn = new ButtonType(yesMsg, ButtonBar.ButtonData.OK_DONE);
+        ButtonType noBtn = new ButtonType(noMsg, ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, msg, yesBtn, noBtn);
         alert.setTitle(title);
-        alert.setContentText(msg);
         alert.initStyle(StageStyle.TRANSPARENT);
         alert.initModality(Modality.APPLICATION_MODAL);
         DialogPane dialogPane = alert.getDialogPane();
@@ -62,6 +65,18 @@ public enum Functions {
         if (result.get() == ButtonType.OK)
             return true;
         return false;
+    }
+
+    public void informationAlert(String title, String msg, String yesMsg) {
+        ButtonType yesBtn = new ButtonType(yesMsg, ButtonBar.ButtonData.OK_DONE);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION, msg, yesBtn);
+        alert.setTitle(title);
+        alert.initStyle(StageStyle.TRANSPARENT);
+        alert.initModality(Modality.APPLICATION_MODAL);
+        DialogPane dialogPane = alert.getDialogPane();
+        dialogPane.getStylesheets().add(
+                getClass().getResource("/styles/deleteConfirmAlert.css").toExternalForm());
+        alert.showAndWait();
     }
 
     public String todayDateToString () {

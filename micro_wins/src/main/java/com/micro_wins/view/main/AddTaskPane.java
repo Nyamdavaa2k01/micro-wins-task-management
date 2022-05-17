@@ -8,6 +8,7 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantStyles;
+import com.micro_wins.constant.Functions;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.ProjectRepo;
@@ -27,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -51,6 +53,8 @@ public class AddTaskPane implements Initializable, FxController {
     @Lazy
     @Autowired
     private StageManager stageManager;
+
+    private Functions informationAlert;
 
     @Autowired
     ConfigurableApplicationContext springAppContext;
@@ -80,6 +84,7 @@ public class AddTaskPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         constantStyles = new ConstantStyles() ;
         constantColors = new ConstantColors() ;
+        informationAlert = Functions.INFORMATION_ALERT;
         taskDatePicker.setValue(LocalDate.now());
         task = new Task();
         /**
@@ -108,11 +113,6 @@ public class AddTaskPane implements Initializable, FxController {
     }
 
     @FXML
-    public void initialize() {
-
-    }
-
-    @FXML
     private Button addReminderBtn;
 
     @FXML
@@ -138,11 +138,9 @@ public class AddTaskPane implements Initializable, FxController {
 
     @FXML
     void addReminder(ActionEvent event) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION) ;
-        alert.setTitle("Мэдэгдэл");
-        alert.setHeaderText("Энэхүү хэсгийн хөгжүүлэлт дуусаагүй байна.");
-        alert.setContentText("Хугацаа сануулах үйлдэл нь байж болох шаардлага дунд багтсан байгааг анхаарна уу");
-        alert.showAndWait();
+
+        informationAlert.informationAlert("Information", "Sorry, The development of this section is not complete.", "OK");
+
     }
 
     @FXML
@@ -212,6 +210,7 @@ public class AddTaskPane implements Initializable, FxController {
             priorityButtonsRoot.getChildren().add(priorityButtons[i]) ;
         }
         priorityButtonsStage.setScene(priorityButtonsScene);
+        priorityButtonsStage.initModality(Modality.APPLICATION_MODAL);
         priorityButtonsStage.show();
     }
 
@@ -282,9 +281,8 @@ public class AddTaskPane implements Initializable, FxController {
 
         Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
         projectButtonsStage.setScene(projectButtonsScene);
+        projectButtonsStage.initModality(Modality.APPLICATION_MODAL);
         projectButtonsStage.show();
-
-
     }
 
 }

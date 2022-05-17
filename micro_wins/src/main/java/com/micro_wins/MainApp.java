@@ -39,7 +39,7 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
     public void onApplicationEvent(StageReadyEvent event)
     {
         STAGE_MANAGER = springAppContext.getBean(StageManager.class, event.stage);
-        STAGE_MANAGER.rebuildStage(UpcomingPane.class);
+        STAGE_MANAGER.rebuildStage(TodayPane.class);
     }
 
     public static StageManager getStageManager()

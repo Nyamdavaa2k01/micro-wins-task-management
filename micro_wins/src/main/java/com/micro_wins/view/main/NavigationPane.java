@@ -133,7 +133,7 @@ public class NavigationPane {
 
                     Button btnTitle = new Button(item.getProTitle());
                     btnTitle.setStyle("-fx-pref-width:180;\n" +
-                            "-fx-pref-height:45;\n" +
+                            "-fx-pref-height:35;\n" +
                             "-fx-background-radius : 25;\n" +
                             "-fx-text-fill : white;\n" +
                             "-fx-font-size: 18;\n" +
