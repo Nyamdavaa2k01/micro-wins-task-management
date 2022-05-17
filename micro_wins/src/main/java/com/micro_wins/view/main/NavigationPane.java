@@ -8,7 +8,7 @@ import com.micro_wins.constants.Functions;
 import com.micro_wins.model.Project;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.StageManager;
-import com.micro_wins.view.holder.ProjectHolder;
+import com.micro_wins.holder.ProjectHolder;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -37,7 +37,6 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Controller

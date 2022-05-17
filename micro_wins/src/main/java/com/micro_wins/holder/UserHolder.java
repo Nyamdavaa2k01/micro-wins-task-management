@@ -1,4 +1,4 @@
-package com.micro_wins.view.holder;
+package com.micro_wins.holder;
 
 import com.micro_wins.model.User;
 

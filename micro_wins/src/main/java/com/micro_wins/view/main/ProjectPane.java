@@ -2,7 +2,7 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.model.Project;
 import com.micro_wins.view.FxController;
-import com.micro_wins.view.holder.ProjectHolder;
+import com.micro_wins.holder.ProjectHolder;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
