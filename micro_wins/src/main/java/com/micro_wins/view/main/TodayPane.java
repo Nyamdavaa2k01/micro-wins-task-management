@@ -413,7 +413,7 @@ public class  TodayPane implements Initializable, FxController {
                                 Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
                                 if (optionalTask.isPresent()) {
                                     Task deleteTask = optionalTask.get() ;
-                                    if (Functions.DELETE_CONFIRM_ALERT.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete the task" +
+                                    if (Functions.DELETE_CONFIRM_ALERT.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete the task " +
                                     deleteTask.getTaskTitle(), "yes", "no")) {
                                         taskRepo.deleteById(deleteTask.getTaskId());
                                         refreshTaskList();

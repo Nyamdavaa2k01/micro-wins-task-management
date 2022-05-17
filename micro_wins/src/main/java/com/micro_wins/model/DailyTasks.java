@@ -16,25 +16,26 @@ import java.util.ResourceBundle;
  * @created 16/05/2022 - 3:29 AM
  */
 
-public class DailyTasks implements Initializable {
-
-    @Autowired
-    TaskRepo taskRepo ;
+public class DailyTasks {
 
     Date dayDate ;
     ListView<Task> innerList ;
 
-    public DailyTasks (Date date) {
-        dayDate = date ;
-        List<Task> tasksByDate = taskRepo.findByTaskStartDate(date);
-        tasksByDate.forEach(each -> {
-            innerList.getItems().add(each) ;
-        });
+    public void cellFactoryImpl() {
+        /**
+         * Implementation of cellFactory of innerlist is defined here.
+         * DailyTasks class is used in UpcomingPane, so the cellFactory of innerlist has important value for
+         * UpcomingPane. 
+         */
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
+    public DailyTasks (Date date) {
+        dayDate = date ;
+        innerList = new ListView<>() ;
+    }
 
+    public DailyTasks () {
+        innerList = new ListView<>() ;
     }
 
     public void addTask (Task task) {

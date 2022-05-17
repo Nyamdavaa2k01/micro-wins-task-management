@@ -7,6 +7,7 @@
 package com.micro_wins;
 import com.micro_wins.view.StageManager;
 import com.micro_wins.view.main.TodayPane;
+import com.micro_wins.view.main.UpcomingPane;
 import javafx.application.Application;
 
 import java.util.Locale;
@@ -38,7 +39,7 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
     public void onApplicationEvent(StageReadyEvent event)
     {
         STAGE_MANAGER = springAppContext.getBean(StageManager.class, event.stage);
-        STAGE_MANAGER.rebuildStage(TodayPane.class);
+        STAGE_MANAGER.rebuildStage(UpcomingPane.class);
     }
 
     public static StageManager getStageManager()
