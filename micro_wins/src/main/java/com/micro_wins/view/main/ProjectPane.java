@@ -1,8 +1,10 @@
 package com.micro_wins.view.main;
 
 import com.micro_wins.model.Project;
+import com.micro_wins.model.Task;
 import com.micro_wins.view.FxController;
 import com.micro_wins.holder.ProjectHolder;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ListView;
@@ -13,26 +15,30 @@ import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 @Controller
 @FxmlView
 public class ProjectPane implements Initializable, FxController {
 
+    public List<Task> proTaskList;
+    public ObservableList<Task> proTasks;
+
     @FXML
     private Text completedTaskCntText;
 
     @FXML
-    private ListView<?> lvCompleted;
+    private ListView<Task> lvCompleted;
 
     @FXML
-    private ListView<?> lvOpen;
+    private ListView<Task> lvOpen;
 
     @FXML
-    private ListView<?> lvPostponed;
+    private ListView<Task> lvPostponed;
 
     @FXML
-    private ListView<?> lvWorking;
+    private ListView<Task> lvWorking;
 
     @FXML
     private Text openTaskCntTxt;
@@ -66,6 +72,8 @@ public class ProjectPane implements Initializable, FxController {
         Project activeProject = projectHolder.getProject();
         proTitleTxt.setText(activeProject.getProTitle());
         proDescTxt.setText(activeProject.getProDescription());
+
+
     }
 
 }

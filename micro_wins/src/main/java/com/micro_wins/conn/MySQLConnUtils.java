@@ -17,7 +17,6 @@ public class MySQLConnUtils {
         String dbName = "micro_wins";
         String userName = "root";
         String password = "root";
-//        String password = "";
         return getMySQLConnection(hostName, dbName, userName, password);
     }
 
