@@ -282,6 +282,7 @@ public class AddTaskPane implements Initializable, FxController {
         if (projectButtonsStage == null) {
             projectButtonsStage = new Stage();
             projectButtonsStage.initStyle(StageStyle.UNDECORATED);
+            projectButtonsStage.initModality(Modality.APPLICATION_MODAL);
             Bounds setProjectBtnBounds = setProjectBtn.localToScreen(setProjectBtn.getBoundsInLocal()) ;
             int projectButtonsStageInitPosX = (int) setProjectBtnBounds.getMinX();
             int projectButtonsStageInitPosY = (int) setProjectBtnBounds.getMaxY() ;
@@ -291,7 +292,6 @@ public class AddTaskPane implements Initializable, FxController {
 
         Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
         projectButtonsStage.setScene(projectButtonsScene);
-        projectButtonsStage.initModality(Modality.APPLICATION_MODAL);
         projectButtonsStage.show();
     }
 

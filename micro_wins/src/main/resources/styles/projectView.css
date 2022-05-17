@@ -2,3 +2,8 @@
     -fx-background-color: #d3d3d3;
     -fx-background-radius: 35px;
 }
+
+.list-cell:filled:selected {
+  -fx-background-color: -fx-background ;
+  -fx-background-insets: 0 ;
+}
