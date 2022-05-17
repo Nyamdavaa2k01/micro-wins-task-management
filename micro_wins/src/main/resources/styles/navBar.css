@@ -21,7 +21,7 @@
 }
 
 #navBar .projectButtons .button{
-    -fx-pref-height: 30;
+    -fx-pref-height: 20;
 }
 
 #navBar .image-view {
