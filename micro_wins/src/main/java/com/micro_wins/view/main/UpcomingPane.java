@@ -3,6 +3,7 @@ package com.micro_wins.view.main;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.model.DailyTasks;
 import com.micro_wins.model.Task;
+import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import javafx.fxml.FXML;
@@ -36,6 +37,9 @@ public class UpcomingPane implements Initializable, FxController {
     @Autowired
     TaskRepo taskRepo ;
 
+    @Autowired
+    ProjectRepo projectRepo ;
+
     @FXML
     private ListView<DailyTasks> comingDaysListView;
 
@@ -68,15 +72,17 @@ public class UpcomingPane implements Initializable, FxController {
                         AnchorPane.setLeftAnchor(titleSep, 50.0);
                         AnchorPane.setRightAnchor(titleSep, 50.0);
 
-                        List<Task> tasksForDay = taskRepo.findByTaskStartDate(dailyTasks.getDayDate()) ;
-                        tasksForDay.forEach(each -> {
-                            dailyTasks.addTask(each);
-                        });
+                        dailyTasks.setTaskRepo(taskRepo);
+                        dailyTasks.setProjectRepo(projectRepo);
                         ListView innerList = dailyTasks.getInnerList() ;
                         AnchorPane.setTopAnchor(innerList, 65.0);
                         AnchorPane.setLeftAnchor(innerList, 50.0);
                         AnchorPane.setRightAnchor(innerList, 50.0);
 
+                        dailyTasks.setTaskRepo(taskRepo);
+                        dailyTasks.cellFactoryImpl();
+                        dailyTasks.refreshTaskList();
+                        innerList.setPrefHeight(innerList.getItems().size() * 100);
                         cellRoot.getChildren().addAll(title, titleSep, innerList) ;
                         setGraphic(cellRoot);
                     }
@@ -95,7 +101,9 @@ public class UpcomingPane implements Initializable, FxController {
         while (cnt < 200) {
             Date currentDate = Functions.LOCALDATE_TO_DATE.localDateToDate(currentLocalDate) ;
             currentLocalDate = currentLocalDate.plusDays(1) ;
-            comingDaysListView.getItems().add(new DailyTasks( currentDate )) ;
+            DailyTasks dailyTasks = new DailyTasks() ;
+            dailyTasks.setDayDate(currentDate);
+            comingDaysListView.getItems().add(dailyTasks) ;
             cnt ++ ;
         }
     }

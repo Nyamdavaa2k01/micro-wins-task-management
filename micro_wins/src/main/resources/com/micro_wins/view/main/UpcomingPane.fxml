@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -8,7 +9,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1366.0" stylesheets="@../../../../styles/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.UpcomingPane">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="837.0" prefWidth="1366.0" stylesheets="@../../../../styles/main.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.UpcomingPane">
    <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
    <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="37.0" />
    <AnchorPane layoutX="283.0" layoutY="48.0" prefHeight="129.0" prefWidth="1093.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="40.0">
@@ -18,18 +19,19 @@
                <Font size="31.0" />
             </font>
          </Label>
-         <Separator layoutX="37.0" layoutY="115.0" prefWidth="1020.0" style="-fx-background-color: black;" />
+         <Separator layoutX="37.0" layoutY="115.0" prefWidth="1020.0" />
          <DatePicker fx:id="setDateDatePicker" layoutX="865.0" layoutY="68.0" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../../styles/addTask.css" />
          <Label layoutX="754.0" layoutY="72.0" prefHeight="29.0" prefWidth="103.0" text="Choose Date:">
             <font>
                <Font name="Times New Roman Bold" size="18.0" />
             </font>
          </Label>
+         <Button layoutX="389.0" layoutY="79.0" mnemonicParsing="false" text="Test Speed" />
       </children>
    </AnchorPane>
    <VBox layoutX="273.0" layoutY="184.0" prefHeight="200.0" prefWidth="100.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="167.0">
       <children>
-         <ListView fx:id="comingDaysListView" prefHeight="435.0" prefWidth="1093.0" />
+         <ListView fx:id="comingDaysListView" prefHeight="1000.0" prefWidth="1093.0" />
       </children>
    </VBox>
 </AnchorPane>
