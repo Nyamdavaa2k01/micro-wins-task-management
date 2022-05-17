@@ -3,11 +3,10 @@ package com.micro_wins.view.main;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
-import com.micro_wins.constants.ConstantColors;
-import com.micro_wins.constants.Functions;
+import com.micro_wins.constant.ConstantColors;
+import com.micro_wins.constant.Functions;
 import com.micro_wins.model.Project;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.FxController;

@@ -1,18 +1,14 @@
 package com.micro_wins.service.impl;
 
-import com.micro_wins.constants.ConstantDictionaryValues;
+import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.model.Task;
-import com.micro_wins.model.User;
 import com.micro_wins.repository.TaskRepo;
-import com.micro_wins.repository.UserRepo;
 import com.micro_wins.service.CrudService;
 import com.micro_wins.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

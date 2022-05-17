@@ -6,11 +6,11 @@ package com.micro_wins.view.main;
  * @created 06/05/2022 - 1:46 AM
  */
 
-import com.micro_wins.constants.ConstantColors;
+import com.micro_wins.constant.ConstantColors;
 
-import com.micro_wins.constants.ConstantDictionaryValues;
-import com.micro_wins.constants.ConstantStyles;
-import com.micro_wins.constants.Functions;
+import com.micro_wins.constant.ConstantDictionaryValues;
+import com.micro_wins.constant.ConstantStyles;
+import com.micro_wins.constant.Functions;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Result;
 import com.micro_wins.model.Task;
@@ -18,9 +18,6 @@ import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableArray;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -37,7 +34,6 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -46,7 +42,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
-import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.util.*;
 

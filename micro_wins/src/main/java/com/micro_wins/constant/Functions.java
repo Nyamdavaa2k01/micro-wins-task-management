@@ -1,4 +1,4 @@
-package com.micro_wins.constants;
+package com.micro_wins.constant;
 
 import javafx.scene.control.*;
 import javafx.stage.Modality;

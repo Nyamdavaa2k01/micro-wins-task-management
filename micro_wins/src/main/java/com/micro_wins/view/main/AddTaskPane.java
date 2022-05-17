@@ -6,8 +6,8 @@
 
 package com.micro_wins.view.main;
 
-import com.micro_wins.constants.ConstantColors;
-import com.micro_wins.constants.ConstantStyles;
+import com.micro_wins.constant.ConstantColors;
+import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.ProjectRepo;
@@ -38,7 +38,6 @@ import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
 import java.net.URL;
-import java.sql.*;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.*;

@@ -1,15 +1,12 @@
 package com.micro_wins.view.main;
 
-import ch.qos.logback.core.joran.util.beans.BeanUtil;
-import com.micro_wins.constants.Functions;
+import com.micro_wins.constant.Functions;
 import com.micro_wins.model.DailyTasks;
-import com.micro_wins.model.Task;
 import com.micro_wins.view.FxController;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.stereotype.Controller;
@@ -17,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
