@@ -110,4 +110,15 @@ public class TaskServiceImpl implements CrudService<Task>, TaskService {
     public List<Task> findByTaskStartDate (Date date)  {
         return taskRepo.findByTaskStartDate(date) ;
     }
+
+    /**
+     * @author Bagaa
+     * @param taskUserId
+     * @param taskProId
+     * @return
+     */
+    @Override
+    public List<Task> findByTaskUserIdAndTaskProId(int taskUserId, int taskProId){
+        return taskRepo.findByTaskUserIdAndTaskProId(taskUserId, taskProId);
+    }
 }

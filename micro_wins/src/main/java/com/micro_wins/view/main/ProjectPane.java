@@ -1,17 +1,23 @@
 package com.micro_wins.view.main;
 
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
+import com.micro_wins.model.User;
+import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.holder.ProjectHolder;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import net.rgielen.fxweaver.core.FxmlView;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
@@ -22,8 +28,14 @@ import java.util.ResourceBundle;
 @FxmlView
 public class ProjectPane implements Initializable, FxController {
 
-    public List<Task> proTaskList;
-    public ObservableList<Task> proTasks;
+    @Autowired
+    private TaskRepo taskRepo;
+
+    private List<Task> proTaskList;
+    private ObservableList<Task> proTasks;
+
+    private User user;
+    private Project activeProject;
 
     @FXML
     private Text completedTaskCntText;
@@ -66,14 +78,43 @@ public class ProjectPane implements Initializable, FxController {
 
     }
 
+    /**
+     * refresh list view items
+     */
+    void resetListView(){
+        lvOpen.getItems().clear();
+        proTaskList = taskRepo.findByTaskUserIdAndTaskProId(11, activeProject.getProId());
+        proTasks = FXCollections.observableArrayList(proTaskList);
+        proTasks.forEach(project -> {
+            lvOpen.getItems().add(project);
+        });
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        UserHolder userHolder = UserHolder.getInstance();
         ProjectHolder projectHolder = ProjectHolder.getInstance();
-        Project activeProject = projectHolder.getProject();
+        user = userHolder.getUser();
+        activeProject = projectHolder.getProject();
+
+        resetListView();
+
+        lvOpen.setCellFactory(param -> new ListCell<Task>() {
+                    @Override
+                    protected void updateItem(Task item, boolean empty) {
+                        super.updateItem(item, empty);
+                        setText(null);
+                        setGraphic(null);
+
+                        if (!empty && item != null) {
+                            //...
+                            
+                        }
+                    }
+                });
+
         proTitleTxt.setText(activeProject.getProTitle());
         proDescTxt.setText(activeProject.getProDescription());
-
-
     }
 
 }

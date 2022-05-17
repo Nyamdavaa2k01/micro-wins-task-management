@@ -16,4 +16,12 @@ public interface TaskService {
     List<Task> findByTaskPriority(int taskPriority) ;
     List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) ;
     List<Task> findByTaskStartDate (Date date) ;
+
+    /**
+     * @author Bagaa
+     * @param taskUserId
+     * @param taskProId
+     * @return
+     */
+    List<Task> findByTaskUserIdAndTaskProId(int taskUserId, int taskProId);
 }

@@ -5,7 +5,9 @@
 
 package com.micro_wins.view.main;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
+import com.micro_wins.model.User;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.StageManager;
 import com.micro_wins.holder.ProjectHolder;
@@ -45,6 +47,8 @@ public class NavigationPane {
     private StageManager stageManager;
 
     private Stage stage;
+
+    private User user;
 
     public List<Project> projectList;
     public ObservableList<Project> projects;
@@ -110,9 +114,12 @@ public class NavigationPane {
      */
     public void initialize() {
         stageManager = springAppContext.getBean(StageManager.class);
+        UserHolder userHolder = UserHolder.getInstance();
+        user = userHolder.getUser();
         deleteConfirmAlert = Functions.DELETE_CONFIRM_ALERT;
 
         resetListView();
+
         lvProjects.setCellFactory(param -> new ListCell<Project>() {
             @Override
             protected void updateItem(Project item, boolean empty) {

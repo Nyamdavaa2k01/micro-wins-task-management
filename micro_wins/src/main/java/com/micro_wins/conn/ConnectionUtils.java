@@ -10,7 +10,7 @@ import java.sql.SQLException;
  */
 public class ConnectionUtils {
 
-    //DB holboltoo amjilttai holbogdson eseh ee shalgahiin tuld ug hesgiig oruulaw. Ghdee holbolt ug hesgeer hiidehgui buguud application.properties file - aar hiigdene.
+    //Whether check data connected successfully using below codes.
     public static Connection getConnection() throws SQLException,
             ClassNotFoundException {
         // Using Oracle
