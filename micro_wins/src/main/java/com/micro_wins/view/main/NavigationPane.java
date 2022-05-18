@@ -109,9 +109,6 @@ public class NavigationPane {
         });
     }
 
-    /**
-     *
-     */
     public void initialize() {
         stageManager = springAppContext.getBean(StageManager.class);
         UserHolder userHolder = UserHolder.getInstance();
@@ -242,18 +239,8 @@ public class NavigationPane {
     }
 
     @FXML
-    void navToCustomize(ActionEvent event) {
-        System.out.println("Under development for now :)");
-    }
-
-    @FXML
     void navToInbox(ActionEvent event) {
         stageManager.rebuildStage(InboxPane.class);
-    }
-
-    @FXML
-    void navToResults(ActionEvent event) {
-        System.out.println("Under development for now :)");
     }
 
     @FXML
@@ -277,4 +264,6 @@ public class NavigationPane {
         addProjectStage.initModality(Modality.APPLICATION_MODAL);
         addProjectStage.show();
     }
+
+
 }

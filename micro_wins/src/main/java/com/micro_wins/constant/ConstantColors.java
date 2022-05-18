@@ -3,6 +3,9 @@ package com.micro_wins.constant;
  * @author Nyamka
  * @project micro-wins-task-management
  * @created 11/05/2022 - 4:33 PM
+ * @purpose Өргөн хэрэглэгдэх өнгөний утгуудыг тогтмол болгон ашигласан ба эдгээр утгуудыг
+ * програмын бусад хэсгүүдээс дуудан ашиглах боломжтой.
+ * @definition Классын бүх attribute нь тогтмол утгууд ба эдгээр утгуудыг зөвхөн get хийж авах боломжтой.
  */
 
 public class ConstantColors {

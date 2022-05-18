@@ -56,18 +56,11 @@ public class InboxPane implements Initializable, FxController {
     @Autowired
     ResultRepo resultRepo ;
 
-    Stage priorityButtonsStage ;
-    Stage projectButtonsStage ;
     Stage chooseFilterOptionStage ;
 
     DailyTasks dailyTasks ;
-  //  private ListView<Task> taskList;
 
-    private int priority ;
     private int filterOpt = 0 ;
-    Project chosenProject ;
-    Boolean sortedByDate = false;
-    Boolean sortedByPriority = false ;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

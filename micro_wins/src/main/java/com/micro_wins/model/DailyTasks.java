@@ -5,6 +5,7 @@ import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.UpcomingHolder;
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
@@ -37,7 +38,11 @@ import java.util.Optional;
 /**
  * @author Nyamka
  * @project micro-wins-task-management
- * @created 16/05/2022 - 3:29 AM
+ * @created 15/05/2022 - 5:58 PM
+ * @purpose DailyTasks класс нь хийх даалгавруудын жагсаалтыг хэрэгжүүлэхэд ашиглагдана.
+ * @definition Энэхүү класст хийх даалгавруудын жагсаалтыг хэрхэн яаж харуулах тухай cellFactory-г
+ * хэрэгжүүлсэн. Мөн жагсаалт дахь даалгавруудтай харьцан тэдгээрийн утгыг өөрчлөх, устгах, дууссаныг
+ * тэмдэглэх боломжуудыг хэрэгжүүлсэн болно.
  */
 
 @Component
@@ -48,9 +53,7 @@ public class DailyTasks{
     ConstantDictionaryValues constantDictionaryValues ;
 
     TaskRepo taskRepo ;
-
     ProjectRepo projectRepo ;
-
     ResultRepo resultRepo ;
 
     Date dayDate ;
@@ -60,10 +63,9 @@ public class DailyTasks{
     Stage projectButtonsStage ;
 
     private int priority ;
-    Project chosenProject ;
+    Project chosenProject = null;
     Boolean sortedByDate = false;
     Boolean sortedByPriority = false ;
-
     private Boolean isCalledFromUpcoming = false ;
 
 
@@ -94,16 +96,32 @@ public class DailyTasks{
 
     public void refreshTaskList () {
         List<Task> tasks ;
+        // before code tuning
+        tasks = taskRepo.findAll() ;
+        for (Task task : tasks) {
+            if(dayDate != null) {
+                if (task.getTaskStartDate() == dayDate) taskList.getItems().add(task) ;
+                else continue;
+            }
+            else {
+                taskList.getItems().add(task) ;
+            }
+        }
+
+        // after code tuning
         if (dayDate != null) tasks = taskRepo.findByTaskStartDate(dayDate) ;
         else tasks = taskRepo.findAll() ;
         taskList.getItems().clear();
         tasks.forEach(eachTask -> {
-            System.out.println(eachTask.toString());
             if (eachTask.getTaskStatus() != constantDictionaryValues.getTASK_STATUS_COMPLETED()) {
                 taskList.getItems().add(eachTask) ;
             }
         });
+
+
         taskList.setPrefHeight(taskList.getItems().size() * 100);
+
+
     }
 
     public void cellFactoryImpl() {
@@ -193,7 +211,6 @@ public class DailyTasks{
                             AnchorPane.setLeftAnchor(dateLbl, 113.0);
                             AnchorPane.setBottomAnchor(dateLbl, 11.0) ;
 
-
                             Separator bottomSep = new Separator() ;
                             AnchorPane.setLeftAnchor(bottomSep, 50.0);
                             AnchorPane.setBottomAnchor(bottomSep, 5.0);
@@ -224,7 +241,6 @@ public class DailyTasks{
                             AnchorPane.setRightAnchor(changeProjectLbl, 51.0 );
                             AnchorPane.setBottomAnchor(changeProjectLbl, 11.0);
                             changeProjectLbl.setPrefWidth(0.088*TASK_LIST_WIDTH);
-                         //   changeProjectLbl.setPrefHeight(28) ;
                             changeProjectLbl.setAlignment(Pos.CENTER);
                             changeProjectLbl.setTextFill(Color.BLUE);
 
@@ -233,7 +249,8 @@ public class DailyTasks{
                             setGraphic(taskOnTodayRoot);
 
                             /**
-                             * when user clicks button with an icon of pen, textfields show and user can change textfield
+                             * when user clicks button with an icon of pen, main view of task in the listview is changed
+                             * so that user can edit the task directly from the listview instead of calling another modal.
                              */
                             editTaskBtn.setOnMouseClicked(e -> {
                                 AnchorPane editTaskRootContainer = new AnchorPane() ;
@@ -313,14 +330,12 @@ public class DailyTasks{
                                 editTaskRoot.getChildren().addAll(taskTitleTxt, taskDescriptionTxt, taskDatePicker, setProjectBtn, bottomSep, saveTaskBtn, cancelBtn, setPriorityBtn, addReminderBtn) ;
                                 setGraphic(editTaskRootContainer);
 
-                                System.out.println(taskList.getParent().toString());
-
                                 double collapsedHeight = taskList.getHeight() ;
                                 taskList.setPrefHeight(collapsedHeight + 104);
-                                /**
-                                 * Actions
-                                 */
 
+                                /**
+                                 * Implementation of actions that will be done after certain buttons are clicked
+                                 */
                                 cancelBtn.setOnMouseClicked(cancelEvent -> {
                                     taskOnTodayRoot.getChildren().add(bottomSep) ;
                                     setGraphic(taskOnTodayRoot);
@@ -329,14 +344,12 @@ public class DailyTasks{
                                 });
 
                                 saveTaskBtn.setOnMouseClicked(editEvent -> {
-
                                     Optional<Task> optionalTask = taskRepo.findById(getItem().getTaskId());
                                     System.out.println(getItem().getTaskId());
                                     if (optionalTask.isPresent()) {
                                         Task editTask = optionalTask.get() ;
                                         editTask.setTaskTitle(taskTitleTxt.getText());
                                         editTask.setTaskDefinition(taskDescriptionTxt.getText());
-
                                         Date previousDate = editTask.getTaskStartDate() ;
                                         editTask.setTaskStartDate(Functions.LOCALDATE_TO_DATE.localDateToDate(taskDatePicker.getValue()));
 
@@ -364,7 +377,6 @@ public class DailyTasks{
                                     if (priorityButtonsStage != null) priorityButtonsStage.close();
                                     priorityButtonsStage = new Stage( );
                                     priorityButtonsStage.initStyle(StageStyle.UNDECORATED);
-
                                     /**
                                      * Changing the initial position of priorityButtonsStage relative to setPriorityBtn
                                      */
@@ -373,7 +385,6 @@ public class DailyTasks{
                                     int priorityButtonsStageInitPosY = (int) setPriorityBtnBounds.getMaxY() ;
                                     priorityButtonsStage.setX(priorityButtonsStageInitPosX);
                                     priorityButtonsStage.setY(priorityButtonsStageInitPosY);
-
 
                                     Button [] priorityButtons = new Button[4] ;
                                     int i ;
@@ -399,7 +410,6 @@ public class DailyTasks{
                                             setPriorityBtn.setGraphic(((Button) setEvent.getSource()).getGraphic());
                                             ((Stage)((Button)setEvent.getSource()).getScene().getWindow()).close();
                                         });
-
                                     }
                                     priorityButtonsStage.setScene(priorityButtonsScene);
                                     priorityButtonsStage.show();
@@ -407,12 +417,11 @@ public class DailyTasks{
 
                                 setProjectBtn.setOnMouseClicked(setProjectEvent -> {
                                     ListView<Project> projectListView = new ListView<>() ;
-                                    List<Project> projectList = projectRepo.findProjectsByProOwner(11) ;
+                                    List<Project> projectList = projectRepo.findProjectsByProOwner(UserHolder.getInstance().getUser().getUserId()) ;
                                     VBox projectListRoot = new VBox( );
                                     projectList.forEach(eachProject -> {
                                         projectListView.getItems().add(eachProject) ;
                                     });
-
                                     projectListView.setPadding(new Insets(0));
                                     projectListView.setCellFactory(new Callback<ListView<Project>, ListCell<Project>>() {
                                         @Override
@@ -456,7 +465,6 @@ public class DailyTasks{
                                         projectButtonsStage.setX(projectButtonsStageInitPosX);
                                         projectButtonsStage.setY(projectButtonsStageInitPosY);
                                     }
-
                                     Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
                                     projectButtonsStage.setScene(projectButtonsScene);
                                     projectButtonsStage.show();
@@ -476,7 +484,6 @@ public class DailyTasks{
                             });
 
                             finishTaskBtn.setOnMouseEntered(enterEvent -> {
-                              //  System.out.println(finishTaskBtn.getHeight());
                                 finishTaskBtn.setVisible(false);
                                 acceptTaskBtn.setVisible(true);
                             });
@@ -561,8 +568,5 @@ public class DailyTasks{
         return taskList;
     }
 
-    public void setInnerList(ListView<Task> innerList) {
-        this.taskList = innerList;
-    }
 
 }

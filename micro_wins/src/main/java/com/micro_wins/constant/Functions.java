@@ -17,7 +17,11 @@ import java.util.Optional;
  * @author Bagaa
  * @project micro-wins-task-management
  * @created 14/05/2022 - 5:16 PM
+ * @purpose Нийтлэг хэрэглэгдэх функцуудийг олон дахин хэрэглэхээс сэргийлэн үүсгэсэн класс болно.
+ * @definition Програмын бусад хэсэгт ашиглахдаа Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate LocalDateToConvert)
+ * байдлаар ашиглана.
  */
+
 public enum Functions {
     IS_INT,
     LOCALDATE_TO_DATE,

@@ -8,6 +8,9 @@ package com.micro_wins.view.main;
 /**
  * @author Nyamka
  * @project micro-wins-task-management
+ * @definition HeaderMenu is used in UpcomingPane, ProjectPane, InboxPane, TodayPane controllers.
+ * HeaderMenu also acts as custom title bar with buttons (restore down, minimize/maximize stage, close stage) which is
+ * found in title bar of usual applications.
  */
 
 

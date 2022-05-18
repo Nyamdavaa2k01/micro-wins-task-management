@@ -7,7 +7,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="270.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@/styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.NavigationPane">
+<VBox fx:id="navBar" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="270.0" spacing="20.0" style="-fx-background-color: #413F3F;" stylesheets="@../../../../styles/navBar.css" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.NavigationPane">
    <children>
       <Button fx:id="navToTodayBtn" mnemonicParsing="false" onAction="#navToToday" text="Today">
          <graphic>
@@ -36,11 +36,11 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="navToResultsBtn" mnemonicParsing="false" onAction="#navToResults" text="Results">
+      <Button mnemonicParsing="false" text="Button">
          <graphic>
             <ImageView fitHeight="35.0" fitWidth="35.0">
                <image>
-                  <Image url="@/images/result-icon.png" />
+                  <Image url="@../../../../images/result-icon.png" />
                </image>
             </ImageView>
          </graphic>

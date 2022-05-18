@@ -1,5 +1,12 @@
 package com.micro_wins.view.main;
 
+
+/**
+ * @author Bagabandi
+ * @project micro-wins-task-management
+ * @definition ProjectPane class allows user to handle the project one created.
+ */
+
 import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.TaskHolder;
 import com.micro_wins.holder.UserHolder;
@@ -122,13 +129,13 @@ public class ProjectPane implements Initializable, FxController {
     }
 
     /**
-     * refresh list view items
+     * When elements in the listview (named lvOpen), remove all previous elements and
+     * reload updated elements from the DB to show the latest update to the user.
      */
     void resetListView(){
         lvOpen.getItems().clear();
         proTaskList = taskRepo.findByTaskUserIdAndTaskProId(12, activeProject.getProId());
         proTasks = FXCollections.observableArrayList(proTaskList);
-        System.out.println("pro tasks: " + proTaskList.size());
         proTasks.forEach(proTask -> {
             lvOpen.getItems().add(proTask);
         });
@@ -181,7 +188,6 @@ public class ProjectPane implements Initializable, FxController {
                 editTaskStage.show();
             }
         });
-
         proTitleTxt.setText(activeProject.getProTitle());
         proDescTxt.setText(activeProject.getProDescription());
     }

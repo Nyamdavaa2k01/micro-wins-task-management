@@ -36,8 +36,8 @@ public enum ProjectTaskCard {
         Circle statusCircle = new Circle(8);
         statusCircle.setStrokeWidth(3);
         System.out.println("\n" + item.toString() + "\n");
-        String priorityColor = constantColors.getPRIORITY4_COLOR();
 
+        String priorityColor = constantColors.getPRIORITY4_COLOR();
         if(item.getTaskPriority() == 7){
             priorityColor = constantColors.getPRIORITY1_COLOR();
         }else if(item.getTaskPriority() == 8){

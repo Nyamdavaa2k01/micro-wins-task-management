@@ -1,14 +1,19 @@
+package com.micro_wins.view.main;
+
 /**
  * @author Nyamka
  * @project micro-wins-task-management
+ * @purpose Хэрэглэгч даалгавар нэмэхэд хэрэглэгдэх ба тухайн даалгаврын нэр, тодорхойлолт, хугацаа,
+ * чухлын зэрэг, харьяалагдах project зэргийг тохируулан өөрчлөх боломжтой. saveTaskBtn товч дарснаар
+ * хэрэглэгчийн оруулсан даалгаврыг хадгална.
  * @definition Header дээрх "+" товчийг дарахад гарж ирэх ба хэрхэн цонх болгон үзүүлж буйг HeaderMenuController-оос харна уу.
  */
 
-package com.micro_wins.view.main;
-
 import com.micro_wins.constant.ConstantColors;
+import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.modal.CustomPopup;
 import com.micro_wins.model.Dict;
 import com.micro_wins.model.DictType;
@@ -58,9 +63,6 @@ public class AddTaskPane implements Initializable, FxController {
 
     private Functions informationAlert;
 
-    //@Autowired
-    //ConfigurableApplicationContext springAppContext;
-
     @Autowired
     TaskRepo taskRepo ;
 
@@ -82,6 +84,7 @@ public class AddTaskPane implements Initializable, FxController {
     Task task ;
     ConstantStyles constantStyles ;
     ConstantColors constantColors ;
+    ConstantDictionaryValues constantDictionaryValues ;
 
     private CustomPopup customPopup;
 
@@ -128,6 +131,7 @@ public class AddTaskPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         constantStyles = new ConstantStyles() ;
         constantColors = new ConstantColors() ;
+        constantDictionaryValues = new ConstantDictionaryValues() ;
         informationAlert = Functions.INFORMATION_ALERT;
         customPopup = CustomPopup.POPUP;
         priorityDictionary = getDictByDictType("priority");
@@ -139,11 +143,12 @@ public class AddTaskPane implements Initializable, FxController {
         /**
          * task default values
          */
-        task.setTaskPriority(10);
-        task.setTaskStatus(1);
-        task.setTaskUserId(12);
-        task.setTaskProId(1);
-        task.setTaskProTitle("inbox");
+        task.setTaskPriority(dictRepo.findByDictName("low").getDictId());
+        task.setTaskStatus(constantDictionaryValues.getTASK_STATUS_OPEN());
+        task.setTaskUserId(UserHolder.getInstance().getUser().getUserId());
+        Project defaultPro = (Project) projectRepo.findByProTitleAndProOwner("inbox", UserHolder.getInstance().getUser().getUserId());
+        task.setTaskProId(defaultPro.getProId());
+        task.setTaskProTitle(defaultPro.getProTitle());
         /**
          * Add Task Button is disabled while Task Name TextField is empty, and as soon as user start
          * typing task title, button is enabled

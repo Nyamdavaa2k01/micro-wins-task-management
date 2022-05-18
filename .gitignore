@@ -1,2 +1,3 @@
 micro_wins/target/*
 micro_wins/src/main/resources/com.micro_wins.view/main/testView.fxml
+micro_wins/target/classes/com/micro_wins/service/ResultService.class

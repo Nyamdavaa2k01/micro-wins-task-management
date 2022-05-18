@@ -79,7 +79,6 @@ public class UpcomingPane implements Initializable, FxController {
         int dateIdx = (int) DAYS.between(LocalDate.now(), chosenDate);
         Date upperDate = Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now().plusDays(200)) ;
         if (dateIdx < 0 || dateIdx > 200) {
-            // show invalid date alert
             Functions.INFORMATION_ALERT.informationAlert("Огноо алдаатай ",
                     "Хайх огноо нь өнөөдрөөс (" + Functions.DATE_TO_STRING.dateToString(upperDate) + ") хооронд байхыг анхаарна уу", "Ok");
             return;
@@ -87,8 +86,17 @@ public class UpcomingPane implements Initializable, FxController {
         comingDaysListView.scrollTo(dateIdx);
     }
 
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        stageManager = springAppContext.getBean(StageManager.class);
+        UpcomingHolder.getInstance().setUpcomingPane(this);
+        setDateDatePicker.getEditor().setEditable(false);
+        handleCellFactory();
+        refreshComingDaysListView();
+    }
+
     public void refreshComingDaysListView () {
-        System.out.println("Upcoming Refresh is called");
         setDateDatePicker.setValue(LocalDate.now());
         int cnt = 0 ;
         LocalDate currentLocalDate = LocalDate.now() ;
@@ -181,12 +189,4 @@ public class UpcomingPane implements Initializable, FxController {
         });
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        stageManager = springAppContext.getBean(StageManager.class);
-        UpcomingHolder.getInstance().setUpcomingPane(this);
-        setDateDatePicker.getEditor().setEditable(false);
-        handleCellFactory();
-        refreshComingDaysListView();
-    }
 }

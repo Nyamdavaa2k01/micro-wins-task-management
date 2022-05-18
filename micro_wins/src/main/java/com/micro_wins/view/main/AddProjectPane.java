@@ -110,7 +110,6 @@ public class AddProjectPane implements Initializable, FxController {
     @FXML
     void cancelAddProject(ActionEvent event) {
         Stage stage = (Stage) btnCancel.getScene().getWindow();
-        // do what you have to do
         stage.close();
     }
 

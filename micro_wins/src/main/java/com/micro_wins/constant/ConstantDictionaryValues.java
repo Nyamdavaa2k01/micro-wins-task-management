@@ -4,7 +4,12 @@ package com.micro_wins.constant;
  * @author Nyamka
  * @project micro-wins-task-management
  * @created 15/05/2022 - 6:50 PM
+ * @purpose Dictionary утгуудыг дахин дахин шалгахаас зайлсхийх болон Dictionary утга өөрчлөгдөхөд
+ * хялбар байдлаар зохицуулахын тулд ашигласан.
+ * @definition Програмд ашиглагдах утгууд нь өгөгдлийн сангийн dictionary утгуудыг тусгах ёстой тул
+ * тэдгээрийг тогтмол болгон ашигласан.
  */
+
 public class ConstantDictionaryValues {
     private final int TASK_STATUS_OPEN = 1 ;
     private final int TASK_STATUS_WORKING = 2 ;

@@ -10,6 +10,9 @@ import java.util.Date;
  * @author Nyamka
  * @project micro-wins-task-management
  * @created 06/05/2022 - 1:59 AM
+ * @purpose Даалгаврыг илэрхийлэх класс.
+ * @definition Энэхүү классийн мэдээлийг хадгалах mw_task хүснэгт үүсгэсэн. Иймд эдгээрийг хооронд нь
+ * холбохын тулд Entity болон Table Annotation-уудыг ашигласан.
  */
 
 @Entity
