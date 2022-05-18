@@ -1,9 +1,11 @@
 package com.micro_wins.constant;
 
 import javafx.scene.control.*;
+import javafx.scene.control.TextField;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
+import java.awt.*;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -24,7 +26,8 @@ public enum Functions {
 
     INFORMATION_ALERT,
     TODAY_DATE_TO_STRING,
-    DATE_TO_STRING ;
+    DATE_TO_STRING,
+    HEX_TO_RGB;
 
     public boolean isInt(TextField f, String msg)
     {
@@ -97,5 +100,11 @@ public enum Functions {
         int year = calendar.get(Calendar.YEAR) ;
         String monthLocalizedName = new DateFormatSymbols().getMonths()[month] ;
         return monthLocalizedName + " " + day +", " + year ;
+    }
+    public static Color hex2Rgb(String colorStr) {
+        return new Color(
+                Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
+                Integer.valueOf( colorStr.substring( 3, 5 ), 16 ),
+                Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) );
     }
 }

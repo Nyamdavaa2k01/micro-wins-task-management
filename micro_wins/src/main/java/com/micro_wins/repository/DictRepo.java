@@ -4,6 +4,8 @@ import com.micro_wins.model.Dict;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 /**
  * @author Bagaa
@@ -14,4 +16,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DictRepo extends JpaRepository<Dict, Integer> {
     Dict findByDictName(String dictName);
+    List<Dict> findDictByDictTypeNo(int dictTypeNo);
 }

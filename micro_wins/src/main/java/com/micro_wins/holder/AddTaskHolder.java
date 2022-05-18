@@ -9,7 +9,7 @@ import com.micro_wins.view.main.UpcomingPane;
  * @created 18/05/2022 - 4:13 AM
  */
 
-public class AddTaskHolder {
+public final class AddTaskHolder {
     private AddTaskPane addTaskPane ;
     private final static AddTaskHolder INSTANCE = new AddTaskHolder() ;
 

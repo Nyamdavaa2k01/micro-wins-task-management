@@ -3,7 +3,27 @@
     -fx-background-radius: 35px;
 }
 
-.list-cell:filled:selected {
-  -fx-background-color: -fx-background ;
+.add_pro_task_btn{
+    -fx-background-color: transparent;
+    -fx-text-fill: #8980EF;
+}
+
+.add_pro_task_btn:hover{
+    -fx-background-color: #8980EF;
+    -fx-text-fill: #fff;
+}
+
+.button{
+    -fx-background-color: transparent;
+    -fx-text-fill: #8980EF;
+}
+
+.button:hover{
+    -fx-background-color: #8980EF;
+    -fx-text-fill: #fff;
+}
+
+.list-cell:filled:selected:focused, .list-cell:filled:selected  {
+  -fx-background-color: transparent;
   -fx-background-insets: 0 ;
 }

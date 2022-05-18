@@ -1,7 +1,9 @@
 package com.micro_wins.view.main;
 
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.TaskHolder;
 import com.micro_wins.holder.UserHolder;
+import com.micro_wins.modal.ProjectTaskCard;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
 import com.micro_wins.model.User;
@@ -63,8 +65,11 @@ public class ProjectPane implements Initializable, FxController {
     private Project activeProject;
 
     private Functions dateToString;
+    private ProjectTaskCard projectTaskCard;
 
     private final double LIST_CELL_HEIGHT = 70;
+
+    private TaskHolder taskHolder;
 
     @FXML
     private Text completedTaskCntText;
@@ -138,6 +143,9 @@ public class ProjectPane implements Initializable, FxController {
         user = userHolder.getUser();
         activeProject = projectHolder.getProject();
         dateToString = Functions.DATE_TO_LOCALDATE;
+        projectTaskCard = ProjectTaskCard.PRO_TASK_CARD;
+
+        taskHolder = TaskHolder.getInstance();
 
         resetListView();
 
@@ -150,46 +158,7 @@ public class ProjectPane implements Initializable, FxController {
                     setGraphic(null);
 
                     if (!empty && item != null) {
-                        VBox taskCard = new VBox();
-                        taskCard.setStyle("-fx-background-color: #fff; -fx-border-color: #000; -fx-border-width: 1px; -fx-border-radius: 30px; -fx-background-radius: 30px;");
-                        taskCard.setPadding(new Insets(5));
-                        taskCard.setPrefHeight(60);
-                        taskCard.setSpacing(5);
-
-                        HBox top = new HBox();
-                        top.setAlignment(Pos.CENTER);
-                        top.setSpacing(10);
-                        Circle statusCircle = new Circle(8);
-                        statusCircle.setFill(Color.rgb(255, 0, 0, 0.4));
-                        statusCircle.setStrokeWidth(3);
-                        statusCircle.setStroke(Color.RED);
-
-                        Label taskNameLbl = new Label(item.getTaskTitle());
-                        taskNameLbl.setWrapText(true);
-                        taskNameLbl.setPrefWidth(80);
-                        taskNameLbl.setTextFill(Color.BLACK);
-
-                        Image taskUserImg = new Image("file:micro_wins/src/main/resources/images/clarity_assign_user_line.png");
-                        ImageView taskUserImgView = new ImageView(taskUserImg);
-                        taskUserImgView.setFitHeight(20);
-                        taskUserImgView.setFitWidth(20);
-
-                        top.getChildren().addAll(statusCircle, taskNameLbl, taskUserImgView);
-
-                        HBox bottom = new HBox();
-                        bottom.setAlignment(Pos.CENTER);
-                        bottom.setSpacing(5);
-                        Label taskStartDate = new Label(dateToString.dateToLocalDate(item.getTaskStartDate()).toString());
-                        taskStartDate.setTextFill(Color.BLACK);
-                        taskStartDate.setPadding(new Insets(0, 2, 0, 2));
-                        taskStartDate.setStyle("-fx-background-color: #fff; -fx-border-color: #000; -fx-border-width: 1px; -fx-border-radius: 30px; -fx-background-radius: 30px;");
-                        Image arrowRight = new Image("file:micro_wins/src/main/resources/images/ci_sub_right.png");
-                        ImageView arrowRightView = new ImageView(arrowRight);
-                        arrowRightView.setFitHeight(15);
-                        arrowRightView.setFitWidth(30);
-                        bottom.getChildren().addAll(arrowRightView, taskStartDate);
-
-                        taskCard.getChildren().addAll(top, bottom);
+                        VBox taskCard = projectTaskCard.getProOpenTaskCard(item);
                         setGraphic(taskCard);
                     }
                 }
@@ -200,6 +169,8 @@ public class ProjectPane implements Initializable, FxController {
             @Override
             public void handle(Event event) {
                 System.out.println("clicked on " + lvOpen.getSelectionModel().getSelectedItem());
+                Task lvOpenItem = lvOpen.getSelectionModel().getSelectedItem();
+                taskHolder.setTask(lvOpenItem);
                 Stage editTaskStage = new Stage();
                 Parent node = stageManager.loadView(EditTaskPane.class);
                 Scene scene = new Scene(node);

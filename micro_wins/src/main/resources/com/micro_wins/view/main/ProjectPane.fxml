@@ -110,14 +110,14 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <ListView fx:id="lvOpen" prefHeight="1.0" prefWidth="205.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" stylesheets="@../../../../styles/projectView.css">
+                              <ListView fx:id="lvOpen" prefHeight="1.0" prefWidth="205.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" styleClass="list-cell" stylesheets="@../../../../styles/projectView.css">
                                  <padding>
                                     <Insets left="5.0" right="5.0" />
                                  </padding>
                               </ListView>
-                              <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="189.0" style="-fx-background-color: #8980ef26; -fx-background-radius: 35; -fx-border-color: #8980EF; -fx-border-width: 1; -fx-border-radius: 35;">
+                              <HBox alignment="CENTER_RIGHT" prefHeight="40.0" prefWidth="189.0" style="-fx-background-color: #8980ef40; -fx-background-radius: 35; -fx-border-color: #8980EF; -fx-border-width: 0; -fx-border-radius: 35;">
                                  <children>
-                                    <Button fx:id="addTaskToProjectBtn" alignment="CENTER" graphicTextGap="0.0" minHeight="40.0" mnemonicParsing="false" onAction="#addTaskToProject" prefHeight="40.0" prefWidth="40.0" style="-fx-background-color: transparent; -fx-border-color: #8980EF; -fx-border-radius: 35; -fx-background-color: #8980EF26; -fx-background-radius: 35;" text="+" textFill="#8980ef">
+                                    <Button fx:id="addTaskToProjectBtn" alignment="CENTER" graphicTextGap="0.0" minHeight="40.0" mnemonicParsing="false" onAction="#addTaskToProject" prefHeight="40.0" prefWidth="40.0" style="-fx-border-color: #8980EF; -fx-border-radius: 35; -fx-background-radius: 35;" styleClass="add_pro_task_btn" stylesheets="@../../../../styles/projectView.css" text="+" textFill="#8980ef">
                                        <font>
                                           <Font name="System Bold" size="15.0" />
                                        </font>
@@ -164,7 +164,7 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <ListView fx:id="lvWorking" minHeight="300.0" prefWidth="209.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" stylesheets="@../../../../styles/projectView.css" />
+                              <ListView fx:id="lvWorking" minHeight="300.0" prefWidth="209.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" styleClass="list-cell" stylesheets="@../../../../styles/projectView.css" />
                            </children>
                         </VBox>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
@@ -196,7 +196,7 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <ListView fx:id="lvPostponed" minHeight="300.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" stylesheets="@../../../../styles/projectView.css" />
+                              <ListView fx:id="lvPostponed" minHeight="300.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" styleClass="list-cell" stylesheets="@../../../../styles/projectView.css" />
                            </children>
                         </VBox>
                         <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="240.0" spacing="10.0">
@@ -228,7 +228,7 @@
                                     </Text>
                                  </children>
                               </HBox>
-                              <ListView fx:id="lvCompleted" minHeight="300.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" stylesheets="@../../../../styles/projectView.css" />
+                              <ListView fx:id="lvCompleted" minHeight="300.0" prefWidth="200.0" style="-fx-background-color: transparent; -fx-control-inner-background: transparent;" styleClass="list-cell" stylesheets="@../../../../styles/projectView.css" />
                            </children>
                         </VBox>
                      </children>

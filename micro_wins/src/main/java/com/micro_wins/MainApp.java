@@ -7,7 +7,6 @@
 package com.micro_wins;
 import com.micro_wins.view.StageManager;
 import com.micro_wins.view.main.TodayPane;
-import com.micro_wins.view.main.UpcomingPane;
 import javafx.application.Application;
 
 import java.util.Locale;

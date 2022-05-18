@@ -9,9 +9,13 @@ package com.micro_wins.view.main;
 import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
-import com.micro_wins.holder.UserHolder;
+import com.micro_wins.modal.CustomPopup;
+import com.micro_wins.model.Dict;
+import com.micro_wins.model.DictType;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
+import com.micro_wins.repository.DictRepo;
+import com.micro_wins.repository.DictTypeRepo;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
@@ -25,8 +29,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -35,7 +37,6 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -66,61 +67,25 @@ public class AddTaskPane implements Initializable, FxController {
     @Autowired
     ProjectRepo projectRepo ;
 
+    @Autowired
+    DictTypeRepo dictTypeRepo;
+
+    @Autowired
+    DictRepo dictRepo;
+
     private Stage priorityButtonsStage ;
     Stage projectButtonsStage ;
 
     private Date date ;
 
-    public void setDate (Date date) {
-        this.date = date ;
-    }
-
-    /**
-     * task values are being set from 4 main different places.
-     * taskUserId and taskStatus are set by default inside the initialize function,
-     * taskTitle, taskDefinition and taskStartDate are set by textfields when user clicks save button,
-     * taskPriority is set by priority stage if not set the value is 4 by default,
-     * taskProId and taskProTitle are set by project stage, if not set, project is inbox by default
-     */
 
     Task task ;
     ConstantStyles constantStyles ;
     ConstantColors constantColors ;
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        constantStyles = new ConstantStyles() ;
-        constantColors = new ConstantColors() ;
-        informationAlert = Functions.INFORMATION_ALERT;
+    private CustomPopup customPopup;
 
-        if (date == null) taskDatePicker.setValue(LocalDate.now());
-        else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
-
-        task = new Task();
-        /**
-         * task default values
-         */
-        task.setTaskPriority(4);
-        task.setTaskStatus(1);
-        task.setTaskUserId(12);
-        task.setTaskProId(1);
-        task.setTaskProTitle("inbox");
-        /**
-         * Add Task Button is disabled while Task Name TextField is empty, and as soon as user start
-         * typing task title, button is enabled
-         */
-        BooleanBinding bindTaskNameTxt = new BooleanBinding() {
-            {
-                super.bind(taskNameTxt.textProperty());
-            }
-
-            @Override
-            protected boolean computeValue() {
-                return (taskNameTxt.getText().isEmpty());
-            }
-        };
-        addTaskBtn.disableProperty().bind(bindTaskNameTxt);
-    }
+    private List<Dict> priorityDictionary;
 
     @FXML
     private Button addReminderBtn;
@@ -146,11 +111,59 @@ public class AddTaskPane implements Initializable, FxController {
     @FXML
     private TextField taskNameTxt;
 
+
+    public void setDate (Date date) {
+        this.date = date ;
+    }
+
+    /**
+     * task values are being set from 4 main different places.
+     * taskUserId and taskStatus are set by default inside the initialize function,
+     * taskTitle, taskDefinition and taskStartDate are set by textfields when user clicks save button,
+     * taskPriority is set by priority stage if not set the value is 4 by default,
+     * taskProId and taskProTitle are set by project stage, if not set, project is inbox by default
+     */
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        constantStyles = new ConstantStyles() ;
+        constantColors = new ConstantColors() ;
+        informationAlert = Functions.INFORMATION_ALERT;
+        customPopup = CustomPopup.POPUP;
+        priorityDictionary = getDictByDictType("priority");
+
+        if (date == null) taskDatePicker.setValue(LocalDate.now());
+        else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
+
+        task = new Task();
+        /**
+         * task default values
+         */
+        task.setTaskPriority(10);
+        task.setTaskStatus(1);
+        task.setTaskUserId(12);
+        task.setTaskProId(1);
+        task.setTaskProTitle("inbox");
+        /**
+         * Add Task Button is disabled while Task Name TextField is empty, and as soon as user start
+         * typing task title, button is enabled
+         */
+        BooleanBinding bindTaskNameTxt = new BooleanBinding() {
+            {
+                super.bind(taskNameTxt.textProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                return (taskNameTxt.getText().isEmpty());
+            }
+        };
+        addTaskBtn.disableProperty().bind(bindTaskNameTxt);
+    }
+
     @FXML
     void addReminder(ActionEvent event) {
-
         informationAlert.informationAlert("Information", "Sorry, The development of this section is not complete.", "OK");
-
     }
 
     @FXML
@@ -179,8 +192,7 @@ public class AddTaskPane implements Initializable, FxController {
 
     @FXML
     void setPriority(ActionEvent event) throws IOException {
-        VBox priorityButtonsRoot = new VBox() ;
-        Scene priorityButtonsScene = new Scene(priorityButtonsRoot, 200, 172) ;
+
         if (priorityButtonsStage != null) priorityButtonsStage.close();
         priorityButtonsStage = new Stage( );
         priorityButtonsStage.initStyle(StageStyle.UNDECORATED);
@@ -194,34 +206,7 @@ public class AddTaskPane implements Initializable, FxController {
         priorityButtonsStage.setX(priorityButtonsStageInitPosX);
         priorityButtonsStage.setY(priorityButtonsStageInitPosY);
 
-        
-        Button [] priorityButtons = new Button[4] ;
-        int i ;
-        for (i = 0 ; i < 4 ; i ++) {
-            priorityButtons[i] = new Button() ;
-            priorityButtons[i].setAlignment(Pos.TOP_LEFT);
-            priorityButtons[i].setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
-            priorityButtons[i].setOnMouseClicked(e -> {
-                String text = ((Button) e.getSource()).getText();
-                int priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
-                task.setTaskPriority(priority);
-                setPriorityBtn.setGraphic(((Button) e.getSource()).getGraphic());
-                ((Stage)((Button)e.getSource()).getScene().getWindow()).close();
-            });
-            String buttonText = "Priority " + (i+1) ;
-            String buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/priority-"+(i+1)+"-icon.png" ;
-            ImageView buttonGraphicImage = new ImageView(new Image(buttonGraphicFilePath)) ;
-            buttonGraphicImage.setFitHeight(25);
-            buttonGraphicImage.setFitWidth(25);
-            priorityButtons[i].setText(buttonText);
-            priorityButtons[i].setGraphic(buttonGraphicImage);
-            priorityButtons[i].setPrefWidth(200);
-            priorityButtons[i].setPrefHeight(43);
-            priorityButtonsRoot.getChildren().add(priorityButtons[i]) ;
-        }
-        priorityButtonsStage.setScene(priorityButtonsScene);
-        priorityButtonsStage.initModality(Modality.APPLICATION_MODAL);
-        priorityButtonsStage.show();
+        customPopup.callSetPriorityPopup(priorityButtonsStageInitPosX, priorityButtonsStageInitPosY, priorityDictionary, setPriorityBtn, task);
     }
 
     /**
@@ -237,9 +222,9 @@ public class AddTaskPane implements Initializable, FxController {
 
     @FXML
     void setProject(ActionEvent event) {
-        ListView<Project> projectListView = new ListView<>() ;
         List<Project> projectList = projectRepo.findProjectsByProOwner(11) ;
         VBox projectListRoot = new VBox();
+        ListView<Project> projectListView = new ListView<>() ;
         projectList.forEach(project -> {
             projectListView.getItems().add(project) ;
         });
@@ -293,6 +278,12 @@ public class AddTaskPane implements Initializable, FxController {
         Scene projectButtonsScene = new Scene(projectListRoot, 200, projectList.size()*43) ;
         projectButtonsStage.setScene(projectButtonsScene);
         projectButtonsStage.show();
+    }
+
+    List<Dict> getDictByDictType(String dictTypeTxt){
+        DictType dictType = dictTypeRepo.findByDtTypeName(dictTypeTxt);
+        List<Dict> dictList = dictRepo.findDictByDictTypeNo(dictType.getDtTypeNo());
+        return dictList;
     }
 
 }
