@@ -18,9 +18,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -129,7 +131,7 @@ public class DailyTasks{
                             priority = task.getTaskPriority() ;
                             AnchorPane taskOnTodayRoot = new AnchorPane() ;
                             taskOnTodayRoot.setPrefWidth(TASK_LIST_WIDTH-200);
-                            taskOnTodayRoot.setPrefHeight(80);
+                            taskOnTodayRoot.setPrefHeight(90);
 
                             Button finishTaskBtn = new Button() ;
                             AnchorPane.setLeftAnchor(finishTaskBtn, 50.0);
@@ -163,18 +165,34 @@ public class DailyTasks{
                             acceptTaskBtn.setGraphic(acceptImage);
                             acceptTaskBtn.setVisible(false);
 
-                            Label taskTitleLbl = new Label(task.getTaskTitle()) ;
+                            Text taskTitleLbl = new Text(task.getTaskTitle()) ;
                             AnchorPane.setLeftAnchor(taskTitleLbl, 113.0);
                             AnchorPane.setTopAnchor(taskTitleLbl, 14.0);
                             AnchorPane.setRightAnchor(taskTitleLbl, 50.0);
                             taskTitleLbl.setFont(Font.font(18));
+                            if (task.getTaskStatus() == constantDictionaryValues.getTASK_STATUS_COMPLETED()) taskTitleLbl.setStrikethrough(true);
 
                             Label taskDescriptionLbl = new Label(task.getTaskDefinition()) ;
                             AnchorPane.setLeftAnchor(taskDescriptionLbl, 113.0);
-                            AnchorPane.setBottomAnchor(taskDescriptionLbl, 15.0);
+                            AnchorPane.setBottomAnchor(taskDescriptionLbl, 30.0);
                             AnchorPane.setRightAnchor(taskDescriptionLbl, 50.0);
                             taskDescriptionLbl.setTextFill(Paint.valueOf("#4d4a4a"));
                             taskDescriptionLbl.setFont(Font.font("Times New Roman", 12));
+
+                            Label dateLbl = new Label() ;
+                            dateLbl.setText(Functions.DATE_TO_STRING.dateToString(task.getTaskStartDate()));
+                            Date todayDate = Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()) ;
+                            if (task.getTaskStartDate().compareTo(todayDate) == 0) {
+                                dateLbl.setText("Today");
+                                dateLbl.setTextFill(Color.GREEN);
+                            }
+                            else if (task.getTaskStartDate().compareTo(todayDate) == -1) {
+                                dateLbl.setTextFill(Color.RED);
+                            }
+
+                            AnchorPane.setLeftAnchor(dateLbl, 113.0);
+                            AnchorPane.setBottomAnchor(dateLbl, 11.0) ;
+
 
                             Separator bottomSep = new Separator() ;
                             AnchorPane.setLeftAnchor(bottomSep, 50.0);
@@ -200,18 +218,18 @@ public class DailyTasks{
                             seeMoreImage.setFitHeight(20);
                             deleteTaskBtn.setGraphic(seeMoreImage);
 
-                            Button changeProjectBtn = new Button() ;
-                            if (task.getTaskProTitle() != null) changeProjectBtn.setText(task.getTaskProTitle());
-                            else changeProjectBtn.setText("Inbox");
-                            AnchorPane.setRightAnchor(changeProjectBtn, 51.0 );
-                            AnchorPane.setBottomAnchor(changeProjectBtn, 11.0);
-                            changeProjectBtn.setPrefWidth(0.088*TASK_LIST_WIDTH);
-                            changeProjectBtn.setPrefHeight(28) ;
-                            changeProjectBtn.setStyle("-fx-border-color:gray;" +
-                                    "-fx-border-radius:10; ");
+                            Label changeProjectLbl = new Label() ;
+                            if (task.getTaskProTitle() != null) changeProjectLbl.setText(task.getTaskProTitle());
+                            else changeProjectLbl.setText("Inbox");
+                            AnchorPane.setRightAnchor(changeProjectLbl, 51.0 );
+                            AnchorPane.setBottomAnchor(changeProjectLbl, 11.0);
+                            changeProjectLbl.setPrefWidth(0.088*TASK_LIST_WIDTH);
+                         //   changeProjectLbl.setPrefHeight(28) ;
+                            changeProjectLbl.setAlignment(Pos.CENTER);
+                            changeProjectLbl.setTextFill(Color.BLUE);
 
                             editTaskButtons.getChildren().addAll(editTaskBtn, deleteTaskBtn) ;
-                            taskOnTodayRoot.getChildren().addAll(finishTaskBtn, acceptTaskBtn, taskTitleLbl, taskDescriptionLbl, bottomSep, editTaskButtons, changeProjectBtn) ;
+                            taskOnTodayRoot.getChildren().addAll(finishTaskBtn, acceptTaskBtn, taskTitleLbl, taskDescriptionLbl, dateLbl, bottomSep, editTaskButtons, changeProjectLbl) ;
                             setGraphic(taskOnTodayRoot);
 
                             /**

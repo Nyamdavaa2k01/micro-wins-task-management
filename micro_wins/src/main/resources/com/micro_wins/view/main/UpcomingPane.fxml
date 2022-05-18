@@ -19,7 +19,7 @@
             </font>
          </Label>
          <Separator layoutX="37.0" layoutY="115.0" prefWidth="1020.0" />
-         <DatePicker fx:id="setDateDatePicker" layoutX="865.0" layoutY="68.0" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../../styles/addTask.css" />
+         <DatePicker fx:id="setDateDatePicker" layoutX="865.0" layoutY="68.0" onAction="#setDate" prefHeight="36.0" prefWidth="191.0" stylesheets="@../../../../styles/addTask.css" />
          <Label layoutX="754.0" layoutY="72.0" prefHeight="29.0" prefWidth="103.0" text="Choose Date:">
             <font>
                <Font name="Times New Roman Bold" size="18.0" />

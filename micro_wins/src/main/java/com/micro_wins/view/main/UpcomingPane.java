@@ -12,6 +12,7 @@ import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
@@ -36,6 +37,8 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.util.Date;
 import java.util.ResourceBundle;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
  * @author Nyamka
@@ -69,6 +72,20 @@ public class UpcomingPane implements Initializable, FxController {
 
     @FXML
     private DatePicker setDateDatePicker;
+
+    @FXML
+    void setDate(ActionEvent event) {
+        LocalDate chosenDate = setDateDatePicker.getValue() ;
+        int dateIdx = (int) DAYS.between(LocalDate.now(), chosenDate);
+        Date upperDate = Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now().plusDays(200)) ;
+        if (dateIdx < 0 || dateIdx > 200) {
+            // show invalid date alert
+            Functions.INFORMATION_ALERT.informationAlert("Огноо алдаатай ",
+                    "Хайх огноо нь өнөөдрөөс (" + Functions.DATE_TO_STRING.dateToString(upperDate) + ") хооронд байхыг анхаарна уу", "Ok");
+            return;
+        }
+        comingDaysListView.scrollTo(dateIdx);
+    }
 
     public void refreshComingDaysListView () {
         System.out.println("Upcoming Refresh is called");
@@ -168,6 +185,7 @@ public class UpcomingPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stageManager = springAppContext.getBean(StageManager.class);
         UpcomingHolder.getInstance().setUpcomingPane(this);
+        setDateDatePicker.getEditor().setEditable(false);
         handleCellFactory();
         refreshComingDaysListView();
     }
