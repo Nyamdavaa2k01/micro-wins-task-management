@@ -9,7 +9,7 @@ import com.micro_wins.view.main.UpcomingPane;
  * @created 18/05/2022 - 12:41 AM
  */
 
-public class UpcomingHolder {
+public final class UpcomingHolder {
     private UpcomingPane upcomingPane ;
     private final static UpcomingHolder INSTANCE = new UpcomingHolder() ;
 

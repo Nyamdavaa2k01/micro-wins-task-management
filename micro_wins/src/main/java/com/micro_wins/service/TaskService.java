@@ -17,6 +17,7 @@ public interface TaskService {
     List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) ;
     List<Task> findByTaskStartDate (Date date) ;
     List<Task> findByTaskStartDateAndTaskStatus(Date date, int taskStatus) ;
+    List<Task> findByOrderByTaskStartDateAsc() ;
 
     /**
      * @author Bagaa

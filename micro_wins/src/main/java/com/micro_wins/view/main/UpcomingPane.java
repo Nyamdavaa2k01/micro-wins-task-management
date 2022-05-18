@@ -114,6 +114,7 @@ public class UpcomingPane implements Initializable, FxController {
                         dailyTasks.setTaskRepo(taskRepo);
                         dailyTasks.setProjectRepo(projectRepo);
                         dailyTasks.setResultRepo(resultRepo);
+                        dailyTasks.setCalledFromUpcoming(true);
 
                         ListView innerList = dailyTasks.getInnerList() ;
 

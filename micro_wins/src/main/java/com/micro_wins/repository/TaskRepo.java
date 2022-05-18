@@ -19,10 +19,12 @@ import java.util.List;
 public interface TaskRepo extends JpaRepository<Task, Integer> {
     List<Task> findByTaskStatus (int taskStatus) ;
     List<Task> findByOrderByTaskPriorityAsc() ;
+    List<Task> findByOrderByTaskStartDateAsc() ;
     List<Task> findByTaskPriority(int taskPriority) ;
     List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) ;
     List<Task> findByTaskStartDate (Date date) ;
     List<Task> findByTaskStartDateAndTaskStatus(Date date, int taskStatus) ;
+
 
     /**
      * @author Bagaa

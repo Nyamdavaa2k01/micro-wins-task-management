@@ -248,7 +248,7 @@ public class NavigationPane {
 
     @FXML
     void navToInbox(ActionEvent event) {
-        stageManager.rebuildStage(TodayPane.class);
+        stageManager.rebuildStage(InboxPane.class);
     }
 
     @FXML
@@ -258,6 +258,7 @@ public class NavigationPane {
 
     @FXML
     void navToToday(ActionEvent event) throws IOException {
+        stageManager.rebuildStage(TodayPane.class);
     }
 
     @FXML

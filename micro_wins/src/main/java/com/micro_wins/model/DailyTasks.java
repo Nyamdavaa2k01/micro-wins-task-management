@@ -4,11 +4,13 @@ import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.InboxHolder;
 import com.micro_wins.holder.UpcomingHolder;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
@@ -49,7 +51,7 @@ import java.util.ResourceBundle;
  */
 
 @Component
-public class DailyTasks implements  Initializable{
+public class DailyTasks{
 
     ConstantColors constantColors ;
     ConstantStyles constantStyles ;
@@ -69,6 +71,15 @@ public class DailyTasks implements  Initializable{
 
     private int priority ;
     Project chosenProject ;
+    Boolean sortedByDate = false;
+    Boolean sortedByPriority = false ;
+
+    private Boolean isCalledFromUpcoming = false ;
+
+
+    public void setCalledFromUpcoming(Boolean calledFromUpcoming) {
+        isCalledFromUpcoming = calledFromUpcoming;
+    }
 
     @Autowired
     public void setTaskRepo (TaskRepo taskRepo) {
@@ -86,13 +97,15 @@ public class DailyTasks implements  Initializable{
     }
 
     private void refreshParentController () {
-        UpcomingHolder.getInstance().getUpcomingPane().refreshComingDaysListView();
+        if (isCalledFromUpcoming) UpcomingHolder.getInstance().getUpcomingPane().refreshComingDaysListView();
     }
 
-    private final int TASK_LIST_WIDTH = 1000;
+    private final int TASK_LIST_WIDTH = 950;
 
     public void refreshTaskList () {
-        List<Task> tasks = taskRepo.findByTaskStartDate(dayDate) ;
+        List<Task> tasks ;
+        if (dayDate != null) tasks = taskRepo.findByTaskStartDate(dayDate) ;
+        else tasks = taskRepo.findAll() ;
         taskList.getItems().clear();
         tasks.forEach(eachTask -> {
             System.out.println(eachTask.toString());
@@ -110,6 +123,7 @@ public class DailyTasks implements  Initializable{
          * UpcomingPane. 
          */
         taskList = new ListView<>( );
+        taskList.setPrefWidth(TASK_LIST_WIDTH);
         taskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
             @Override
             public ListCell<Task> call (ListView<Task> taskList) {
@@ -494,12 +508,39 @@ public class DailyTasks implements  Initializable{
         constantDictionaryValues = new ConstantDictionaryValues() ;
         taskList = new ListView<>();
         taskList.setStyle("-fx-padding:0;");
-      //  cellFactoryImpl();
-     //   refreshTaskList();
     }
 
-    public void addTask (Task task) {
-        taskList.getItems().add(task) ;
+    public void sortByTime() {
+        if (!sortedByDate) {
+            List<Task> sortTasks = taskRepo.findByOrderByTaskStartDateAsc() ;
+            taskList.getItems().clear();
+            sortTasks.forEach(task -> {
+                if (task.getTaskStatus() != constantDictionaryValues.getTASK_STATUS_COMPLETED()) {
+                    taskList.getItems().add(task) ;
+                }
+            });
+            sortedByDate = true ;
+        }
+        else {
+            refreshTaskList(); ;
+            sortedByDate = false ;
+        }
+    }
+
+    public void sortByPriority() {
+        if (!sortedByPriority) {
+            List<Task> sortTasks = taskRepo.findByOrderByTaskPriorityAsc() ;
+            taskList.getItems().clear();
+            sortTasks.forEach(task -> {
+                if (task.getTaskStatus() != 4)
+                    taskList.getItems().add(task) ;
+            });
+            sortedByPriority = true ;
+        }
+        else {
+            refreshTaskList();
+            sortedByPriority = false ;
+        }
     }
 
     public Date getDayDate() {
@@ -518,8 +559,4 @@ public class DailyTasks implements  Initializable{
         this.taskList = innerList;
     }
 
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-    }
 }
