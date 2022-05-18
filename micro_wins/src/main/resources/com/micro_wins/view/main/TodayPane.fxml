@@ -13,7 +13,7 @@
 
     <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
     <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-   <AnchorPane layoutX="273.0" layoutY="38.0" prefHeight="129.0" prefWidth="1093.0" AnchorPane.bottomAnchor="787.0">
+   <AnchorPane layoutX="273.0" layoutY="38.0" prefHeight="129.0" prefWidth="1093.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="38.0">
       <children>
          <Label layoutX="65.0" layoutY="63.0" prefHeight="35.0" prefWidth="84.0" text="Today" AnchorPane.bottomAnchor="15.0">
             <font>
@@ -42,5 +42,5 @@
          <Separator layoutX="37.0" layoutY="115.0" prefWidth="1020.0" style="-fx-background-color: black;" />
       </children>
    </AnchorPane>
-   <VBox fx:id="taskListRoot" layoutX="273.0" layoutY="167.0" prefHeight="0.0" prefWidth="1093.0" AnchorPane.bottomAnchor="0.0" />
+   <VBox fx:id="taskListRoot" layoutX="273.0" layoutY="167.0" prefHeight="0.0" prefWidth="1093.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="273.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="169.0" />
 </AnchorPane>
