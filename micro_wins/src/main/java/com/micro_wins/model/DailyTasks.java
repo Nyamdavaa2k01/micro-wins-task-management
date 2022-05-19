@@ -195,7 +195,7 @@ public class DailyTasks{
                             AnchorPane.setBottomAnchor(taskDescriptionLbl, 30.0);
                             AnchorPane.setRightAnchor(taskDescriptionLbl, 50.0);
                             taskDescriptionLbl.setTextFill(Paint.valueOf("#4d4a4a"));
-                            taskDescriptionLbl.setFont(Font.font("Times New Roman", 12));
+                            taskDescriptionLbl.setFont(Font.font( 12));
 
                             Label dateLbl = new Label() ;
                             dateLbl.setText(Functions.DATE_TO_STRING.dateToString(task.getTaskStartDate()));

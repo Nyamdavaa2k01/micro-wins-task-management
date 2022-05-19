@@ -3,13 +3,15 @@ package com.micro_wins.service.impl;
 import com.micro_wins.model.Result;
 import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.service.CrudService;
+import com.micro_wins.service.ResultService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
-public class ResultServiceImpl implements CrudService<Result> {
+public class ResultServiceImpl implements CrudService<Result>, ResultService {
 
     @Autowired
     private ResultRepo resultRepo ;
@@ -47,5 +49,10 @@ public class ResultServiceImpl implements CrudService<Result> {
     @Override
     public List<Result> findAll() {
         return resultRepo.findAll() ;
+    }
+
+    @Override
+    public List<Result> findByTaskCompletedDate(Date date) {
+        return resultRepo.findByTaskCompletedDate(date);
     }
 }

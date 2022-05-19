@@ -5,6 +5,9 @@ import com.micro_wins.model.Task;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Date;
+import java.util.List;
+
 /**
  * @author Nyamka
  * @project micro-wins-task-management
@@ -13,5 +16,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResultRepo extends JpaRepository<Result, Integer> {
-
+    List<Result> findByTaskCompletedDate (Date date) ;
 }

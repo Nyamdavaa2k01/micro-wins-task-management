@@ -254,6 +254,11 @@ public class NavigationPane {
     }
 
     @FXML
+    void navToResult(ActionEvent event) {
+        stageManager.rebuildStage(ResultPane.class);
+    }
+
+    @FXML
     void addNewProject(ActionEvent event){
         Stage addProjectStage = new Stage();
         Parent node = stageManager.loadView(AddProjectPane.class);
