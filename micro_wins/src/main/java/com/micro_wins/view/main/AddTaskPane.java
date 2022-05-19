@@ -148,7 +148,6 @@ public class AddTaskPane implements Initializable, FxController {
         UserHolder userHolder = UserHolder.getInstance();
         user = userHolder.getUser();
         ProjectHolder projectHolder = ProjectHolder.getInstance();
-        Project activeProject = projectHolder.getProject();
 
         if (date == null) taskDatePicker.setValue(LocalDate.now());
         else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
@@ -162,17 +161,22 @@ public class AddTaskPane implements Initializable, FxController {
         task.setTaskUserId(user.getUserId());
 
         String proTitleTxt = "inbox";
-        
-//        if(activeProject != null){
-//            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
-//            if (fxControllerClass == ProjectPane.class){
-//                proTitleTxt = activeProject.getProTitle();
-//            }
-//        }
+
+        Project activeProject;
+        if(ProjectHolder.getInstance() != null){
+            activeProject = projectHolder.getProject();
+            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+            if (fxControllerClass == ProjectPane.class){
+                proTitleTxt = activeProject.getProTitle();
+            }
+        }
 
         Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
+
         task.setTaskProId(defaultPro.getProId());
         task.setTaskProTitle(defaultPro.getProTitle());
+
+        setProjectBtn.setText(defaultPro.getProTitle());
 
         /**
          * Save Task Button is disabled while below conditions are happened, and as soon as user start
@@ -269,7 +273,7 @@ public class AddTaskPane implements Initializable, FxController {
 
     @FXML
     void setProject(ActionEvent event) {
-        List<Project> projectList = projectRepo.findProjectsByProOwner(11) ;
+        List<Project> projectList = projectRepo.findProjectsByProOwner(UserHolder.getInstance().getUser().getUserId()) ;
         VBox projectListRoot = new VBox();
         ListView<Project> projectListView = new ListView<>() ;
         projectList.forEach(project -> {
