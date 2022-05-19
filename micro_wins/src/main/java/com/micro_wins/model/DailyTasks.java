@@ -6,9 +6,7 @@ import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.UpcomingHolder;
 import com.micro_wins.holder.UserHolder;
-import com.micro_wins.repository.ProjectRepo;
-import com.micro_wins.repository.ResultRepo;
-import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.repository.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -67,6 +65,8 @@ public class DailyTasks{
     Boolean sortedByDate = false;
     Boolean sortedByPriority = false ;
     private Boolean isCalledFromUpcoming = false ;
+
+    private List<Dict> priorityDictionary;
 
 
     public void setCalledFromUpcoming(Boolean calledFromUpcoming) {
@@ -253,6 +253,7 @@ public class DailyTasks{
                              * so that user can edit the task directly from the listview instead of calling another modal.
                              */
                             editTaskBtn.setOnMouseClicked(e -> {
+                                priority = task.getTaskPriority() ;
                                 AnchorPane editTaskRootContainer = new AnchorPane() ;
                                 AnchorPane editTaskRoot = new AnchorPane() ;
                                 editTaskRootContainer.getChildren().add(editTaskRoot);
@@ -312,7 +313,8 @@ public class DailyTasks{
                                 cancelBtn.setPrefHeight(35);
 
                                 Button setPriorityBtn = new Button() ;
-                                ImageView priorityImage = new ImageView("file:micro_wins/src/main/resources/images/priority-" + task.getTaskPriority()+ "-icon.png") ;
+                                int taskPriorityParse = task.getTaskPriority() - 6 ;
+                                ImageView priorityImage = new ImageView("file:micro_wins/src/main/resources/images/priority-" + taskPriorityParse+ "-icon.png") ;
                                 priorityImage.setFitWidth(25);
                                 priorityImage.setFitHeight(25);
                                 setPriorityBtn.setGraphic(priorityImage);
@@ -371,7 +373,10 @@ public class DailyTasks{
                                     }
                                 });
 
+
+
                                 setPriorityBtn.setOnMouseClicked(setPriorityEvent -> {
+//                                  
                                     VBox priorityButtonsRoot = new VBox() ;
                                     Scene priorityButtonsScene = new Scene(priorityButtonsRoot, 200, 172) ;
                                     if (priorityButtonsStage != null) priorityButtonsStage.close();
@@ -406,7 +411,7 @@ public class DailyTasks{
 
                                         priorityButtons[i].setOnMouseClicked(setEvent -> {
                                             String text = ((Button) setEvent.getSource()).getText();
-                                            priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                                            priority = Integer.parseInt(text.replaceAll("[^0-9]", "")) + 6 ;
                                             setPriorityBtn.setGraphic(((Button) setEvent.getSource()).getGraphic());
                                             ((Stage)((Button)setEvent.getSource()).getScene().getWindow()).close();
                                         });
@@ -545,7 +550,7 @@ public class DailyTasks{
             List<Task> sortTasks = taskRepo.findByOrderByTaskPriorityAsc() ;
             taskList.getItems().clear();
             sortTasks.forEach(task -> {
-                if (task.getTaskStatus() != 4)
+                if (task.getTaskStatus() != 4 && (dayDate == null || dayDate.compareTo(task.getTaskStartDate()) == 0))
                     taskList.getItems().add(task) ;
             });
             sortedByPriority = true ;
@@ -567,6 +572,5 @@ public class DailyTasks{
     public ListView<Task> getInnerList() {
         return taskList;
     }
-
 
 }

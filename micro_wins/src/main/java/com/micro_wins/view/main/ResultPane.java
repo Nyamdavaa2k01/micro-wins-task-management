@@ -39,14 +39,20 @@ import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import static java.time.temporal.ChronoUnit.DAYS;
 
 /**
  * @author Nyamka
  * @project micro-wins-task-management
  * @created 18/05/2022 - 1:30 PM
+ * @purpose Хэрэглэгчийн дуусгасан даалгавруудын тоон утга болон даалгавруудыг үзүүлэх interface
+ * @definition Дуусгасан даалгавруудыг харуулахдаа ListView, харин тоон утгыг нь харуулахдаа
+ * PieChart ашигласан болно.
  */
 
 
@@ -159,40 +165,52 @@ public class ResultPane implements Initializable, FxController {
 
         XYChart.Series<Number, String> series = new XYChart.Series();
 
-        LocalDate currentDate = LocalDate.now().minusDays(7) ;
+
+        LocalDate currentDate = LocalDate.now().minusDays(6) ;
+        final int[] completeCnt = {0,0,0,0,0,0,0} ;
+        List<Result> allResult = resultRepo.findAll() ;
+        allResult.forEach(result -> {
+            int dayDiff = Math.toIntExact(DAYS.between(Functions.DATE_TO_LOCALDATE.dateToLocalDate(result.getTaskCompletedDate()), LocalDate.now()));
+            if (dayDiff < 7) {
+                completeCnt[dayDiff] ++ ;
+            }
+        });
         while(!currentDate.isAfter(LocalDate.now())) {
             String dateString ;
             if (currentDate.isEqual(LocalDate.now())) dateString = "Today" ;
             else if (currentDate.plusDays(1).isEqual(LocalDate.now())) dateString = "Yesterday" ;
             else dateString = Functions.DATE_TO_STRING.dateToString(Functions.LOCALDATE_TO_DATE.localDateToDate(currentDate)) ;
-            List<Result> dailyResult = resultRepo.findByTaskCompletedDate(Functions.LOCALDATE_TO_DATE.localDateToDate(currentDate)) ;
-            Number completeCnt = dailyResult.size() ;
-          //  series.getData().add(new XYChart.Data<>(completeCnt, dateString)) ;
-            currentDate = currentDate.plusDays(1) ;
-
-            final XYChart.Data<Number, String> data = new XYChart.Data<>(completeCnt, dateString) ;
+            int dayDiff = (int) DAYS.between(currentDate, LocalDate.now());
+            final XYChart.Data<Number, String> data = new XYChart.Data<>(completeCnt[dayDiff], dateString) ;
             data.nodeProperty().addListener(new ChangeListener<Node>() {
+
                 @Override
                 public void changed(ObservableValue<? extends Node> observableValue, Node oldNode, Node newNode) {
                     if(newNode != null) {
                         int value = (int) data.getXValue();
+                        String barColor ;
                         if (value <= LOW_THRESHOLD_TASK_CNT) {
-                            newNode.setStyle("-fx-bar-fill: #81E771;");
+                            barColor = "#81E771" ;
                         }
                         else if (value <= MEDIUM_THRESHOLD_TASK_CNT) {
-                            newNode.setStyle("-fx-bar-fill: #55BD45;");
+                            barColor = "#55BD45" ;
                         }
                         else if(value < HIGH_THRESHOLD_TASK_CNT) {
-                            newNode.setStyle("-fx-bar-fill: #3AA529;");
+                            barColor = "#3AA529" ;
                         }
                         else {
-                            newNode.setStyle("-fx-bar-fill: #197909");
+                            barColor = "#197909" ;
                         }
+                        newNode.setStyle("-fx-bar-fill:" + barColor + ";");
                     }
                 }
+
+
             });
             series.getData().add(data) ;
+            currentDate = currentDate.plusDays(1) ;
         }
+
 
 
         bc.getData().add(series) ;

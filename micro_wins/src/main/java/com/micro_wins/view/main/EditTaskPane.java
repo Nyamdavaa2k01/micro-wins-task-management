@@ -147,7 +147,6 @@ public class EditTaskPane implements Initializable, FxController {
         Dict selectedStatus = taskStatusCbx.getSelectionModel().getSelectedItem();
         activeTask.setTaskStatus(selectedStatus.getDictId());
         activeTask.setTaskStartDate(taskStartDate);
-
         Task savedTask = taskRepo.save(activeTask);
 
         if(savedTask != null){

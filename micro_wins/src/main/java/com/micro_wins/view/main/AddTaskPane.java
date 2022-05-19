@@ -3,10 +3,12 @@ package com.micro_wins.view.main;
 /**
  * @author Nyamka
  * @project micro-wins-task-management
- * @purpose Хэрэглэгч даалгавар нэмэхэд хэрэглэгдэх ба тухайн даалгаврын нэр, тодорхойлолт, хугацаа,
- * чухлын зэрэг, харьяалагдах project зэргийг тохируулан өөрчлөх боломжтой. saveTaskBtn товч дарснаар
- * хэрэглэгчийн оруулсан даалгаврыг хадгална.
- * @definition Header дээрх "+" товчийг дарахад гарж ирэх ба хэрхэн цонх болгон үзүүлж буйг HeaderMenuController-оос харна уу.
+ * @created 27/04/2022 - 1:30 PM
+ * @purpose Хэрэглэгч даалгавар нэмэхэд хэрэглэгдэх interface
+ * @definition Header дээрх "+" товч дарахад шинэ цонх болон үүсэх ба энэхүү цонх нээлттэй үед хэрэглэгч
+ * програмын бусад хэсэгтэй харьцах боломжгүй. Үүссэн цонх буюу AddTaskPane Interface-ийн тусламжтайгаар
+ * тухайн даалгаврын нэр, тодорхойлолт, хугацаа, чухлын зэрэг, харьяалагдах project зэргийг тохируулан өөрчлөх
+ * боломжтой. saveTaskBtn товч дарснаар хэрэглэгчийн оруулсан даалгаврыг хадгална.
  */
 
 import com.micro_wins.constant.ConstantColors;
@@ -331,7 +333,7 @@ public class AddTaskPane implements Initializable, FxController {
         projectButtonsStage.show();
     }
 
-    List<Dict> getDictByDictType(String dictTypeTxt){
+    public List<Dict> getDictByDictType(String dictTypeTxt){
         DictType dictType = dictTypeRepo.findByDtTypeName(dictTypeTxt);
         List<Dict> dictList = dictRepo.findDictByDictTypeNo(dictType.getDtTypeNo());
         return dictList;

@@ -6,9 +6,7 @@ import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.model.DailyTasks;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
-import com.micro_wins.repository.ProjectRepo;
-import com.micro_wins.repository.ResultRepo;
-import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.repository.*;
 import com.micro_wins.view.FxController;
 import javafx.collections.ListChangeListener;
 import javafx.event.ActionEvent;
@@ -36,6 +34,9 @@ import java.util.ResourceBundle;
  * @author Nyamka
  * @project micro-wins-task-management
  * @created 18/05/2022 - 5:57 AM
+ * @purpose Энэхүү interface нь хэрэглэгчийн ямар нэг project-д нэмээгүй бүхий л task-ийг
+ * харуулах зорилготой.
+ * @definition Task-уудыг хугацаагаар, цагаар эрэмбэлэх боломжтой ба чухлын зэргээр нь шүүн харах боломжтой
  */
 
 

@@ -63,22 +63,17 @@ public class TaskServiceImpl implements CrudService<Task>, TaskService {
 
     @Override
     public List<Task> findAll() {
-        return (List<Task>) taskRepo.findAll();
+        return taskRepo.findAll();
     }
 
     @Override
     public List<Task> findByTaskStatus(int taskStatus) {
-        constantDictionaryValues = new ConstantDictionaryValues() ;
-        List<Task> activeTasks = new ArrayList<>() ;
-        List<Task> allTasks = taskRepo.findAll() ;
+        return taskRepo.findByTaskStatus(taskStatus);
+    }
 
-        allTasks.forEach(task -> {
-            if (task.getTaskStatus() == taskStatus) {
-                activeTasks.add(task) ;
-            }
-        });
-
-        return activeTasks ;
+    @Override
+    public List<Task> findByTaskPriority(int taskPriority)  {
+        return taskRepo.findByTaskPriority(taskPriority) ; 
     }
 
     @Override
@@ -87,19 +82,6 @@ public class TaskServiceImpl implements CrudService<Task>, TaskService {
         return sortedTasks ;
     }
 
-    @Override
-    public List<Task> findByTaskPriority(int taskPriority)  {
-        List<Task> allTasks = taskRepo.findAll() ;
-        List<Task> filteredTasks = new ArrayList<>( );
-
-        allTasks.forEach(task -> {
-            if (task.getTaskPriority() == taskPriority) {
-                filteredTasks.add(task) ;
-            }
-        });
-
-        return filteredTasks ;
-    }
 
     @Override
     public List<Task> findByTaskPriorityAndTaskStatus (int taskPriority, int taskStatus) {

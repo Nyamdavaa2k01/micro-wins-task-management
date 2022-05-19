@@ -13,9 +13,7 @@ import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.model.DailyTasks;
 import com.micro_wins.model.Task;
-import com.micro_wins.repository.ProjectRepo;
-import com.micro_wins.repository.ResultRepo;
-import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.repository.*;
 import com.micro_wins.view.FxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -54,6 +52,13 @@ public class  TodayPane implements Initializable, FxController {
     @Autowired
     ResultRepo resultRepo ;
 
+    @Autowired
+    DictTypeRepo dictTypeRepo;
+
+    @Autowired
+    DictRepo dictRepo ;
+
+
     Stage chooseFilterOptionStage ;
 
     private int filterOpt = 0 ;
@@ -67,12 +72,13 @@ public class  TodayPane implements Initializable, FxController {
         constantStyles = new ConstantStyles() ;
         todayDateLbl.setText(Functions.TODAY_DATE_TO_STRING.todayDateToString());
         constantDictionaryValues = new ConstantDictionaryValues() ;
-        final double TASK_LIST_WIDTH = 1000;
         dailyTasks = new DailyTasks();
         dailyTasks.setDayDate(Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()));
         dailyTasks.setTaskRepo(taskRepo);
         dailyTasks.setProjectRepo(projectRepo);
         dailyTasks.setResultRepo(resultRepo);
+        dailyTasks.setDictRepo(dictRepo);
+        dailyTasks.setDictTypeRepo(dictTypeRepo);
         dailyTasks.cellFactoryImpl();
         dailyTasks.refreshTaskList();
         taskListRoot.getChildren().add(dailyTasks.getInnerList()) ;
@@ -120,16 +126,17 @@ public class  TodayPane implements Initializable, FxController {
                     filterOpt = 0 ;
                 }
                 else {
-                    filterOpt = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                    filterOpt = Integer.parseInt(text.replaceAll("[^0-9]", "")) + 6;
                 }
-                System.out.println(filterOpt);
                 chooseFilterOptionStage.close();
                 if (filterOpt == 0) dailyTasks.refreshTaskList();
                 else {
                     List<Task> filteredTasks = taskRepo.findByTaskPriorityAndTaskStatus(filterOpt, constantDictionaryValues.getTASK_STATUS_OPEN()) ;
                     dailyTasks.getInnerList().getItems().clear();
                     filteredTasks.forEach(each -> {
-                        dailyTasks.getInnerList().getItems().add(each) ;
+                        Date todayDate = Functions.LOCALDATE_TO_DATE.localDateToDate(LocalDate.now()) ;
+                        if(each.getTaskStartDate().compareTo(todayDate) == 0)
+                            dailyTasks.getInnerList().getItems().add(each) ;
                     });
 
                 }

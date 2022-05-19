@@ -19,10 +19,10 @@ public class ConstantDictionaryValues {
     private final int TASK_USER_ACTIVE = 1 ;
     private final int TASK_USER_INACTIVE = 0 ;
 
-    private final int TASK_PRIORITY_URGENT = 1 ;
-    private final int TASK_PRIORITY_HIGH = 2 ;
-    private final int TASK_PRIORITY_MEDIUM = 3 ;
-    private final int TASK_PRIORITY_LOW = 4 ;
+    private final int TASK_PRIORITY_URGENT = 7 ;
+    private final int TASK_PRIORITY_HIGH = 8 ;
+    private final int TASK_PRIORITY_MEDIUM = 9 ;
+    private final int TASK_PRIORITY_LOW = 10 ;
 
     public int getTASK_STATUS_OPEN() {
         return TASK_STATUS_OPEN;

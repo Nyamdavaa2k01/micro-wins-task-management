@@ -82,7 +82,7 @@ public class HeaderMenuPane implements Initializable, FxController {
     private Button searchBtn;
 
     @FXML
-    private TextField searchTextField;
+    private TextField searchTxt;
 
     @FXML
     private Button seeNavBarBtn;

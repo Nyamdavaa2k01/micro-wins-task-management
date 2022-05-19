@@ -4,8 +4,12 @@ package com.micro_wins.view.main;
 /**
  * @author Bagabandi
  * @project micro-wins-task-management
- * @purpose
- * @definition ProjectPane class allows user to handle the project one created.
+ * @created 02/05/2022 - 1:30 PM
+ * @purpose Хэрэглэгчийн үүсгэсэн Project-той харьцах боломж олгох interface
+ * @definition Энэхүү interface-тэй харилцахаас өмнө хэрэглэгч Project үүсгэсэн байх хэрэгтэй ба
+ * хэрэглэгч үүсгэсэн Project-оо сонгосноор энэхүү interface-тэй харилцах боломжтой болно. ProjectPane
+ * interface-ийн тусламжтай төслийн даалгаврууд нэмэх, төлвийг нь өөрчлөх, даалгавруудын төлвийг Doughnut chart
+ * ашиглан хянах боломжтой.
  */
 
 import com.micro_wins.constant.ConstantColors;
