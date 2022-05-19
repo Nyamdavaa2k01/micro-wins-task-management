@@ -2,10 +2,10 @@ package com.micro_wins.constant;
 
 import javafx.scene.control.*;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.StageStyle;
 
-import java.awt.*;
 import java.text.DateFormatSymbols;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -105,10 +105,11 @@ public enum Functions {
         String monthLocalizedName = new DateFormatSymbols().getMonths()[month] ;
         return monthLocalizedName + " " + day +", " + year ;
     }
-    public static Color hex2Rgb(String colorStr) {
-        return new Color(
-                Integer.valueOf( colorStr.substring( 1, 3 ), 16 ),
-                Integer.valueOf( colorStr.substring( 3, 5 ), 16 ),
-                Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) );
+    public Color hexToRgb(String colorStr, double alpha) {
+        return Color.rgb(
+                Integer.valueOf(colorStr.substring(1, 3), 16),
+                Integer.valueOf(colorStr.substring(3, 5), 16),
+                Integer.valueOf(colorStr.substring(5, 7), 16),
+                alpha);
     }
 }

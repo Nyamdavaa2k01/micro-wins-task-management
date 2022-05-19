@@ -11,9 +11,9 @@ import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.TaskHolder;
 import com.micro_wins.holder.UserHolder;
 import com.micro_wins.modal.ProjectTaskCard;
-import com.micro_wins.model.Project;
-import com.micro_wins.model.Task;
-import com.micro_wins.model.User;
+import com.micro_wins.model.*;
+import com.micro_wins.repository.DictRepo;
+import com.micro_wins.repository.DictTypeRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.holder.ProjectHolder;
@@ -25,21 +25,13 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -52,6 +44,7 @@ import org.springframework.stereotype.Controller;
 import javafx.event.ActionEvent;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 @Controller
@@ -64,6 +57,12 @@ public class ProjectPane implements Initializable, FxController {
     @Autowired
     ConfigurableApplicationContext springAppContext;
 
+    @Autowired
+    DictRepo dictRepo;
+
+    @Autowired
+    DictTypeRepo dictTypeRepo;
+
     private StageManager stageManager;
     private List<Task> proTaskList;
     private ObservableList<Task> proTasks;
@@ -75,6 +74,8 @@ public class ProjectPane implements Initializable, FxController {
     private ProjectTaskCard projectTaskCard;
 
     private final double LIST_CELL_HEIGHT = 70;
+
+    private List<Dict> statusDictionary;
 
     private TaskHolder taskHolder;
 
@@ -134,12 +135,27 @@ public class ProjectPane implements Initializable, FxController {
      */
     void resetListView(){
         lvOpen.getItems().clear();
-        proTaskList = taskRepo.findByTaskUserIdAndTaskProId(12, activeProject.getProId());
+        lvWorking.getItems().clear();
+        lvPostponed.getItems().clear();
+        lvCompleted.getItems().clear();
+        proTaskList = taskRepo.findByTaskUserIdAndTaskProId(user.getUserId(), activeProject.getProId());
         proTasks = FXCollections.observableArrayList(proTaskList);
         proTasks.forEach(proTask -> {
-            lvOpen.getItems().add(proTask);
+            Optional<Dict> staDict = dictRepo.findById(proTask.getTaskStatus());
+            if("completed".equals(staDict.get().getDictName())){
+                lvCompleted.getItems().add(proTask);
+            }else if("postponed".equals(staDict.get().getDictName())){
+                lvPostponed.getItems().add(proTask);
+            }else if("working".equals(staDict.get().getDictName())){
+                lvWorking.getItems().add(proTask);
+            }else{
+                lvOpen.getItems().add(proTask);
+            }
         });
-        lvOpen.prefHeightProperty().bind(Bindings.size(proTasks).multiply(LIST_CELL_HEIGHT));
+        lvOpen.prefHeightProperty().bind(Bindings.size(lvOpen.getItems()).multiply(LIST_CELL_HEIGHT));
+        lvWorking.prefHeightProperty().bind(Bindings.size(lvWorking.getItems()).multiply(LIST_CELL_HEIGHT));
+        lvPostponed.prefHeightProperty().bind(Bindings.size(lvPostponed.getItems()).multiply(LIST_CELL_HEIGHT));
+        lvCompleted.prefHeightProperty().bind(Bindings.size(lvCompleted.getItems()).multiply(LIST_CELL_HEIGHT));
     }
 
     @Override
@@ -151,6 +167,7 @@ public class ProjectPane implements Initializable, FxController {
         activeProject = projectHolder.getProject();
         dateToString = Functions.DATE_TO_LOCALDATE;
         projectTaskCard = ProjectTaskCard.PRO_TASK_CARD;
+        statusDictionary = getDictByDictType("status");
 
         taskHolder = TaskHolder.getInstance();
 
@@ -172,10 +189,57 @@ public class ProjectPane implements Initializable, FxController {
             };
         });
 
+        lvWorking.setCellFactory(param -> {
+            return new ListCell<Task>() {
+                @Override
+                protected void updateItem(Task item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+
+                    if (!empty && item != null) {
+                        VBox taskCard = projectTaskCard.getProWorkingTaskCard(item);
+                        setGraphic(taskCard);
+                    }
+                }
+            };
+        });
+
+        lvPostponed.setCellFactory(param -> {
+            return new ListCell<Task>() {
+                @Override
+                protected void updateItem(Task item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+
+                    if (!empty && item != null) {
+                        VBox taskCard = projectTaskCard.getProPostponedTaskCard(item);
+                        setGraphic(taskCard);
+                    }
+                }
+            };
+        });
+
+        lvCompleted.setCellFactory(param -> {
+            return new ListCell<Task>() {
+                @Override
+                protected void updateItem(Task item, boolean empty) {
+                    super.updateItem(item, empty);
+                    setText(null);
+                    setGraphic(null);
+
+                    if (!empty && item != null) {
+                        VBox taskCard = projectTaskCard.getProCompletedTaskCard(item);
+                        setGraphic(taskCard);
+                    }
+                }
+            };
+        });
+
         lvOpen.setOnMouseClicked(new EventHandler<Event>() {
             @Override
             public void handle(Event event) {
-                System.out.println("clicked on " + lvOpen.getSelectionModel().getSelectedItem());
                 Task lvOpenItem = lvOpen.getSelectionModel().getSelectedItem();
                 taskHolder.setTask(lvOpenItem);
                 Stage editTaskStage = new Stage();
@@ -188,8 +252,63 @@ public class ProjectPane implements Initializable, FxController {
                 editTaskStage.show();
             }
         });
+
+        lvWorking.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                Task lvWorkingItem = lvWorking.getSelectionModel().getSelectedItem();
+                taskHolder.setTask(lvWorkingItem);
+                Stage editTaskStage = new Stage();
+                Parent node = stageManager.loadView(EditTaskPane.class);
+                Scene scene = new Scene(node);
+                scene.setFill(Color.TRANSPARENT);
+                editTaskStage.setScene(scene);
+                editTaskStage.initStyle(StageStyle.TRANSPARENT);
+                editTaskStage.initModality(Modality.APPLICATION_MODAL);
+                editTaskStage.show();
+            }
+        });
+
+        lvPostponed.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                Task lvPostponedItem = lvPostponed.getSelectionModel().getSelectedItem();
+                taskHolder.setTask(lvPostponedItem);
+                Stage editTaskStage = new Stage();
+                Parent node = stageManager.loadView(EditTaskPane.class);
+                Scene scene = new Scene(node);
+                scene.setFill(Color.TRANSPARENT);
+                editTaskStage.setScene(scene);
+                editTaskStage.initStyle(StageStyle.TRANSPARENT);
+                editTaskStage.initModality(Modality.APPLICATION_MODAL);
+                editTaskStage.show();
+            }
+        });
+
+        lvCompleted.setOnMouseClicked(new EventHandler<Event>() {
+            @Override
+            public void handle(Event event) {
+                Task lvCompletedItem = lvCompleted.getSelectionModel().getSelectedItem();
+                taskHolder.setTask(lvCompletedItem);
+                Stage editTaskStage = new Stage();
+                Parent node = stageManager.loadView(EditTaskPane.class);
+                Scene scene = new Scene(node);
+                scene.setFill(Color.TRANSPARENT);
+                editTaskStage.setScene(scene);
+                editTaskStage.initStyle(StageStyle.TRANSPARENT);
+                editTaskStage.initModality(Modality.APPLICATION_MODAL);
+                editTaskStage.show();
+            }
+        });
+
         proTitleTxt.setText(activeProject.getProTitle());
         proDescTxt.setText(activeProject.getProDescription());
+    }
+
+    List<Dict> getDictByDictType(String dictTypeTxt){
+        DictType dictType = dictTypeRepo.findByDtTypeName(dictTypeTxt);
+        List<Dict> dictList = dictRepo.findDictByDictTypeNo(dictType.getDtTypeNo());
+        return dictList;
     }
 
 }

@@ -19,6 +19,7 @@ import com.micro_wins.model.Dict;
 import com.micro_wins.model.DictType;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
+import com.micro_wins.model.User;
 import com.micro_wins.repository.DictRepo;
 import com.micro_wins.repository.DictTypeRepo;
 import com.micro_wins.repository.ProjectRepo;
@@ -90,6 +91,8 @@ public class AddTaskPane implements Initializable, FxController {
 
     private List<Dict> priorityDictionary;
 
+    private User user;
+
     @FXML
     private Button addReminderBtn;
 
@@ -136,6 +139,9 @@ public class AddTaskPane implements Initializable, FxController {
         customPopup = CustomPopup.POPUP;
         priorityDictionary = getDictByDictType("priority");
 
+        UserHolder userHolder = UserHolder.getInstance();
+        user = userHolder.getUser();
+
         if (date == null) taskDatePicker.setValue(LocalDate.now());
         else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
 
@@ -145,8 +151,8 @@ public class AddTaskPane implements Initializable, FxController {
          */
         task.setTaskPriority(dictRepo.findByDictName("low").getDictId());
         task.setTaskStatus(constantDictionaryValues.getTASK_STATUS_OPEN());
-        task.setTaskUserId(UserHolder.getInstance().getUser().getUserId());
-        Project defaultPro = (Project) projectRepo.findByProTitleAndProOwner("inbox", UserHolder.getInstance().getUser().getUserId());
+        task.setTaskUserId(user.getUserId());
+        Project defaultPro = projectRepo.findByProTitleAndProOwner("inbox", user.getUserId()).get(0);
         task.setTaskProId(defaultPro.getProId());
         task.setTaskProTitle(defaultPro.getProTitle());
         /**
@@ -179,14 +185,18 @@ public class AddTaskPane implements Initializable, FxController {
         task.setTaskTitle(taskTitle);
         task.setTaskDefinition(taskDefinition);
         task.setTaskStartDate(datePickerDate);
-        taskRepo.save(task) ;
+        task.setTaskUserId(user.getUserId());
+        Task savedTask = taskRepo.save(task) ;
         stageManager.closeSecondaryStage();
 
-        /**
-         * Go to the latest scene
-         */
-        Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
-        if (fxControllerClass != null) stageManager.rebuildStage(fxControllerClass);
+        if(savedTask != null){
+            addTaskBtn.disableProperty().unbind();
+            /**
+             * Go to the latest scene
+             */
+            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+            if (fxControllerClass != null) stageManager.rebuildStage(fxControllerClass);
+        }
      }
 
     @FXML

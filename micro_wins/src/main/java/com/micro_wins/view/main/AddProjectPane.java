@@ -7,7 +7,9 @@ import java.util.ResourceBundle;
 
 import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
+import com.micro_wins.model.User;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
@@ -41,6 +43,8 @@ public class AddProjectPane implements Initializable, FxController {
     private Project newProject;
 
     private ConstantColors constantColors;
+
+    private User user;
 
     @FXML
     private DatePicker proDeadline;
@@ -117,6 +121,9 @@ public class AddProjectPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stageManager = springAppContext.getBean(StageManager.class);
 
+        UserHolder userHolder = UserHolder.getInstance();
+        user = userHolder.getUser();
+
         /**
          * set instance of ConstantColors
          */
@@ -137,14 +144,14 @@ public class AddProjectPane implements Initializable, FxController {
          */
         newProject.setProStatus(1);
         newProject.setProCompletionPercent(0);
-        newProject.setProOwner(11);
+        newProject.setProOwner(user.getUserId());
         LocalDate today = LocalDate.now();
         proStartDate.setValue(today);
         LocalDate tomorrow = today.plusDays(1);
         proDeadline.setValue(tomorrow);
 
         /**
-         * Add Task Button is disabled while Project Title TextField and Project Description TextField are empty, and as soon as user start
+         * Add Project Button is disabled while Project Title TextField and Project Description TextField are empty, and as soon as user start
          * typing task title, button is enabled
          */
         BooleanBinding bindProTitleAndDesc = new BooleanBinding() {

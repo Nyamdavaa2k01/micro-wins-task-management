@@ -4,6 +4,8 @@ package com.micro_wins.view.main;
  * @author Nyamka
  * @project micro-wins-task-management
  * @created 11/05/2022 - 6:28 PM
+ * @purpose
+ * @definition
  */
 
 import com.micro_wins.constant.Functions;
@@ -16,27 +18,35 @@ import com.micro_wins.repository.DictRepo;
 import com.micro_wins.repository.DictTypeRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
+import com.micro_wins.view.StageManager;
 import com.sun.javafx.reflect.FieldUtil;
+import javafx.beans.binding.BooleanBinding;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @Controller
 @FxmlView
@@ -50,7 +60,16 @@ public class EditTaskPane implements Initializable, FxController {
 
     private Task activeTask;
 
+    @Lazy
+    @Autowired
+    private StageManager stageManager;
+
+    @Autowired
+    ConfigurableApplicationContext springAppContext;
+
     private Functions dateToLocalDate;
+
+    private Functions localDateToDate;
 
     private Stage priorityButtonsStage;
 
@@ -59,6 +78,8 @@ public class EditTaskPane implements Initializable, FxController {
     private Functions informationAlert;
 
     private CustomPopup customPopup;
+
+    private ObservableList<Dict> statusList;
 
     @Autowired
     private TaskRepo taskRepo;
@@ -85,6 +106,10 @@ public class EditTaskPane implements Initializable, FxController {
     private TextField taskNameTxt;
 
     @FXML
+    private ComboBox<Dict> taskStatusCbx;
+
+
+    @FXML
     void addReminder(ActionEvent event) {
         informationAlert.informationAlert("Information", "Sorry, The development of this section is not complete.", "OK");
     }
@@ -98,7 +123,27 @@ public class EditTaskPane implements Initializable, FxController {
 
     @FXML
     void saveTask(ActionEvent event) {
+        String taskName = taskNameTxt.getText();
+        String taskDesc = taskDescTxt.getText();
+        Date taskStartDate = localDateToDate.localDateToDate(taskDatePicker.getValue());
+        activeTask.setTaskTitle(taskName);
+        activeTask.setTaskDefinition(taskDesc);
+        activeTask.setTaskStartDate(taskStartDate);
+        activeTask.setTaskStatus(taskStatusCbx.getSelectionModel().getSelectedItem().getDictId());
+        Task savedTask = taskRepo.save(activeTask);
+        if(savedTask != null){
 
+            saveTaskBtn.disableProperty().unbind();
+
+            Stage stage = (Stage) saveTaskBtn.getScene().getWindow();
+            stage.close();
+
+            /**
+             * Go to the latest scene
+             */
+            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+            if (fxControllerClass != null) stageManager.rebuildStage(fxControllerClass);
+        }
     }
 
     @FXML
@@ -122,17 +167,65 @@ public class EditTaskPane implements Initializable, FxController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        stageManager = springAppContext.getBean(StageManager.class);
+
         TaskHolder taskHolder = TaskHolder.getInstance();
         activeTask = taskHolder.getTask();
         priorityDictionary = getDictByDictType("priority");
+        statusDictionary = getDictByDictType("status");
+
+        System.out.println("status dictionary: " + statusDictionary.size());
+
+        statusList = FXCollections.observableArrayList(statusDictionary);
+        taskStatusCbx.setItems(statusList);
+        taskStatusCbx.getSelectionModel().select(0);
+
+        Callback<ListView<Dict>, ListCell<Dict>> factory = lv -> new ListCell<Dict>() {
+
+            @Override
+            protected void updateItem(Dict item, boolean empty) {
+                super.updateItem(item, empty);
+                setText(empty ? "" : item.getDictName());
+            }
+
+        };
+
+        taskStatusCbx.setCellFactory(factory);
+        taskStatusCbx.setButtonCell(factory.call(null));
 
         dateToLocalDate = Functions.DATE_TO_LOCALDATE;
+        localDateToDate = Functions.LOCALDATE_TO_DATE;
         informationAlert = Functions.INFORMATION_ALERT;
         customPopup = CustomPopup.POPUP;
 
         taskNameTxt.setText(activeTask.getTaskTitle());
         taskDescTxt.setText(activeTask.getTaskDefinition());
         taskDatePicker.setValue(dateToLocalDate.dateToLocalDate(activeTask.getTaskStartDate()));
+        List<Dict> filteredStatus = statusDictionary.stream().filter(sDic -> (sDic.getDictId() == activeTask.getTaskStatus())).collect(Collectors.toList());
+
+        if(filteredStatus.size() == 0){
+            taskStatusCbx.setValue(new Dict());
+        }else{
+            taskStatusCbx.getSelectionModel().select(filteredStatus.get(0));
+        }
+
+        /**
+         * Save Task Button is disabled while Task Title TextField and Task Description TextField are empty, and as soon as user start
+         * typing task title, button is enabled
+         */
+        BooleanBinding bindProTitleAndDesc = new BooleanBinding() {
+            {
+                super.bind(taskNameTxt.textProperty());
+                super.bind(taskDescTxt.textProperty());
+            }
+
+            @Override
+            protected boolean computeValue() {
+                return (taskNameTxt.getText().isEmpty() || taskDescTxt.getText().isEmpty());
+            }
+        };
+
+        saveTaskBtn.disableProperty().bind(bindProTitleAndDesc);
     }
 
     List<Dict> getDictByDictType(String dictTypeTxt){

@@ -3,7 +3,7 @@ package com.micro_wins.model;
 import javax.persistence.*;
 
 /**
- * @author Littl
+ * @author Bagaa
  * @project micro-wins-task-management
  * @created 13/05/2022 - 1:30 AM
  */
