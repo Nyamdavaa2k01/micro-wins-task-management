@@ -1,33 +1,36 @@
 package com.micro_wins.view.main;
 
 import com.micro_wins.constant.Functions;
-import com.micro_wins.holder.UserHolder;
-import com.micro_wins.model.Project;
 import com.micro_wins.model.Result;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.ResultRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Scene;
+import javafx.geometry.Orientation;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.Screen;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +39,6 @@ import org.springframework.stereotype.Controller;
 
 import java.net.URL;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -64,7 +66,18 @@ public class ResultPane implements Initializable, FxController {
     @FXML
     private ListView<Task> finishedTaskList;
 
-    private int TASK_LIST_WIDTH = 1000 ;
+    @FXML
+    private ScrollPane scrollRoot ;
+
+    @FXML
+    private VBox root ;
+
+    private final int TASK_LIST_WIDTH = 1000 ;
+    private final int NAVBAR_HEIGHT = 40 ;
+    private final int TASK_VIEW_HEIGHT = 100 ;
+    private final int LOW_THRESHOLD_TASK_CNT = 3;
+    private final int MEDIUM_THRESHOLD_TASK_CNT = 7 ;
+    private final int HIGH_THRESHOLD_TASK_CNT = 10;
     private void handleCellFactory () {
         finishedTaskList.setCellFactory(new Callback<ListView<Task>, ListCell<Task>>() {
             @Override
@@ -87,6 +100,7 @@ public class ResultPane implements Initializable, FxController {
                             acceptImage.setFitWidth(28);
                             acceptImage.setFitHeight(28);
                             acceptTaskBtn.setGraphic(acceptImage);
+                            acceptTaskBtn.setDisable(true);
 
                             Text taskTitleText = new Text(task.getTaskTitle()) ;
                             AnchorPane.setLeftAnchor(taskTitleText, 113.0);
@@ -127,11 +141,68 @@ public class ResultPane implements Initializable, FxController {
                finishedTaskList.getItems().add(optionalTask.get()) ;
            }
        });
-        /**
-         * TODO scrollpane
-         */
-       finishedTaskList.setPrefHeight(finishedTaskList.getItems().size() * 330);
-       finishedTaskList.setMaxHeight(finishedTaskList.getItems().size()*330);
-       System.out.println(finishedTaskList);
+
+       Rectangle2D screenBounds = Screen.getPrimary().getBounds() ;
+       scrollRoot.setPrefHeight(screenBounds.getHeight()-NAVBAR_HEIGHT);
+       finishedTaskList.setPrefHeight(finishedTaskList.getItems().size() * TASK_VIEW_HEIGHT);
+       finishedTaskList.setMaxHeight(finishedTaskList.getItems().size()*TASK_VIEW_HEIGHT);
+
+       handleBarChart();
+    }
+
+    private void handleBarChart () {
+        final NumberAxis xAxis = new NumberAxis();
+        final CategoryAxis yAxis = new CategoryAxis();
+        final BarChart<Number,String> bc =
+                new BarChart<>(xAxis,yAxis);
+        xAxis.setTickLabelRotation(0);
+
+        XYChart.Series<Number, String> series = new XYChart.Series();
+
+        LocalDate currentDate = LocalDate.now().minusDays(7) ;
+        while(!currentDate.isAfter(LocalDate.now())) {
+            String dateString ;
+            if (currentDate.isEqual(LocalDate.now())) dateString = "Today" ;
+            else if (currentDate.plusDays(1).isEqual(LocalDate.now())) dateString = "Yesterday" ;
+            else dateString = Functions.DATE_TO_STRING.dateToString(Functions.LOCALDATE_TO_DATE.localDateToDate(currentDate)) ;
+            List<Result> dailyResult = resultRepo.findByTaskCompletedDate(Functions.LOCALDATE_TO_DATE.localDateToDate(currentDate)) ;
+            Number completeCnt = dailyResult.size() ;
+          //  series.getData().add(new XYChart.Data<>(completeCnt, dateString)) ;
+            currentDate = currentDate.plusDays(1) ;
+
+            final XYChart.Data<Number, String> data = new XYChart.Data<>(completeCnt, dateString) ;
+            data.nodeProperty().addListener(new ChangeListener<Node>() {
+                @Override
+                public void changed(ObservableValue<? extends Node> observableValue, Node oldNode, Node newNode) {
+                    if(newNode != null) {
+                        int value = (int) data.getXValue();
+                        if (value <= LOW_THRESHOLD_TASK_CNT) {
+                            newNode.setStyle("-fx-bar-fill: #81E771;");
+                        }
+                        else if (value <= MEDIUM_THRESHOLD_TASK_CNT) {
+                            newNode.setStyle("-fx-bar-fill: #55BD45;");
+                        }
+                        else if(value < HIGH_THRESHOLD_TASK_CNT) {
+                            newNode.setStyle("-fx-bar-fill: #3AA529;");
+                        }
+                        else {
+                            newNode.setStyle("-fx-bar-fill: #197909");
+                        }
+                    }
+                }
+            });
+            series.getData().add(data) ;
+        }
+
+
+        bc.getData().add(series) ;
+        bc.setLegendVisible(false);
+        bc.setAlternativeRowFillVisible(false);
+        bc.setAlternativeColumnFillVisible(false);
+        bc.setHorizontalGridLinesVisible(false);
+        bc.setVerticalGridLinesVisible(false);
+
+        bc.setMaxWidth(TASK_LIST_WIDTH);
+        root.getChildren().add(bc) ;
     }
 }
