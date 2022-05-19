@@ -4,6 +4,7 @@ package com.micro_wins.view.main;
 /**
  * @author Bagabandi
  * @project micro-wins-task-management
+ * @purpose
  * @definition ProjectPane class allows user to handle the project one created.
  */
 
@@ -23,8 +24,6 @@ import com.micro_wins.view.StageManager;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.css.CssMetaData;
-import javafx.css.Styleable;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -37,7 +36,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;

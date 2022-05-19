@@ -20,17 +20,14 @@ import com.micro_wins.repository.DictTypeRepo;
 import com.micro_wins.repository.TaskRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
-import com.sun.javafx.reflect.FieldUtil;
 import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -44,6 +41,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -112,7 +110,6 @@ public class EditTaskPane implements Initializable, FxController {
     @FXML
     private ComboBox<Dict> taskStatusCbx;
 
-
     @FXML
     void addReminder(ActionEvent event) {
         informationAlert.informationAlert("Information", "Sorry, The development of this section is not complete.", "OK");
@@ -125,16 +122,50 @@ public class EditTaskPane implements Initializable, FxController {
         stage.close();
     }
 
+
+    @FXML
+    void selectStatus(ActionEvent event) {
+        Dict selectedDict = taskStatusCbx.getSelectionModel().getSelectedItem();
+        double compareDateToNow = taskDatePicker.getValue().compareTo(LocalDate.now());
+        if(!("postponed".equals(selectedDict.getDictName())) && compareDateToNow >= 0){
+            taskDatePicker.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
     @FXML
     void saveTask(ActionEvent event) {
         String taskName = taskNameTxt.getText();
         String taskDesc = taskDescTxt.getText();
         Date taskStartDate = localDateToDate.localDateToDate(taskDatePicker.getValue());
+
         activeTask.setTaskTitle(taskName);
         activeTask.setTaskDefinition(taskDesc);
+        Dict selectedStatus = taskStatusCbx.getSelectionModel().getSelectedItem();
+        activeTask.setTaskStatus(selectedStatus.getDictId());
+
+        Task savedTask;
+        if("postponed".equals(selectedStatus.getDictName())){
+            if(taskStartDate.equals(activeTask.getTaskStartDate())){
+                taskDatePicker.setStyle("-fx-background-color: #ff000040");
+                return;
+            }
+        }
+
+        taskDatePicker.valueProperty().addListener((ov, oldValue, newValue) -> {
+            if(newValue.isAfter(oldValue)){
+                taskDatePicker.setStyle("-fx-background-color: transparent;");
+            }
+        });
+
+        double compareDateToNow = taskDatePicker.getValue().compareTo(LocalDate.now());
+        if(compareDateToNow < 0){
+            taskDatePicker.setStyle("-fx-background-color: #ff000040");
+            return;
+        }
+
         activeTask.setTaskStartDate(taskStartDate);
-        activeTask.setTaskStatus(taskStatusCbx.getSelectionModel().getSelectedItem().getDictId());
-        Task savedTask = taskRepo.save(activeTask);
+        savedTask = taskRepo.save(activeTask);
+
         if(savedTask != null){
 
             saveTaskBtn.disableProperty().unbind();
