@@ -27,8 +27,8 @@ public class LoginPaneManager
 
     public void login(LoginPane loginPane)
     {
-        String userName = String.valueOf(loginPane.getUserName());
-        Integer deviceId = Integer.valueOf(loginPane.getDeviceId());
+        String userName = String.valueOf(loginPane.getUserNameTxt());
+        Integer deviceId = Integer.valueOf(loginPane.getUserDeviceId());
 
         if (userService.authenticate(userName, deviceId)){
 

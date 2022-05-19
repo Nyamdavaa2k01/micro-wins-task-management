@@ -9,7 +9,7 @@ import com.micro_wins.model.User;
  * @purpose анхны хэрэглэгчийг хадгалах зорилготой
  * @definition анх программыг ажиллуулахад шинэ хэрэглэгч үүсгэх мэдээллийг хадгална.
  */
-public class InitUserHolder {
+public final class InitUserHolder {
     private User user;
 
     private final static InitUserHolder INSTANCE = new InitUserHolder();

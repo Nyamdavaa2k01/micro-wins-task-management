@@ -3,7 +3,6 @@ package com.micro_wins.model;
 //import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.Date;
 
 
 /**
@@ -22,9 +21,10 @@ public class User {
     private int userId;
     private int deviceId;
     private String userName;
+    private String deviceName;
     private int userStatus;
 
-    public int getUserId(){
+    public int getUserId() {
         return userId;
     }
 
@@ -48,6 +48,14 @@ public class User {
         this.userName = userName;
     }
 
+    public String getDeviceName() {
+        return deviceName;
+    }
+
+    public void setDeviceName(String deviceName) {
+        this.deviceName = deviceName;
+    }
+
     public int getUserStatus() {
         return userStatus;
     }
@@ -62,6 +70,7 @@ public class User {
                 "userId=" + userId +
                 ", deviceId=" + deviceId +
                 ", userName='" + userName + '\'' +
+                ", deviceName='" + deviceName + '\'' +
                 ", userStatus=" + userStatus +
                 '}';
     }

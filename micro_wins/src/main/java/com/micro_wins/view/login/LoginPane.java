@@ -1,6 +1,9 @@
 package com.micro_wins.view.login;
 
 
+import com.micro_wins.holder.InitUserHolder;
+import com.micro_wins.model.User;
+import com.micro_wins.repository.UserRepo;
 import com.micro_wins.view.FxController;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -30,6 +33,9 @@ public class LoginPane implements Initializable, FxController
     @Autowired
     private LoginPaneManager loginManager;
 
+    @Autowired
+    private UserRepo userRepo;
+
     @FXML
     private Button btnLogin;
 
@@ -42,21 +48,41 @@ public class LoginPane implements Initializable, FxController
     @FXML
     private Label lblLogin;
 
+    @FXML
+    private Label initUserDeviceIdLb;
+
+    @FXML
+    private Label initUserNameLb;
+
     @Override
     public void initialize(URL location, ResourceBundle resources)
     {
+        User initUser = InitUserHolder.getInstance().getUser();
+        System.out.println(initUser.toString());
+        User exitsUser = userRepo.findByUserNameAndDeviceId(initUser.getUserName(), initUser.getDeviceId());
+
         EventHandler<ActionEvent> loginEventHandler = event -> loginManager.login(this);
 
         deviceId.setOnAction(loginEventHandler);
         btnLogin.setOnAction(loginEventHandler);
+
+        if(exitsUser == null) {
+            User savedUser = userRepo.save(initUser);
+            if (savedUser != null) {
+                initUserNameLb.setText("Your username: " + savedUser.getUserName());
+                initUserNameLb.setStyle("-fx-border-color: #f00; -fx-border-radius: 5px;");
+                initUserDeviceIdLb.setText("Your device ID: " + savedUser.getDeviceId());
+                initUserDeviceIdLb.setStyle("-fx-border-color: #f00; -fx-border-radius: 5px;");
+            }
+        }
     }
 
-    public Integer getDeviceId()
+    public Integer getUserDeviceId()
     {
         return Integer.parseInt(deviceId.getText());
     }
 
-    public String getUserName()
+    public String getUserNameTxt()
     {
         return userName.getText();
     }

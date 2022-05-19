@@ -16,7 +16,6 @@ import javafx.application.Application;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.sql.*;
 import java.util.Locale;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -36,7 +35,7 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
     /**
      * 1. runs Java application. Neither SpringContext nor JavaFx context is initialized in this stage
      */
-    public static void main(String[] args) throws SQLException, ClassNotFoundException {
+    public static void main(String[] args){
 
         /**
          * Программыг анх run хийхэд тухайн программыг ажиллуулж байгаа төхөөрөмжийг бүртгэж, хэрэглэгч үүсгэх бөгөөд цааш тухайн хэрэглэгчийн мэдээллээр программыг ашиглах юм.
@@ -54,11 +53,11 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
 
         final int deviceId = Math.abs(deviceName.hashCode())/10000;
 
-        System.out.println("\n\nusername: " + userName + "\n\ndeviceid: " + deviceId + "\n\n");
-
         User initUser = new User();
         initUser.setUserName(userName);
+        initUser.setDeviceName(deviceName);
         initUser.setDeviceId(deviceId);
+        initUser.setUserStatus(1);
 
         /**
          * Анх програм ажиллахад төхөөрөмжийн мэдээллийг авч шинэ хэрэглэгч үүсгэх тул төхөөрөмжийн мэдээллийг holder - т хадгалав.
