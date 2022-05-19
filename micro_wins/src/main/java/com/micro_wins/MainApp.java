@@ -27,14 +27,21 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
     @Autowired
     ConfigurableApplicationContext springAppContext;
 
-    // 1. runs Java application. Neither SpringContext nor JavaFx context is initialized in this stage
+    /**
+     * 1. runs Java application. Neither SpringContext nor JavaFx context is initialized in this stage
+     */
     public static void main(String[] args)
     {
-        // 2. Start JavaFX application in another Thread (by calling com.sun.javafx.application.LauncherImpl#run())
+        /**
+         * 2. Start JavaFX application in another Thread (by calling com.sun.javafx.application.LauncherImpl#run())
+         */
         Application.launch(SpringBootJavaFxApplication.class, args);
     }
 
-    // 6. callback method. Catching event produced by SpringBootJavaFxApplication#start() method, once the initialization of Spring context, JavaFx context and FxWeaver context is done
+    /**
+     * 6. callback method. Catching event produced by SpringBootJavaFxApplication#start() method, once the initialization of Spring context, JavaFx context and FxWeaver context is done
+     * @param event
+     */
     @Override
     public void onApplicationEvent(StageReadyEvent event)
     {
