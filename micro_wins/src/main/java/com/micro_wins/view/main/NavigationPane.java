@@ -102,7 +102,7 @@ public class NavigationPane {
      */
     void resetListView(){
         lvProjects.getItems().clear();
-        projectList = projectRepo.findProjectsByProOwner(11);
+        projectList = projectRepo.findProjectsByProOwner(UserHolder.getInstance().getUser().getUserId());
         projects = FXCollections.observableArrayList(projectList.stream().filter(project -> !project.getProTitle().toLowerCase().equals("inbox")).collect(Collectors.toList()));
         projects.forEach(project -> {
             lvProjects.getItems().add(project);

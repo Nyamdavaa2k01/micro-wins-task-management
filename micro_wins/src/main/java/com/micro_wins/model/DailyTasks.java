@@ -97,16 +97,16 @@ public class DailyTasks{
     public void refreshTaskList () {
         List<Task> tasks ;
         // before code tuning
-        tasks = taskRepo.findAll() ;
-        for (Task task : tasks) {
-            if(dayDate != null) {
-                if (task.getTaskStartDate() == dayDate) taskList.getItems().add(task) ;
-                else continue;
-            }
-            else {
-                taskList.getItems().add(task) ;
-            }
-        }
+//        tasks = taskRepo.findAll() ;
+//        for (Task task : tasks) {
+//            if(dayDate != null) {
+//                if (task.getTaskStartDate() == dayDate) taskList.getItems().add(task) ;
+//                else continue;
+//            }
+//            else {
+//                taskList.getItems().add(task) ;
+//            }
+//        }
 
         // after code tuning
         if (dayDate != null) tasks = taskRepo.findByTaskStartDate(dayDate) ;

@@ -73,7 +73,7 @@ public class AddProjectPane implements Initializable, FxController {
         /**
          * whether check be same title project of saved projects
          */
-        if(projectRepo.findByProTitleAndProOwner(title, 11).size() > 0)
+        if(projectRepo.findByProTitleAndProOwner(title, UserHolder.getInstance().getUser().getUserId()).size() > 0)
         {
             proTitle.setStyle("-fx-background-color: " + constantColors.getWARNING_COLOR() + ";");
             return;
