@@ -10,10 +10,12 @@ package com.micro_wins.view.main;
 
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.ProjectHolder;
 import com.micro_wins.holder.TaskHolder;
 import com.micro_wins.modal.CustomPopup;
 import com.micro_wins.model.Dict;
 import com.micro_wins.model.DictType;
+import com.micro_wins.model.Project;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.DictRepo;
 import com.micro_wins.repository.DictTypeRepo;
@@ -83,6 +85,8 @@ public class EditTaskPane implements Initializable, FxController {
 
     private ConstantStyles constantStyles;
 
+    private Project activeProject;
+
     @Autowired
     private TaskRepo taskRepo;
 
@@ -142,29 +146,9 @@ public class EditTaskPane implements Initializable, FxController {
         activeTask.setTaskDefinition(taskDesc);
         Dict selectedStatus = taskStatusCbx.getSelectionModel().getSelectedItem();
         activeTask.setTaskStatus(selectedStatus.getDictId());
-
-        Task savedTask;
-        if("postponed".equals(selectedStatus.getDictName())){
-            if(taskStartDate.equals(activeTask.getTaskStartDate())){
-                taskDatePicker.setStyle("-fx-background-color: #ff000040");
-                return;
-            }
-        }
-
-        taskDatePicker.valueProperty().addListener((ov, oldValue, newValue) -> {
-            if(newValue.isAfter(oldValue)){
-                taskDatePicker.setStyle("-fx-background-color: transparent;");
-            }
-        });
-
-        double compareDateToNow = taskDatePicker.getValue().compareTo(LocalDate.now());
-        if(compareDateToNow < 0){
-            taskDatePicker.setStyle("-fx-background-color: #ff000040");
-            return;
-        }
-
         activeTask.setTaskStartDate(taskStartDate);
-        savedTask = taskRepo.save(activeTask);
+
+        Task savedTask = taskRepo.save(activeTask);
 
         if(savedTask != null){
 
@@ -204,8 +188,13 @@ public class EditTaskPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stageManager = springAppContext.getBean(StageManager.class);
 
+        taskDatePicker.setEditable(false);
+
         TaskHolder taskHolder = TaskHolder.getInstance();
         activeTask = taskHolder.getTask();
+        ProjectHolder projectHolder = ProjectHolder.getInstance();
+        activeProject = projectHolder.getProject();
+
         priorityDictionary = getDictByDictType("priority");
         statusDictionary = getDictByDictType("status");
         constantStyles = new ConstantStyles();
@@ -260,28 +249,60 @@ public class EditTaskPane implements Initializable, FxController {
         List<Dict> filteredStatus = statusDictionary.stream().filter(sDic -> (sDic.getDictId() == activeTask.getTaskStatus())).collect(Collectors.toList());
 
         if(filteredStatus.size() == 0){
-            taskStatusCbx.setValue(new Dict());
+            taskStatusCbx.setValue(null);
         }else{
             taskStatusCbx.getSelectionModel().select(filteredStatus.get(0));
         }
 
         /**
-         * Save Task Button is disabled while Task Title TextField and Task Description TextField are empty, and as soon as user start
+         * Save Task Button is disabled while below conditions are happened, and as soon as user start
          * typing task title, button is enabled
          */
-        BooleanBinding bindProTitleAndDesc = new BooleanBinding() {
+        BooleanBinding bindProFields = new BooleanBinding() {
             {
                 super.bind(taskNameTxt.textProperty());
-                super.bind(taskDescTxt.textProperty());
+                super.bind(taskDatePicker.valueProperty());
+                super.bind(taskStatusCbx.valueProperty());
             }
 
             @Override
             protected boolean computeValue() {
-                return (taskNameTxt.getText().isEmpty() || taskDescTxt.getText().isEmpty());
+                boolean saveTaskBtnDisable = false;
+
+                LocalDate pickedDate = taskDatePicker.getValue();
+                LocalDate nowDate = LocalDate.now();
+                LocalDate actProStartDate = dateToLocalDate.dateToLocalDate(activeProject.getProStartDate());
+                LocalDate actProDeadline = dateToLocalDate.dateToLocalDate(activeProject.getProDeadline());
+                LocalDate actTaskStartDate = dateToLocalDate.dateToLocalDate(activeTask.getTaskStartDate());
+                String actTaskStatus = taskStatusCbx.getSelectionModel().getSelectedItem().getDictName();
+
+                double comparePickedDateNow = pickedDate.compareTo(nowDate);
+                double comparePickedDateProStartDate = pickedDate.compareTo(actProStartDate);
+                double comparePickedDateProDeadline = pickedDate.compareTo(actProDeadline);
+
+                if(taskNameTxt.getText().isEmpty()){
+                    saveTaskBtnDisable = true;
+                }
+
+                if("postponed".equals(actTaskStatus)){
+                    if(pickedDate.equals(actTaskStartDate)){
+                        saveTaskBtnDisable = true;
+                    }
+                }
+
+                if(comparePickedDateNow < 0){
+                    saveTaskBtnDisable = true;
+                }
+
+                if(comparePickedDateProStartDate < 0 || comparePickedDateProDeadline > 0){
+                    saveTaskBtnDisable = true;
+                }
+
+                return saveTaskBtnDisable;
             }
         };
 
-        saveTaskBtn.disableProperty().bind(bindProTitleAndDesc);
+        saveTaskBtn.disableProperty().bind(bindProFields);
     }
 
     List<Dict> getDictByDictType(String dictTypeTxt){

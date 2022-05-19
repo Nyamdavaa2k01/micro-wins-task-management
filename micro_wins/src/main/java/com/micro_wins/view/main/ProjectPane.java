@@ -43,6 +43,7 @@ import javafx.stage.StageStyle;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import javafx.event.ActionEvent;
@@ -69,6 +70,8 @@ public class ProjectPane implements Initializable, FxController {
     @Autowired
     DictTypeRepo dictTypeRepo;
 
+    @Autowired
+    @Lazy
     private StageManager stageManager;
     private List<Task> proTaskList;
     private ObservableList<Task> proTasks;
@@ -119,6 +122,12 @@ public class ProjectPane implements Initializable, FxController {
 
     @FXML
     private Text proTitleTxt;
+
+    @FXML
+    private Text proEndDateTxt;
+
+    @FXML
+    private Text proStartDateTxt;
 
     @FXML
     private Text workingTaskCntTxt;
@@ -339,6 +348,13 @@ public class ProjectPane implements Initializable, FxController {
 
         proTitleTxt.setText(activeProject.getProTitle());
         proDescTxt.setText(activeProject.getProDescription());
+        proStartDateTxt.setText(dateToString.dateToString(activeProject.getProStartDate()));
+        proEndDateTxt.setText(dateToString.dateToString(activeProject.getProDeadline()));
+    }
+
+    @FXML
+    void editProject(MouseEvent event) {
+
     }
 
     List<PieChart.Data> getPieChartList(){

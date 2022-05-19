@@ -13,6 +13,7 @@ import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.ProjectHolder;
 import com.micro_wins.holder.UserHolder;
 import com.micro_wins.modal.CustomPopup;
 import com.micro_wins.model.Dict;
@@ -43,6 +44,7 @@ import javafx.stage.StageStyle;
 import javafx.util.Callback;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
@@ -62,7 +64,9 @@ public class AddTaskPane implements Initializable, FxController {
     @Autowired
     private StageManager stageManager;
 
-    private Functions informationAlert;
+    @Autowired
+    ConfigurableApplicationContext springAppContext;
+
 
     @Autowired
     TaskRepo taskRepo ;
@@ -77,15 +81,13 @@ public class AddTaskPane implements Initializable, FxController {
     DictRepo dictRepo;
 
     private Stage priorityButtonsStage ;
-    Stage projectButtonsStage ;
-
+    private Stage projectButtonsStage;
+    private Functions informationAlert;
     private Date date ;
-
-
-    Task task ;
-    ConstantStyles constantStyles ;
-    ConstantColors constantColors ;
-    ConstantDictionaryValues constantDictionaryValues ;
+    private Task task ;
+    private ConstantStyles constantStyles ;
+    private ConstantColors constantColors ;
+    private ConstantDictionaryValues constantDictionaryValues ;
 
     private CustomPopup customPopup;
 
@@ -132,6 +134,8 @@ public class AddTaskPane implements Initializable, FxController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        stageManager = springAppContext.getBean(StageManager.class);
+
         constantStyles = new ConstantStyles() ;
         constantColors = new ConstantColors() ;
         constantDictionaryValues = new ConstantDictionaryValues() ;
@@ -139,8 +143,12 @@ public class AddTaskPane implements Initializable, FxController {
         customPopup = CustomPopup.POPUP;
         priorityDictionary = getDictByDictType("priority");
 
+        taskDatePicker.setEditable(false);
+
         UserHolder userHolder = UserHolder.getInstance();
         user = userHolder.getUser();
+        ProjectHolder projectHolder = ProjectHolder.getInstance();
+        Project activeProject = projectHolder.getProject();
 
         if (date == null) taskDatePicker.setValue(LocalDate.now());
         else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
@@ -152,24 +160,49 @@ public class AddTaskPane implements Initializable, FxController {
         task.setTaskPriority(dictRepo.findByDictName("low").getDictId());
         task.setTaskStatus(constantDictionaryValues.getTASK_STATUS_OPEN());
         task.setTaskUserId(user.getUserId());
-        Project defaultPro = projectRepo.findByProTitleAndProOwner("inbox", user.getUserId()).get(0);
+
+//        System.out.println("\n activePro: " + activeProject.toString() + "\n");
+
+        String proTitleTxt = "inbox";
+        if(activeProject != null){
+            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+            if (fxControllerClass == ProjectPane.class){
+                proTitleTxt = activeProject.getProTitle();
+            }
+        }
+
+        Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
         task.setTaskProId(defaultPro.getProId());
         task.setTaskProTitle(defaultPro.getProTitle());
+
         /**
-         * Add Task Button is disabled while Task Name TextField is empty, and as soon as user start
+         * Save Task Button is disabled while below conditions are happened, and as soon as user start
          * typing task title, button is enabled
          */
-        BooleanBinding bindTaskNameTxt = new BooleanBinding() {
+        BooleanBinding bindTaskFields = new BooleanBinding() {
             {
                 super.bind(taskNameTxt.textProperty());
+                super.bind(taskDatePicker.valueProperty());
             }
 
             @Override
             protected boolean computeValue() {
-                return (taskNameTxt.getText().isEmpty());
+
+                boolean addTaskBtnDisable = false;
+
+                LocalDate pickedDate = taskDatePicker.getValue();
+                LocalDate nowDate = LocalDate.now();
+
+                double comparePickedDateNow = pickedDate.compareTo(nowDate);
+
+                if(taskNameTxt.getText().isEmpty() || comparePickedDateNow < 0){
+                    addTaskBtnDisable = true;
+                }
+
+                return addTaskBtnDisable;
             }
         };
-        addTaskBtn.disableProperty().bind(bindTaskNameTxt);
+        addTaskBtn.disableProperty().bind(bindTaskFields);
     }
 
     @FXML

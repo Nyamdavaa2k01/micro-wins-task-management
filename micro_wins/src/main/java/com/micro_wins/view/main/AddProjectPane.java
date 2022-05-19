@@ -121,6 +121,9 @@ public class AddProjectPane implements Initializable, FxController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         stageManager = springAppContext.getBean(StageManager.class);
 
+        proStartDate.setEditable(false);
+        proDeadline.setEditable(false);
+
         UserHolder userHolder = UserHolder.getInstance();
         user = userHolder.getUser();
 
@@ -151,22 +154,46 @@ public class AddProjectPane implements Initializable, FxController {
         proDeadline.setValue(tomorrow);
 
         /**
-         * Add Project Button is disabled while Project Title TextField and Project Description TextField are empty, and as soon as user start
+         * Save Task Button is disabled while below conditions are happened, and as soon as user start
          * typing task title, button is enabled
          */
-        BooleanBinding bindProTitleAndDesc = new BooleanBinding() {
+        BooleanBinding bindAddProFields = new BooleanBinding() {
             {
                 super.bind(proTitle.textProperty());
                 super.bind(proDesc.textProperty());
+                super.bind(proStartDate.valueProperty());
+                super.bind(proDeadline.valueProperty());
             }
 
             @Override
             protected boolean computeValue() {
-                return (proTitle.getText().isEmpty() || proDesc.getText().isEmpty());
+                boolean addProBtnDisable = false;
+
+                if(proTitle.getText().isEmpty() || proDesc.getText().isEmpty()){
+                    addProBtnDisable = true;
+                }
+
+                LocalDate pickedProStartDate = proStartDate.getValue();
+                LocalDate pickedProDeadline = proDeadline.getValue();
+                LocalDate nowDate = LocalDate.now();
+
+                double compareStartDateNow = pickedProStartDate.compareTo(nowDate);
+                double compareDeadlineNow = pickedProDeadline.compareTo(nowDate);
+                double compareStartDateProDeadline = pickedProStartDate.compareTo(pickedProDeadline);
+
+                if(compareDeadlineNow < 0 || compareStartDateNow < 0){
+                    addProBtnDisable = true;
+                }
+
+                if(compareStartDateProDeadline == 0){
+                    addProBtnDisable = true;
+                }
+
+                return addProBtnDisable;
             }
         };
 
-        btnAddProject.disableProperty().bind(bindProTitleAndDesc);
+        btnAddProject.disableProperty().bind(bindAddProFields);
     }
 
 }

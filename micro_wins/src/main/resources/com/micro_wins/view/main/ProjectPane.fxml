@@ -14,21 +14,22 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+
 <?import com.micro_wins.utils.DoughnutChart?>
 
 <AnchorPane prefHeight="1000.0" prefWidth="600.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.ProjectPane">
     <children>
          <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-      <ScrollPane fitToWidth="true" minHeight="800.0" minViewportWidth="1096.0" prefHeight="964.0" prefViewportHeight="1096.0" prefViewportWidth="1096.0" prefWidth="1096.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
+      <ScrollPane fitToWidth="true" minHeight="800.0" minViewportWidth="1096.0" prefHeight="1096.0" prefViewportHeight="500.0" prefViewportWidth="1096.0" prefWidth="1096.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
          <content>
-            <VBox prefHeight="964.0" prefWidth="1096.0" style="-fx-background-color: #fff;">
+            <VBox prefHeight="1096.0" prefWidth="1096.0" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
                         <VBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="720.0">
                            <children>
-                              <Text fx:id="proTitleTxt" text="Project Name">
+                              <Text fx:id="proTitleTxt" onMouseClicked="#editProject" text="Project Name">
                                  <font>
                                     <Font name="System Bold" size="32.0" />
                                  </font>
@@ -36,14 +37,38 @@
                                     <Insets left="20.0" />
                                  </VBox.margin>
                               </Text>
-                              <Text fx:id="proDescTxt" text="Project Description">
-                                 <font>
-                                    <Font size="16.0" />
-                                 </font>
-                                 <VBox.margin>
+                              <HBox prefHeight="22.0" prefWidth="200.0" spacing="10.0">
+                                 <children>
+                                    <Text fx:id="proDescTxt" text="Project Description">
+                                       <font>
+                                          <Font size="16.0" />
+                                       </font>
+                                    </Text>
+                                    <Separator orientation="VERTICAL" prefHeight="200.0" />
+                                    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+                                       <children>
+                                          <Text fx:id="proStartDateTxt" text="Start Date">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                          <ImageView fitHeight="22.0" fitWidth="10.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../../../../images/fast-forward.png" />
+                                             </image>
+                                          </ImageView>
+                                          <Text fx:id="proEndDateTxt" text="End Date">
+                                             <font>
+                                                <Font size="16.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </HBox>
+                                 </children>
+                                 <padding>
                                     <Insets left="40.0" />
-                                 </VBox.margin>
-                              </Text>
+                                 </padding>
+                              </HBox>
                            </children>
                         </VBox>
                         <HBox fx:id="proAddMember" alignment="CENTER" maxWidth="220.0" onKeyPressed="#addProMember" onMouseClicked="#addProMember" prefHeight="100.0" prefWidth="220.0" spacing="8.0" styleClass="add_owner_project_task" stylesheets="@/styles/projectView.css">
@@ -259,7 +284,7 @@
                         <Insets left="60.0" right="60.0" />
                      </padding>
                   </Separator>
-                  <VBox prefHeight="417.0" prefWidth="1126.0">
+                  <VBox alignment="TOP_CENTER" prefHeight="417.0" prefWidth="1126.0">
                      <VBox.margin>
                         <Insets left="120.0" right="120.0" />
                      </VBox.margin>
@@ -316,7 +341,7 @@
                         </HBox>
                         <Separator prefWidth="200.0">
                            <padding>
-                              <Insets left="60.0" right="60.0" />
+                              <Insets bottom="60.0" left="60.0" right="60.0" />
                            </padding>
                         </Separator>
                         <DoughnutChart fx:id="doughnutChart" prefHeight="270.0" prefWidth="856.0"/>
