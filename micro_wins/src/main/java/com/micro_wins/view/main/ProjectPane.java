@@ -348,7 +348,6 @@ public class ProjectPane implements Initializable, FxController {
 
         statusDictionary.forEach(status -> {
             List<Task> proT = taskRepo.findByTaskUserIdAndTaskProId(user.getUserId(), activeProject.getProId());
-            System.out.println(proT);
             List<Task> filteredTask = proT.stream().filter( proTask -> (status.getDictId() == proTask.getTaskStatus())).collect(Collectors.toList());
             PieChart.Data pieData = new PieChart.Data(status.getDictName(), filteredTask.size());
             pieChartDataList.add(pieData);

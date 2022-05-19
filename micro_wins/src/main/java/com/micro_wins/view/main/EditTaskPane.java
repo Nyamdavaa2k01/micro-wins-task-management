@@ -8,6 +8,7 @@ package com.micro_wins.view.main;
  * @definition
  */
 
+import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.TaskHolder;
 import com.micro_wins.modal.CustomPopup;
@@ -28,11 +29,11 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Callback;
@@ -45,6 +46,7 @@ import org.springframework.stereotype.Controller;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 
@@ -80,6 +82,8 @@ public class EditTaskPane implements Initializable, FxController {
     private CustomPopup customPopup;
 
     private ObservableList<Dict> statusList;
+
+    private ConstantStyles constantStyles;
 
     @Autowired
     private TaskRepo taskRepo;
@@ -173,8 +177,7 @@ public class EditTaskPane implements Initializable, FxController {
         activeTask = taskHolder.getTask();
         priorityDictionary = getDictByDictType("priority");
         statusDictionary = getDictByDictType("status");
-
-        System.out.println("status dictionary: " + statusDictionary.size());
+        constantStyles = new ConstantStyles();
 
         statusList = FXCollections.observableArrayList(statusDictionary);
         taskStatusCbx.setItems(statusList);
@@ -201,6 +204,28 @@ public class EditTaskPane implements Initializable, FxController {
         taskNameTxt.setText(activeTask.getTaskTitle());
         taskDescTxt.setText(activeTask.getTaskDefinition());
         taskDatePicker.setValue(dateToLocalDate.dateToLocalDate(activeTask.getTaskStartDate()));
+
+        Button priBtn = new Button() ;
+        priBtn.setAlignment(Pos.TOP_LEFT);
+        priBtn.setStyle(constantStyles.getDEFAULT_BUTTON_STYLE());
+        priBtn.setOnAction(e -> {
+            setPriority(e);
+        });
+
+        Optional<Dict> activeDict = priorityDictionary.stream().filter(priDict -> priDict.getDictId() == activeTask.getTaskPriority()).findFirst();
+
+        String buttonText = activeDict.get().getDictName();
+        String buttonGraphicFilePath ="file:micro_wins/src/main/resources/images/priority-"+(activeDict.get().getDictValue())+"-icon.png" ;
+        ImageView buttonGraphicImage = new ImageView(new Image(buttonGraphicFilePath)) ;
+        buttonGraphicImage.setFitHeight(25);
+        buttonGraphicImage.setFitWidth(25);
+        priBtn.setText(buttonText);
+        priBtn.setGraphic(buttonGraphicImage);
+        priBtn.setPrefWidth(200);
+        priBtn.setPrefHeight(43);
+
+        setPriorityBtn.setGraphic(priBtn.getGraphic());
+
         List<Dict> filteredStatus = statusDictionary.stream().filter(sDic -> (sDic.getDictId() == activeTask.getTaskStatus())).collect(Collectors.toList());
 
         if(filteredStatus.size() == 0){
