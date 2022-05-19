@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
@@ -15,12 +14,13 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import com.micro_wins.utils.DoughnutChart?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="600.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.ProjectPane">
+<AnchorPane prefHeight="1000.0" prefWidth="600.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.ProjectPane">
     <children>
          <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-      <ScrollPane fitToWidth="true" minViewportWidth="1096.0" prefHeight="800.0" prefViewportHeight="964.0" prefViewportWidth="1096.0" prefWidth="1096.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
+      <ScrollPane fitToWidth="true" minHeight="800.0" minViewportWidth="1096.0" prefHeight="964.0" prefViewportHeight="1096.0" prefViewportWidth="1096.0" prefWidth="1096.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
          <content>
             <VBox prefHeight="964.0" prefWidth="1096.0" style="-fx-background-color: #fff;">
                <children>
@@ -189,7 +189,7 @@
                                        </font>
                                     </Label>
                                     <Separator maxHeight="50.0" orientation="VERTICAL" prefHeight="60.0" style="-fx-background-color: #ff13bf;" />
-                                    <Text fx:id="postponedTaskCntText" fill="WHITE" style="-fx-stroke: #fff;" text="2" textAlignment="CENTER">
+                                    <Text fx:id="postponedTaskCntTxt" fill="WHITE" style="-fx-stroke: #fff;" text="2" textAlignment="CENTER">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -221,7 +221,7 @@
                                        </font>
                                     </Label>
                                     <Separator maxHeight="50.0" orientation="VERTICAL" prefHeight="60.0" style="-fx-background-color: #4CAF50;" />
-                                    <Text fx:id="completedTaskCntText" fill="WHITE" style="-fx-stroke: #fff;" text="2" textAlignment="CENTER">
+                                    <Text fx:id="completedTaskCntTxt" fill="WHITE" style="-fx-stroke: #fff;" text="2" textAlignment="CENTER">
                                        <font>
                                           <Font size="16.0" />
                                        </font>
@@ -281,7 +281,7 @@
                               </HBox>
                               <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="15.0">
                                  <children>
-                                    <Circle fill="#f35532" radius="12.0" stroke="#f35532" strokeType="INSIDE" />
+                                    <Circle fill="#f25333" radius="12.0" stroke="#f25333" strokeType="INSIDE" />
                                     <Label text="Working">
                                        <font>
                                           <Font size="18.0" />
@@ -319,7 +319,7 @@
                               <Insets left="60.0" right="60.0" />
                            </padding>
                         </Separator>
-                        <PieChart prefHeight="354.0" prefWidth="1126.0" />
+                        <DoughnutChart fx:id="doughnutChart" prefHeight="270.0" prefWidth="856.0"/>
                      </children>
                   </VBox>
                </children>

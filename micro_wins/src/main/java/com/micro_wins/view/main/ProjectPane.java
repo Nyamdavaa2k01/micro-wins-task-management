@@ -7,6 +7,7 @@ package com.micro_wins.view.main;
  * @definition ProjectPane class allows user to handle the project one created.
  */
 
+import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.TaskHolder;
 import com.micro_wins.holder.UserHolder;
@@ -15,23 +16,28 @@ import com.micro_wins.model.*;
 import com.micro_wins.repository.DictRepo;
 import com.micro_wins.repository.DictTypeRepo;
 import com.micro_wins.repository.TaskRepo;
+import com.micro_wins.utils.DoughnutChart;
 import com.micro_wins.view.FxController;
 import com.micro_wins.holder.ProjectHolder;
 import com.micro_wins.view.StageManager;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.css.CssMetaData;
+import javafx.css.Styleable;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.PieChart;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -43,9 +49,11 @@ import org.springframework.stereotype.Controller;
 
 import javafx.event.ActionEvent;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 @Controller
 @FxmlView
@@ -79,8 +87,10 @@ public class ProjectPane implements Initializable, FxController {
 
     private TaskHolder taskHolder;
 
+    private ConstantColors constantColors;
+
     @FXML
-    private Text completedTaskCntText;
+    private Text completedTaskCntTxt;
 
     @FXML
     private ListView<Task> lvCompleted;
@@ -98,7 +108,7 @@ public class ProjectPane implements Initializable, FxController {
     private Text openTaskCntTxt;
 
     @FXML
-    private Text postponedTaskCntText;
+    private Text postponedTaskCntTxt;
 
     @FXML
     private HBox proAddMember;
@@ -119,6 +129,9 @@ public class ProjectPane implements Initializable, FxController {
     private Button addTaskToProjectBtn;
 
     @FXML
+    private DoughnutChart doughnutChart;
+
+    @FXML
     void addProMember(MouseEvent event) {
 
     }
@@ -134,12 +147,17 @@ public class ProjectPane implements Initializable, FxController {
      * reload updated elements from the DB to show the latest update to the user.
      */
     void resetListView(){
+        // list view - үүдйиг цэвэрлэнэ.
         lvOpen.getItems().clear();
         lvWorking.getItems().clear();
         lvPostponed.getItems().clear();
         lvCompleted.getItems().clear();
+
+        //Өгөгдлийн сангаас тухайн нэвтэрсэн хэрэглэгчийн id болон уг хэрэглэгчийн үүсгэсэн project id - д харгалзах даалгавруудыг авчирна.
         proTaskList = taskRepo.findByTaskUserIdAndTaskProId(user.getUserId(), activeProject.getProId());
         proTasks = FXCollections.observableArrayList(proTaskList);
+
+        //Авчирсан даалгавруудыг төлвөөр нь ангилан харгалзах list view бүрт нэмнэ.
         proTasks.forEach(proTask -> {
             Optional<Dict> staDict = dictRepo.findById(proTask.getTaskStatus());
             if("completed".equals(staDict.get().getDictName())){
@@ -152,6 +170,8 @@ public class ProjectPane implements Initializable, FxController {
                 lvOpen.getItems().add(proTask);
             }
         });
+
+        //Агуулж байгаа даалгаврын тооноос хамаарч list view - ийн өндөр даган хувьсана.
         lvOpen.prefHeightProperty().bind(Bindings.size(lvOpen.getItems()).multiply(LIST_CELL_HEIGHT));
         lvWorking.prefHeightProperty().bind(Bindings.size(lvWorking.getItems()).multiply(LIST_CELL_HEIGHT));
         lvPostponed.prefHeightProperty().bind(Bindings.size(lvPostponed.getItems()).multiply(LIST_CELL_HEIGHT));
@@ -161,9 +181,14 @@ public class ProjectPane implements Initializable, FxController {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         stageManager = springAppContext.getBean(StageManager.class);
+
+        constantColors = new ConstantColors();
+
+        //Программд нэвтэрсэн хэрэглэгчийн олж авна
         UserHolder userHolder = UserHolder.getInstance();
         ProjectHolder projectHolder = ProjectHolder.getInstance();
         user = userHolder.getUser();
+
         activeProject = projectHolder.getProject();
         dateToString = Functions.DATE_TO_LOCALDATE;
         projectTaskCard = ProjectTaskCard.PRO_TASK_CARD;
@@ -301,8 +326,35 @@ public class ProjectPane implements Initializable, FxController {
             }
         });
 
+        ObservableList<PieChart.Data> pieChartData =
+                        FXCollections.observableArrayList(getPieChartList());
+        doughnutChart.getData().addAll(pieChartData);
+        doughnutChart.getStylesheets().add(
+                getClass().getResource("/styles/doughnutChart.css").toExternalForm());
+        doughnutChart.setLegendVisible(false);
+        doughnutChart.setLabelsVisible(false);
+
+        openTaskCntTxt.setText(String.valueOf(lvOpen.getItems().size()));
+        workingTaskCntTxt.setText(String.valueOf(lvWorking.getItems().size()));
+        postponedTaskCntTxt.setText(String.valueOf(lvPostponed.getItems().size()));
+        completedTaskCntTxt.setText(String.valueOf(lvCompleted.getItems().size()));
+
         proTitleTxt.setText(activeProject.getProTitle());
         proDescTxt.setText(activeProject.getProDescription());
+    }
+
+    List<PieChart.Data> getPieChartList(){
+        List<PieChart.Data> pieChartDataList = new ArrayList<>();
+
+        statusDictionary.forEach(status -> {
+            List<Task> proT = taskRepo.findByTaskUserIdAndTaskProId(user.getUserId(), activeProject.getProId());
+            System.out.println(proT);
+            List<Task> filteredTask = proT.stream().filter( proTask -> (status.getDictId() == proTask.getTaskStatus())).collect(Collectors.toList());
+            PieChart.Data pieData = new PieChart.Data(status.getDictName(), filteredTask.size());
+            pieChartDataList.add(pieData);
+        });
+
+        return pieChartDataList;
     }
 
     List<Dict> getDictByDictType(String dictTypeTxt){
