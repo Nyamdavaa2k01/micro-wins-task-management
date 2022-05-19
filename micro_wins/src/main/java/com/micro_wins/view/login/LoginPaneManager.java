@@ -33,7 +33,7 @@ public class LoginPaneManager
         if (userService.authenticate(userName, deviceId)){
 
             /**
-             * hold user which logins
+             * when user login, hold user data
              */
             UserHolder userHolder = UserHolder.getInstance();
             User user = userService.findByUserNameAndDeviceId(userName, deviceId);
@@ -43,8 +43,8 @@ public class LoginPaneManager
              * jump to Today Page
              */
             stageManager.rebuildStage(TodayPane.class);
-        }
-        else
+        } else {
             loginPane.getLblLogin().setText("Login Failed.");
+        }
     }
 }
