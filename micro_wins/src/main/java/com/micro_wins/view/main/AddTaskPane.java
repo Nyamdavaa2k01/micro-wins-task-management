@@ -161,15 +161,14 @@ public class AddTaskPane implements Initializable, FxController {
         task.setTaskStatus(constantDictionaryValues.getTASK_STATUS_OPEN());
         task.setTaskUserId(user.getUserId());
 
-//        System.out.println("\n activePro: " + activeProject.toString() + "\n");
-
         String proTitleTxt = "inbox";
-        if(activeProject != null){
-            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
-            if (fxControllerClass == ProjectPane.class){
-                proTitleTxt = activeProject.getProTitle();
-            }
-        }
+        
+//        if(activeProject != null){
+//            Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+//            if (fxControllerClass == ProjectPane.class){
+//                proTitleTxt = activeProject.getProTitle();
+//            }
+//        }
 
         Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
         task.setTaskProId(defaultPro.getProId());
