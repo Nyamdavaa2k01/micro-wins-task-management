@@ -17,6 +17,9 @@ import javafx.application.Application;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Locale;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -36,6 +39,9 @@ public class MainApp implements ApplicationListener<StageReadyEvent> {
      * 1. runs Java application. Neither SpringContext nor JavaFx context is initialized in this stage
      */
     public static void main(String[] args){
+
+        Logger logger = LoggerFactory.getLogger(MainApp.class);
+        logger.info("Program starting");
 
         /**
          * Программыг анх run хийхэд тухайн программыг ажиллуулж байгаа төхөөрөмжийг бүртгэж, хэрэглэгч үүсгэх бөгөөд цааш тухайн хэрэглэгчийн мэдээллээр программыг ашиглах юм.

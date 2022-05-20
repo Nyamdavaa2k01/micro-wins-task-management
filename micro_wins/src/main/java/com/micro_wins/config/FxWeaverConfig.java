@@ -1,6 +1,5 @@
 package com.micro_wins.config;
 
-import com.micro_wins.service.impl.TaskServiceImpl;
 import javafx.scene.Node;
 import net.rgielen.fxweaver.core.FxControllerAndView;
 import net.rgielen.fxweaver.core.FxWeaver;

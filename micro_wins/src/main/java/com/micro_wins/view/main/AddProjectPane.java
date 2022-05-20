@@ -138,6 +138,14 @@ public class AddProjectPane implements Initializable, FxController {
         localDateToDate = Functions.DATE_TO_LOCALDATE;
 
         /**
+         * default values of add project fields
+         */
+        final LocalDate today = LocalDate.now();
+        final LocalDate tomorrow = today.plusDays(1);
+        final int defaultStatus = 1;
+        final float defaultPercent = 0;
+
+        /**
          * set instance of Project to newProject
          */
         newProject = new Project();
@@ -145,12 +153,10 @@ public class AddProjectPane implements Initializable, FxController {
         /**
          * set default value to new project model fields and new project attribute
          */
-        newProject.setProStatus(1);
-        newProject.setProCompletionPercent(0);
+        newProject.setProStatus(defaultStatus);
+        newProject.setProCompletionPercent(defaultPercent);
         newProject.setProOwner(user.getUserId());
-        LocalDate today = LocalDate.now();
         proStartDate.setValue(today);
-        LocalDate tomorrow = today.plusDays(1);
         proDeadline.setValue(tomorrow);
 
         /**

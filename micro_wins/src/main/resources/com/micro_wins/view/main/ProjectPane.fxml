@@ -17,13 +17,13 @@
 
 <?import com.micro_wins.utils.DoughnutChart?>
 
-<AnchorPane prefHeight="1000.0" prefWidth="600.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.ProjectPane">
+<AnchorPane prefHeight="1000.0" prefWidth="600.0" style="-fx-background-color: #fff;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.micro_wins.view.main.ProjectPane">
     <children>
          <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-      <ScrollPane fitToWidth="true" minHeight="800.0" minViewportWidth="1096.0" prefHeight="1096.0" prefViewportHeight="500.0" prefViewportWidth="1096.0" prefWidth="1096.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="800.0" minViewportWidth="1300.0" prefHeight="1096.0" prefViewportHeight="500.0" prefViewportWidth="1096.0" prefWidth="1300.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
          <content>
-            <VBox prefHeight="1096.0" prefWidth="1096.0" style="-fx-background-color: #fff;">
+            <VBox prefHeight="1096.0" prefWidth="1200.0" style="-fx-background-color: #fff;">
                <children>
                   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                      <children>
