@@ -173,8 +173,8 @@ public class AddTaskPane implements Initializable, FxController {
             }
         }
 
-        Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
-
+       // Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
+        Project defaultPro = projectRepo.findProjectsByProOwner(user.getUserId()).get(0);
         task.setTaskProId(defaultPro.getProId());
         task.setTaskProTitle(defaultPro.getProTitle());
 

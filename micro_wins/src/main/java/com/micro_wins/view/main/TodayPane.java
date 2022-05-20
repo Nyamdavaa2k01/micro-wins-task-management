@@ -77,8 +77,6 @@ public class  TodayPane implements Initializable, FxController {
         dailyTasks.setTaskRepo(taskRepo);
         dailyTasks.setProjectRepo(projectRepo);
         dailyTasks.setResultRepo(resultRepo);
-        dailyTasks.setDictRepo(dictRepo);
-        dailyTasks.setDictTypeRepo(dictTypeRepo);
         dailyTasks.cellFactoryImpl();
         dailyTasks.refreshTaskList();
         taskListRoot.getChildren().add(dailyTasks.getInnerList()) ;

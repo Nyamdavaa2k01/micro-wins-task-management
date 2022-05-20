@@ -121,7 +121,7 @@ public class InboxPane implements Initializable, FxController {
                     filterOpt = 0 ;
                 }
                 else {
-                    filterOpt = Integer.parseInt(text.replaceAll("[^0-9]", "")) ;
+                    filterOpt = Integer.parseInt(text.replaceAll("[^0-9]", "")) + 6;
                 }
                 System.out.println(filterOpt);
                 chooseFilterOptionStage.close();

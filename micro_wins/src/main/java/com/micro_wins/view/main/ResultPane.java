@@ -210,9 +210,6 @@ public class ResultPane implements Initializable, FxController {
             series.getData().add(data) ;
             currentDate = currentDate.plusDays(1) ;
         }
-
-
-
         bc.getData().add(series) ;
         bc.setLegendVisible(false);
         bc.setAlternativeRowFillVisible(false);
