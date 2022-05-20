@@ -1,4 +1,4 @@
-package com.micro_wins.model;
+package com.micro_wins.modal;
 
 import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantDictionaryValues;
@@ -6,6 +6,10 @@ import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
 import com.micro_wins.holder.UpcomingHolder;
 import com.micro_wins.holder.UserHolder;
+import com.micro_wins.model.Dict;
+import com.micro_wins.model.Project;
+import com.micro_wins.model.Result;
+import com.micro_wins.model.Task;
 import com.micro_wins.repository.*;
 import javafx.geometry.Bounds;
 import javafx.geometry.Insets;

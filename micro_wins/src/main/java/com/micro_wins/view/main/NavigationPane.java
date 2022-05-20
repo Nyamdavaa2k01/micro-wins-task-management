@@ -61,8 +61,6 @@ public class NavigationPane {
     @Autowired
     ConfigurableApplicationContext springAppContext;
 
-    @Autowired
-    private MainPane mainController;
 
     @Autowired
     private ProjectPane projectController;

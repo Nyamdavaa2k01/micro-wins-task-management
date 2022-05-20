@@ -11,7 +11,7 @@ import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.ConstantDictionaryValues;
 import com.micro_wins.constant.ConstantStyles;
 import com.micro_wins.constant.Functions;
-import com.micro_wins.model.DailyTasks;
+import com.micro_wins.modal.DailyTasks;
 import com.micro_wins.model.Task;
 import com.micro_wins.repository.*;
 import com.micro_wins.view.FxController;

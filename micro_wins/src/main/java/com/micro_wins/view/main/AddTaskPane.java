@@ -97,6 +97,8 @@ public class AddTaskPane implements Initializable, FxController {
 
     private User user;
 
+    private ProjectHolder projectHolder;
+
     @FXML
     private Button addReminderBtn;
 
@@ -149,7 +151,7 @@ public class AddTaskPane implements Initializable, FxController {
 
         UserHolder userHolder = UserHolder.getInstance();
         user = userHolder.getUser();
-        ProjectHolder projectHolder = ProjectHolder.getInstance();
+        projectHolder = ProjectHolder.getInstance();
 
         if (date == null) taskDatePicker.setValue(LocalDate.now());
         else taskDatePicker.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(date));
@@ -173,8 +175,8 @@ public class AddTaskPane implements Initializable, FxController {
             }
         }
 
-       // Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
-        Project defaultPro = projectRepo.findProjectsByProOwner(user.getUserId()).get(0);
+        Project defaultPro = projectRepo.findByProTitleAndProOwner(proTitleTxt, user.getUserId()).get(0);
+//        Project defaultPro = projectRepo.findProjectsByProOwner(user.getUserId()).get(0);
         task.setTaskProId(defaultPro.getProId());
         task.setTaskProTitle(defaultPro.getProTitle());
 
@@ -219,7 +221,9 @@ public class AddTaskPane implements Initializable, FxController {
     void addTask(ActionEvent event) {
         String taskTitle = taskNameTxt.getText() ;
         String taskDefinition = taskDescriptionTxt.getText();
-        Date datePickerDate = Date.from(taskDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant()) ;
+        LocalDate pickedDate = taskDatePicker.getValue();
+        Date datePickerDate = Date.from(pickedDate.atStartOfDay(ZoneId.systemDefault()).toInstant()) ;
+
         task.setTaskTitle(taskTitle);
         task.setTaskDefinition(taskDefinition);
         task.setTaskStartDate(datePickerDate);

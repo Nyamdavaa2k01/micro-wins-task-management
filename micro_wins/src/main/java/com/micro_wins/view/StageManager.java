@@ -2,23 +2,21 @@ package com.micro_wins.view;
 
 import com.micro_wins.utils.ResizeHelper;
 import com.micro_wins.config.ResourceBundleUtil;
+import com.micro_wins.view.login.LoginPane;
 import javafx.application.Platform;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import net.rgielen.fxweaver.core.FxWeaver;
-
-import static org.slf4j.LoggerFactory.getLogger;
 
 /**
  * @author Bagaa
@@ -26,7 +24,7 @@ import static org.slf4j.LoggerFactory.getLogger;
  * @created 11/05/2022 - 10:38 AM
  */
 public class StageManager {
-    private static final Logger LOG = getLogger(StageManager.class);
+    private static final Logger LOG = LoggerFactory.getLogger(StageManager.class);
 
     @Autowired
     private FxWeaver fxWeaver;
@@ -82,8 +80,11 @@ public class StageManager {
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
         Rectangle2D screenBounds = Screen.getPrimary().getBounds() ;
-        primaryStage.setWidth(screenBounds.getWidth());
-        primaryStage.setHeight(screenBounds.getHeight());
+        if(fxControllerClass != LoginPane.class){
+            primaryStage.setWidth(screenBounds.getWidth());
+            primaryStage.setHeight(screenBounds.getHeight());
+        }
+
         primaryStage.setX(screenBounds.getMinX()) ;
         primaryStage.setY(screenBounds.getMinY());
 
@@ -96,7 +97,6 @@ public class StageManager {
             logAndExit("Unable to show scene with title " + title, exception);
         }
     }
-
 
     private void showSecondaryScene(Class<? extends FxController> fxControllerClass, Scene scene)
     {

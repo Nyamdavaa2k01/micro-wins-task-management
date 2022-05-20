@@ -143,11 +143,7 @@ public class HeaderMenuPane implements Initializable, FxController {
 
     @FXML
     void seeNavBar(ActionEvent event) {
-        MainPane mainPane = MainPane.getInstance();
-        mainPane.borderPane = new BorderPane();
-        mainPane.borderPane.setTop(stageManager.loadView(HeaderMenuPane.class));
-        mainPane.borderPane.setCenter(stageManager.loadView(TodayPane.class));
-        mainPane.borderPane.setLeft(null);
+
     }
 
     @FXML
