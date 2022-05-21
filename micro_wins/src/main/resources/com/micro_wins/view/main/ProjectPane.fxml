@@ -21,7 +21,7 @@
     <children>
          <fx:include source="HeaderMenuPane.fxml" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
          <fx:include source="NavigationPane.fxml" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="40.0" />
-      <ScrollPane fitToHeight="true" fitToWidth="true" minHeight="800.0" minViewportWidth="1300.0" prefHeight="1096.0" prefViewportHeight="500.0" prefViewportWidth="1096.0" prefWidth="1300.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
+      <ScrollPane fitToHeight="true" fitToWidth="true" style="-fx-background-color:transparent;" minHeight="800.0" minViewportWidth="1300.0" prefHeight="1096.0" prefViewportHeight="500.0" prefViewportWidth="1096.0" prefWidth="1300.0" AnchorPane.leftAnchor="270.0" AnchorPane.topAnchor="40.0">
          <content>
             <VBox prefHeight="1096.0" prefWidth="1200.0" style="-fx-background-color: #fff;">
                <children>

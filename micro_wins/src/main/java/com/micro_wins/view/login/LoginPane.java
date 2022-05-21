@@ -2,11 +2,14 @@ package com.micro_wins.view.login;
 
 
 import com.micro_wins.holder.InitUserHolder;
+import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.User;
 import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.repository.UserRepo;
 import com.micro_wins.view.FxController;
+import com.micro_wins.view.StageManager;
+import com.micro_wins.view.main.TodayPane;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -15,10 +18,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import net.rgielen.fxweaver.core.FxmlView;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 
 import java.net.URL;
@@ -61,7 +67,17 @@ public class LoginPane implements Initializable, FxController
     @FXML
     private Label initUserNameLb;
 
+    @Autowired
+    @Lazy
+    private StageManager stageManager;
+
+    @Autowired
+    ConfigurableApplicationContext springAppContext;
+
     private static final Logger LOG =LoggerFactory.getLogger(LoginPane.class);
+    private final String DEFAULT_PRO_TITLE = "inbox";
+    private final float DEFAULT_COMPLETE_PERCENT = 0;
+    private final int DEFAULT_STATUS = 1;
 
     @Override
     public void initialize(URL location, ResourceBundle resources)
@@ -82,11 +98,11 @@ public class LoginPane implements Initializable, FxController
 
             if (savedUser != null) {
 
-                newProject.setProTitle("inbox");
+                newProject.setProTitle(DEFAULT_PRO_TITLE);
                 newProject.setProOwner(savedUser.getUserId());
-                newProject.setProCompletionPercent(0);
+                newProject.setProCompletionPercent(DEFAULT_COMPLETE_PERCENT);
                 newProject.setProDescription("");
-                newProject.setProStatus(1);
+                newProject.setProStatus(DEFAULT_STATUS);
                 newProject.setProStartDate(null);
                 newProject.setProDeadline(null);
 

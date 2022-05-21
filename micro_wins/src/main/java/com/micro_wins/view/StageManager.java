@@ -80,13 +80,14 @@ public class StageManager {
         primaryStage.setTitle(title);
         primaryStage.setScene(scene);
         Rectangle2D screenBounds = Screen.getPrimary().getBounds() ;
+
+        primaryStage.setX(screenBounds.getMinX()) ;
+        primaryStage.setY(screenBounds.getMinY());
+
         if(fxControllerClass != LoginPane.class){
             primaryStage.setWidth(screenBounds.getWidth());
             primaryStage.setHeight(screenBounds.getHeight());
         }
-
-        primaryStage.setX(screenBounds.getMinX()) ;
-        primaryStage.setY(screenBounds.getMinY());
 
         try
         {
