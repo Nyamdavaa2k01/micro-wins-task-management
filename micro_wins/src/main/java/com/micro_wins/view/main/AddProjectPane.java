@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 
 import com.micro_wins.constant.ConstantColors;
 import com.micro_wins.constant.Functions;
+import com.micro_wins.holder.ProjectHolder;
 import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.User;
@@ -14,7 +15,10 @@ import com.micro_wins.repository.ProjectRepo;
 import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -46,6 +50,8 @@ public class AddProjectPane implements Initializable, FxController {
 
     private User user;
 
+    private ProjectHolder projectHolder;
+
     @FXML
     private DatePicker proDeadline;
 
@@ -65,21 +71,27 @@ public class AddProjectPane implements Initializable, FxController {
     private Button btnCancel;
 
     @FXML
+    private Label addProTitleLbl;
+
+    @FXML
     void addProject(ActionEvent event) {
 
         String title = proTitle.getText();
         String desc = proDesc.getText();
 
-        /**
-         * whether check be same title project of saved projects
-         */
-        if(projectRepo.findByProTitleAndProOwner(title, UserHolder.getInstance().getUser().getUserId()).size() > 0)
-        {
-            proTitle.setStyle("-fx-background-color: " + constantColors.getWARNING_COLOR() + ";");
-            return;
-        }else{
-            proTitle.setStyle("-fx-background-color: " + constantColors.getWHITE() + ";");
+        if(projectHolder.getAction() != "edit"){
+            /**
+             * whether check be same title project of saved projects
+             */
+            if(projectRepo.findByProTitleAndProOwner(title, UserHolder.getInstance().getUser().getUserId()).size() > 0)
+            {
+                proTitle.setStyle("-fx-background-color: " + constantColors.getWARNING_COLOR() + ";");
+                return;
+            }else{
+                proTitle.setStyle("-fx-background-color: " + constantColors.getWHITE() + ";");
+            }
         }
+
         /**
          * set values to new instant of Project
          */
@@ -127,6 +139,21 @@ public class AddProjectPane implements Initializable, FxController {
         UserHolder userHolder = UserHolder.getInstance();
         user = userHolder.getUser();
 
+        projectHolder = ProjectHolder.getInstance();
+
+        Project editProject = projectHolder.getProject();
+        String actionPro = projectHolder.getAction();
+
+        /**
+         * Ижил нэртэй төсөл үүсгэх үед proTitle талбарын суурь өнгө улаан болох тул төслийн ялгаатай болгох үед суурь өнгийг хэвийн болгоно.
+         */
+        proTitle.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                proTitle.setStyle("-fx-background-color: " + constantColors.getWHITE() + ";");
+            }
+        });
+
         /**
          * set instance of ConstantColors
          */
@@ -150,14 +177,31 @@ public class AddProjectPane implements Initializable, FxController {
          */
         newProject = new Project();
 
-        /**
-         * set default value to new project model fields and new project attribute
-         */
-        newProject.setProStatus(defaultStatus);
-        newProject.setProCompletionPercent(defaultPercent);
-        newProject.setProOwner(user.getUserId());
-        proStartDate.setValue(today);
-        proDeadline.setValue(tomorrow);
+        if(editProject != null && "edit".equals(actionPro)){
+            addProTitleLbl.setText("Edit a project");
+            btnAddProject.setText("Save");
+
+            /**
+             * set editing project value to new project model fields and new project attribute
+             */
+            newProject.setProId(editProject.getProId());
+            newProject.setProStatus(editProject.getProStatus());
+            newProject.setProCompletionPercent(editProject.getProCompletionPercent());
+            newProject.setProOwner(editProject.getProOwner());
+            proTitle.setText(editProject.getProTitle());
+            proDesc.setText(editProject.getProDescription());
+            proStartDate.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(editProject.getProStartDate()));
+            proDeadline.setValue(Functions.DATE_TO_LOCALDATE.dateToLocalDate(editProject.getProDeadline()));
+        }else{
+            /**
+             * set default value to new project model fields and new project attribute
+             */
+            newProject.setProStatus(defaultStatus);
+            newProject.setProCompletionPercent(defaultPercent);
+            newProject.setProOwner(user.getUserId());
+            proStartDate.setValue(today);
+            proDeadline.setValue(tomorrow);
+        }
 
         /**
          * Save Task Button is disabled while below conditions are happened, and as soon as user start

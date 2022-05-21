@@ -358,7 +358,17 @@ public class ProjectPane implements Initializable, FxController {
 
     @FXML
     void editProject(MouseEvent event) {
+        ProjectHolder.getInstance().setProject(activeProject);
+        ProjectHolder.getInstance().setAction("edit");
 
+        Stage editProjectStage = new Stage();
+        Parent node = stageManager.loadView(AddProjectPane.class);
+        Scene scene = new Scene(node);
+        scene.setFill(Color.TRANSPARENT);
+        editProjectStage.setScene(scene);
+        editProjectStage.initStyle(StageStyle.TRANSPARENT);
+        editProjectStage.initModality(Modality.APPLICATION_MODAL);
+        editProjectStage.show();
     }
 
     List<PieChart.Data> getPieChartList(){

@@ -48,7 +48,7 @@ public class Project {
         this.proOwner = proOwner;
     }
 
-    public double getProCompletionPercent() {
+    public float getProCompletionPercent() {
         return proCompletionPercent;
     }
 

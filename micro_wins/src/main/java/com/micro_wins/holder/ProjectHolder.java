@@ -10,6 +10,7 @@ import com.micro_wins.model.Project;
 
 public final class ProjectHolder {
     private Project project;
+    private String action;
     private final static ProjectHolder INSTANCE = new ProjectHolder();
 
     private ProjectHolder() {}
@@ -26,4 +27,11 @@ public final class ProjectHolder {
         return this.project;
     }
 
+    public String getAction() {
+        return action;
+    }
+
+    public void setAction(String action) {
+        this.action = action;
+    }
 }

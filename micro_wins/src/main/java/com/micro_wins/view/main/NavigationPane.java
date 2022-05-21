@@ -9,6 +9,7 @@ import com.micro_wins.holder.UserHolder;
 import com.micro_wins.model.Project;
 import com.micro_wins.model.User;
 import com.micro_wins.repository.ProjectRepo;
+import com.micro_wins.view.FxController;
 import com.micro_wins.view.StageManager;
 import com.micro_wins.holder.ProjectHolder;
 import javafx.collections.FXCollections;
@@ -142,6 +143,7 @@ public class NavigationPane {
                         public void handle(ActionEvent event) {
                             ProjectHolder projectHolder = ProjectHolder.getInstance();
                             projectHolder.setProject(item);
+                            projectHolder.setAction("open");
                             stageManager.rebuildStage(ProjectPane.class);
                         }
                     });
@@ -202,17 +204,17 @@ public class NavigationPane {
                         @Override
                         public void handle(ActionEvent event) {
                             if(deleteConfirmAlert.deleteConfirmAlert("Confirm Delete", "Are you sure you want to delete this project?", "Yes", "No")){
+
                                 projectRepo.delete(item);
                                 resetListView();
 
-                                Scene scene = btnDelete.getScene();
-                                if(scene == null){
-                                    return;
+                                Class<? extends FxController> fxControllerClass = stageManager.getLatestFxControllerClass() ;
+                                if (fxControllerClass != null) {
+                                    if(fxControllerClass == ProjectPane.class){
+                                        stageManager.rebuildStage(TodayPane.class);
+                                    }
                                 }
-                                Stage stage = (Stage) scene.getWindow();
-                                if(stage.isShowing()){
-                                    stageManager.rebuildStage(TodayPane.class);
-                                }
+
                             }
                         }
                     });
@@ -267,6 +269,4 @@ public class NavigationPane {
         addProjectStage.initModality(Modality.APPLICATION_MODAL);
         addProjectStage.show();
     }
-
-
 }
